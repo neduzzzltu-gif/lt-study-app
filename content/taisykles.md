@@ -1,6 +1,6 @@
 # Lietuvių kalbos taisyklės (iš konspektų)
 
-> Perrašyta iš nuotraukų. Žodžiai su (?) buvo neįskaitomi – patikrinti.
+> Perrašyta iš nuotraukų ir patikrinta su originalais.
 
 ---
 
