@@ -32,6 +32,7 @@
   .mistake .w s { color:var(--bad); }
   .mistake .w b { color:var(--ok); }
   .mistake .r { color:#444; font-size:14px; margin-top:4px; }
+  .fixbtn { display:inline-block; margin-top:6px; padding:10px 16px; border-radius:12px; background:var(--bad); color:#fff; text-decoration:none; font-weight:600; font-size:15px; }
   .allok { color:var(--ok); font-weight:600; }
   .empty { color:var(--muted); line-height:1.6; }
   .keys { position:fixed; left:0; right:0; bottom:0; background:var(--card); border-top:1px solid var(--line); padding:10px; display:flex; justify-content:center; flex-wrap:wrap; gap:6px; }
@@ -41,6 +42,14 @@
   .tip { position:absolute; max-width:300px; background:var(--ink); color:#fff; font-size:14px; line-height:1.45; padding:10px 12px; border-radius:10px; transform:translate(-50%, -100%); z-index:11; animation:pop .18s ease-out; }
   .tip b { display:block; margin-bottom:3px; color:#aab8ff; }
   @keyframes pop { from { opacity:0; transform:translate(-50%, -85%) scale(.9); } }
+  .full { margin-top:8px; font-size:14px; }
+  .full summary { cursor:pointer; color:var(--accent); font-weight:600; list-style:none; user-select:none; }
+  .full summary::-webkit-details-marker { display:none; }
+  .full summary::after { content:" ▾"; display:inline-block; transition:transform .2s; }
+  .full[open] summary::after { transform:rotate(180deg); }
+  .full .body { margin-top:8px; padding:10px 12px; background:#fff; border:1px solid var(--line); border-radius:10px; color:#333; line-height:1.55; animation:slide .25s ease-out; }
+  .full .body p { margin:0 0 8px; } .full .body p:last-child { margin:0; }
+  @keyframes slide { from { opacity:0; transform:translateY(-8px); } }
 </style>
 </head>
 <body>
@@ -115,10 +124,21 @@ function check() {
   wrong.forEach(({ k, p, val }) => {
     const right = p.word ? p.ans : wordAround(parts, k, p.ans.split("/")[0]);
     const yours = p.word ? (val || "—") : wordAround(parts, k, val || "_");
-    html += `<div class="mistake"><div class="w"><s>${esc(yours)}</s> → <b>${esc(right)}</b></div><div class="r">${esc(p.rule)}</div></div>`;
+    html += `<div class="mistake"><div class="w"><s>${esc(yours)}</s> → <b>${esc(right)}</b></div><div class="r">${esc(p.rule)}</div>${fullRule(p.cat)}</div>`;
   });
+  const n = Object.keys(loadMistakes()).length;
+  if (n && !MISTAKE_MODE) html += `<a class="fixbtn" href="rasyba.html?klaidos">🎯 Taisyti klaidas (${n}) →</a>`;
   document.getElementById("result").innerHTML = html;
+  updateModeLink();
 }
+
+// Show the mistake count in the top-right link
+function updateModeLink() {
+  if (MISTAKE_MODE) return;
+  const n = Object.keys(loadMistakes()).length;
+  document.getElementById("modeLink").textContent = n ? `Mano klaidos (${n}) →` : "Mano klaidos →";
+}
+updateModeLink();
 
 // Shuffled deck: every sentence comes once per round, never twice in a row
 let deck = [];

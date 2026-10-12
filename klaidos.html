@@ -31,6 +31,14 @@
   .word .w small { color:var(--muted); font-size:13px; margin-left:6px; }
   .word .r { color:#444; font-size:14px; margin-top:4px; }
   .empty { color:var(--muted); line-height:1.6; }
+  .full { margin-top:8px; font-size:14px; }
+  .full summary { cursor:pointer; color:var(--accent); font-weight:600; list-style:none; user-select:none; }
+  .full summary::-webkit-details-marker { display:none; }
+  .full summary::after { content:" ▾"; display:inline-block; transition:transform .2s; }
+  .full[open] summary::after { transform:rotate(180deg); }
+  .full .body { margin-top:8px; padding:10px 12px; background:#fff; border:1px solid var(--line); border-radius:10px; color:#333; line-height:1.55; animation:slide .25s ease-out; }
+  .full .body p { margin:0 0 8px; } .full .body p:last-child { margin:0; }
+  @keyframes slide { from { opacity:0; transform:translateY(-8px); } }
 </style>
 </head>
 <body>
@@ -80,7 +88,7 @@ function render() {
     ${items.map(it => {
       const right = it.p.word ? it.p.ans : wordAround(it.parts, it.k, it.p.ans.split("/")[0]);
       const yours = it.p.word ? (it.last || "—") : wordAround(it.parts, it.k, it.last || "_");
-      return `<div class="word"><div class="w"><s>${esc(yours)}</s> → <b>${esc(right)}</b><small>×${it.wrong}</small></div><div class="r">${esc(it.p.rule)}</div></div>`;
+      return `<div class="word"><div class="w"><s>${esc(yours)}</s> → <b>${esc(right)}</b><small>×${it.wrong}</small></div><div class="r">${esc(it.p.rule)}</div>${fullRule(it.p.cat)}</div>`;
     }).join("")}
     <button class="btn ghost" id="clear">Išvalyti visas klaidas</button>`;
 
