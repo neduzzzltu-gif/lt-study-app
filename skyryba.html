@@ -114,6 +114,8 @@ function setMark(b, mark) {
 }
 document.getElementById("sentence").addEventListener("click", e => {
   const b = e.target.closest(".gap"); if (!b) return;
+  // On touch screens the tap opens the choices instead of cycling
+  if (matchMedia("(hover: none)").matches) return showPicker(b);
   setMark(b, MARKS[(MARKS.indexOf(b.dataset.m) + 1) % MARKS.length]);
   if (pickFor === b) showPicker(b);
 });
@@ -150,11 +152,18 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") hidePicker()
 
 function check() {
   hidePicker();
+  if (document.getElementById("actions").style.display === "none") return;
   const first = !checked; checked = true;
   const wrong = [], correct = [];
+  // Paired gaps (e.g. both sides of a priedėlis) must use the same mark
+  const pairVals = {};
+  document.querySelectorAll(".sentence .gap").forEach(b => {
+    const p = sent.gaps[+b.dataset.g].pair;
+    if (p) (pairVals[p] = pairVals[p] || new Set()).add(b.dataset.m);
+  });
   document.querySelectorAll(".sentence .gap").forEach(b => {
     const g = +b.dataset.g, gap = sent.gaps[g], val = b.dataset.m;
-    const ok = gap.ans.includes(val);
+    const ok = gap.ans.includes(val) && !(gap.pair && pairVals[gap.pair].size > 1);
     b.className = "gap " + (ok ? (val ? "ok" : "") : (val ? "bad" : "miss"));
     // Only remember gaps that matter: a mark was expected, or a wrong mark was added
     if (first && (!gap.def || !ok)) skRecord(current, g, ok, val);
@@ -207,7 +216,10 @@ function showNoMistakes() {
 
 document.getElementById("check").onclick = check;
 document.getElementById("next").onclick = nextRandom;
-document.addEventListener("keydown", e => { if (e.key === "Enter" && !e.target.closest("button")) check(); });
+document.addEventListener("keydown", e => {
+  if (e.key !== "Enter") return;
+  if (e.target.closest(".gap") || !e.target.closest("button")) { e.preventDefault(); check(); }
+});
 updateModeLink();
 nextRandom();
 </script>
