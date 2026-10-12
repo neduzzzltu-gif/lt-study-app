@@ -41,7 +41,7 @@ const SENTENCES = [
 
   "Kad gr{į|"+R.grizti+"}žimas prie mito nevirst{ų|"+R.tu+"} archa{ji/i|Žodis archajiškas (taip pat archaiškas): nosinės nėra, tarp balsių rašoma j.|tarpt}šk{ų|Būdvardžio dgs. kilmininkas: archaiškų (kokių?).|galunes} atavistinių polinkių bei egzistencinių rudimentų gaiv{i|gaivinti → gaivinimas: veiksmažodžio priesaga -inti, rašoma trumpas i.|priesagos}nimu, o vest{ų|"+R.tu+"} prie laisvos k{ū|"+R.kuryba+"}rybos ir laisv{e|"+R.esnis+"}snės b{ū|"+R.buti+"}ties versmių, mito prigimtį b{ū|"+R.buti+"}tina apm{ą|"+R.masty+"}styti naujai – naujai klausti tiek apie paties mito esmę, tiek apie mito s{a|Priešdėlis san- (santykis, sandora) rašomas be nosinės.|sudurt}nt{y|santykis, santykiai: šaknyje rašoma y.|saknis}kį su tuo, kas n{ė|nėra = ne + yra, todėl rašoma ė.|sudurt}ra mitas.",
 
-  "Ak{i|Akivaizdu = aki- (akis) + vaizdu.|sudurt}vaizdu, kad vis gil{e|"+R.esnis+"}snės prarajos tarp mito ir logo, rac{i|"+R.tarpt+"}onalaus proto ir intuicijos, m{ą|"+R.masty+"}stymo ir vaizduotės raus{i|"+R.imas+"}mas tikrai {{ne, gali|negali|Ne su veiksmažodžiais visada rašoma kartu: negali, nežino, nebuvo.|ne}} pasitarnauti tiems, kuriems lemta gyventi dv{i|dvi + dešimt: dvidešimt (trumpas i).|sudurt}dešimt pirm{a|"+R.ivardz+"}j{a|"+R.ivardz+"}me amžiuje.",
+  "Ak{i|Akivaizdu = aki- (akis) + vaizdu.|sudurt}vaizdu, kad vis gil{e|"+R.esnis+"}snės prarajos tarp mito ir logo, rac{i|"+R.tarpt+"}onalaus proto ir intuicijos, m{ą|"+R.masty+"}stymo ir vaizduotės raus{i|"+R.imas+"}mas tikrai {{ne, gali|negali|Ne su veiksmažodžiais rašoma kartu, kai nėra priešpriešos (o, bet, tačiau): negali, nežino. Su priešprieša – atskirai: ne bėgo, o skriejo.|ne}} pasitarnauti tiems, kuriems lemta gyventi dv{i|dvi + dešimt: dvidešimt (trumpas i).|sudurt}dešimt pirm{a|"+R.ivardz+"}j{a|"+R.ivardz+"}me amžiuje.",
 
   "Mito išmintis ir mite įš{a|šalti → šaldyti → įšaldyti: šaknyje a.|saknis}ldyti gaivalingos vaizduotės kristalai, gaivinant{y|"+R.antys+"}s šiuolaikinio žmogaus k{ū|"+R.kuryba+"}rybingumą, pajėg{ū|Būdvardžiai su -us daugiskaitoje vyr. g. turi galūnę -ūs: pajėgus → pajėgūs.|galunes}s suteikti vilties ir įkv{ė|kvėpti → kvėpavimas → įkvėpimas: šaknyje ė.|saknis}pimo tiems, kurie kenčia nuo dvasinės disharmonijos ir egzistencinio sutr{i|trikti → sutrikimas: šaknyje trumpas i.|saknis}kimo.",
 
@@ -138,17 +138,17 @@ const FULL = {
   priesagos: `<p><b>-ymas</b> daromas iš <b>-yti</b> veiksmažodžių: papildyti → papildymas, aprašyti → aprašymas, atsakyti → atsakymas, išbandyti → išbandymas.</p>
 <p><b>-imas</b> – iš kitų veiksmažodžių: klausti → klausimas, rausti → rausimas, kasti → kasimas. Iš <b>-inti</b>: gaivinti → gaivinimas.</p>
 <p><b>-esnis, -esnė</b> – aukštesnysis laipsnis: gilus → gilesnis, laisvas → laisvesnė.</p>
-<p><b>-umas</b> iš būdvardžių: įžvalgus → įžvalgumas, gražus → grožis / gražumas. <b>-ybė</b>: puikus → puikybė.</p>
-<p><b>-uoti</b> veiksmažodžių būtajame laike <b>-avo</b>: studijuoti → studijavo → išstudijavęs, keliauti → keliavo.</p>`,
+<p><b>-umas</b> iš būdvardžių: įžvalgus → įžvalgumas, gražus → gražumas. <b>-ybė</b>: puikus → puikybė.</p>
+<p><b>-uoti, -auti</b> veiksmažodžių būtajame laike <b>-avo</b>: studijuoti → studijavo → išstudijavęs, dainuoti → dainavo, keliauti → keliavo.</p>`,
 
   galunes: `<p><b>Minkštas priebalsis:</b> prieš a, o, u, ų rašoma i: panašiais, istoriniame, realiame, pačiai, didžiųjų.</p>
 <p><b>Daugiskaitos kilmininkas</b> visada baigiasi <b>-ų</b>: archaiškų, žmonių, mokytojų.</p>
-<p><b>Būdvardžiai su -us</b> daugiskaitoje vyr. g.: <b>-ūs</b> (gražūs, pajėgūs, gausūs).</p>
+<p><b>Būdvardžiai su -us</b> daugiskaitos vardininke vyr. g.: <b>-ūs</b> (gražūs, pajėgūs, gausūs).</p>
 <p><b>Daiktavardžiai su -ė</b> naudininke: <b>-ei</b> (tikrovė → tikrovei, realybė → realybei).</p>
 <p>Nustatyk: kokia kalbos dalis → koks linksnis → koks skaičius → tada galūnė.</p>`,
 
   ivardz: `<p><b>Įvardžiuotinė forma = paprastoji forma + įvardžio jis / ji forma.</b></p>
-<p>geras + jis → gerasis · gera + ji → geroji<br>gerame + jame → gerajame · geroje + joje → gerojoje<br>gerų + jų → gerųjų · geram + jam → gerajam<br>gerai + jai → gerajai · gerą + ją → gerąjį / gerąją</p>
+<p>geras + jis → gerasis · gera + ji → geroji<br>gerame + jame → gerajame · geroje + joje → gerojoje<br>gerų + jų → gerųjų · geram + jam → gerajam<br>gerai + jai → gerajai · gerą + jį → gerąjį · gerą + ją → gerąją</p>
 <p>Nosinė rašoma ten, kur ji yra paprastojoje formoje ir įvardyje: gimtą + ją → <b>gimtąją</b>, didžių + jų → <b>didžiųjų</b>.</p>
 <p>Pvz.: pirmajame amžiuje, mirtingajam žmogui, žmogiškajai puikybei.</p>`,
 
@@ -162,14 +162,14 @@ const FULL = {
 
   tarpt: `<p><b>Tarptautiniai žodžiai</b> rašomi pagal kilmės kalbą ir tarptautinį tarimą.</p>
 <p>Junginiai <b>io, ia</b> po priebalsio: racionalus, aviacija, specialus.</p>
-<p><b>e prieš a</b> (ne „ia“): realus, realybė, idealas, teatras.</p>
-<p>Tarp dviejų balsių dažnai rašoma <b>j</b>: archajiškas, projektas, trajektorija.</p>`,
+<p><b>ea</b> rašoma, kai kilmės kalboje yra e (lot. realis, gr. theatron): realus, realybė, idealas, teatras.</p>
+<p>Kai kuriuose žodžiuose tarp balsių rašoma <b>j</b>: archajiškas, trajektorija.</p>`,
 
   sudurt: `<p><b>Išskaidyk žodį į dalis</b> – kiekviena dalis rašoma taip, kaip atskirai:</p>
-<p>aki + vaizdu → akivaizdu · dvi + dešimt → dvidešimt · kas + diena → kasdienė · kiek + vienas → kiekvienas · ana + pus → anapus · ne + yra → nėra</p>
-<p><b>Priešdėliai</b> rašomi visada vienodai: san- (santykis, sandora), sam-, su-, ap-, iš-, į-.</p>`,
+<p>aki + vaizdu → akivaizdu · dvi + dešimt → dvidešimt · kas + diena → kasdienė · kiek + vienas → kiekvienas · ana + pus → anapus<br><i>Išimtis:</i> ne + yra → nėra (susilieja į ė).</p>
+<p><b>Priešdėliai:</b> san- / sam- / su- – to paties priešdėlio variantai (sam- prieš b, p: sambūris; san- prieš d, t, g, k: santykis, sandora); iš- visada su š (išbėgti).</p>`,
 
-  ne: `<p><b>1. Kartu</b> su daiktavardžiais, būdvardžiais, veiksmažodžiais ir būdvardiniais prieveiksmiais, jei <b>nėra priešpriešos</b>: nelaimė, negeras, nežino. Su veiksmažodžiais – visada kartu: negali.</p>
+  ne: `<p><b>1. Kartu</b> su daiktavardžiais, būdvardžiais, veiksmažodžiais ir būdvardiniais prieveiksmiais, jei <b>nėra priešpriešos</b>: nelaimė, negeras, nežino. Su veiksmažodžiais – irgi kartu, jei nėra priešpriešos: negali.</p>
 <p><b>Atskirai</b>, jei yra priešprieša (o, bet, tačiau): <i>Knyga buvo ne nauja, o aptrinta.</i></p>
 <p><b>2. Visada atskirai:</b><br>su nebūdvardiniais prieveiksmiais – ne visada, ne kaip, ne taip, ne čia, ne dabar<br>su įvardžiais – ne aš, ne toks, ne kokioje nors<br>su skaitvardžiais – ne vienas, ne pirmas<br>su dalelytėmis – ne tik, ne vien, ne tiktai<br>su prielinksniais – ne be reikalo, ne iš namų<br>tarp dviejų vienodų žodžių – kas ne kas, kur ne kur</p>
 <p><b>3. Įsidėmėk:</b> kartu, kai reikšmė priešinga – nekoks (prastas), nekaip (prastai), nekiek (mažai).</p>`,
