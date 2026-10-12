@@ -123,65 +123,67 @@ function recordAnswer(si, k, ok, given) {
   saveMistakes(m);
 }
 
-// Full rule for each rule type (opened with "Visa taisyklė" under a mistake)
+// Full rule for each rule type, from the official VLKK rules (content/vlkk/rasyba-2022.pdf)
+const SRC_R = p => `<p class="src">📘 VLKK „Lietuvių kalbos rašyba“ (2022), ${p}</p>`;
 const FULL = {
-  nosines: `<p><b>I. Kaitaliojasi su an, en, in, un</b> → rašoma nosinė: kąsti–kando, kęsti–kentė, lįsti–lindo, siųsti–siuntė, spręsti–sprendė, švęsti–šventė, pažįsta–pažinti.<br><i>Pavojingi be nosinių:</i> akti–anka–ako, gesti–genda–gedo.</p>
-<p><b>II. Ilgieji balsiai kaitaliojasi tarpusavyje</b> (ą – į – ę), bet <b>ne su ė</b>: drįsti–drąsa, grįžti–grąža–gręžti–grąžtas, mąstyti–mįslė, tęsti–tįsti–tąsa, tręšti–trąša.<br><i>Pavojingi be nosinių:</i> draskyti (drėskė), dvesia (dvėsė), grasinti (grėsė), driksti–dryksta, gižti–gyžta, tižti–tyžta, pasiryžti, ryžtis, tysoti, tesėti žodį.</p>
-<p><b>III. Senuose daiktavardžiuose</b> (pagal kilmę): ąsa, ąsotis, ąžuolas, įsčios, ląsta, ląstelė, lęšis, vąšas, žąsis, žąslai.<br><i>Pavojingi be nosinių:</i> asla, lysvė, mastas, mastelis, gryčia, ražas, ražiena, žastas, ypatybė, ypač.</p>
-<p><b>IV. Kai kurių veiksmažodžių esamajame laike:</b> bąla, gęsta, glęžta, kąra, knęžta, kęžta, mąžta, sąla, šąla, šąšta, tęžta, tręšta, žabąla.<br><i>Bet bendratyje, kituose laikuose ir jų dariniuose – be nosinių:</i> apsalęs, nušašęs, pabalęs, pašalas, užges, gesina, balina, gesdamas.</p>`,
+  nosines: SRC_R("2.3 p.") + `<p><b>2.3.1.</b> Nosinės ą, ę, į, ų prieš s rašomos šaknyse, kai ilgieji balsiai kaitaliojasi su <b>an, en, in, un</b>: bręsti (brendo), galąsti (galanda), grįsti (grindė), išsigąsti (išsigando), kąsti (kando), kęsti (kentė), lįsti, ląsta (lindo), pažįsta (pažinti), rąstas, ręsti (rentė), skęsti (skendo), siųsti (siuntė), skųsti (skundė), spąstai, spęsti (spendė), spręsti (sprendė), švęsti (šventė), žįsti (žindo).<br><i>Nerašomos</i>, kai n atsiranda tik esamajame laike: akti, anka, ako; sekti, senka, seko; gesti, genda, gedo.</p>
+<p><b>2.3.2.</b> Prieš s, š, ž rašomos, kai garsai giminiškuose žodžiuose <b>kaitaliojasi tarpusavyje</b>: drąsa – drįsti; grąža, grąžtas – grįžti, gręžti; mąstyti – mįslė; ręžtis – rąžytis; tąsa – tęsti – tįsti; trąšos – tręšti.<br><i>Nerašomos:</i> kai a, e kaitaliojasi su <b>ė</b> (graso, gresia, grėsti; drasko, dreskia, drėskė); kai ilgasis balsis kaitaliojasi su trumpuoju (driksti – dryksta – drisko, gižti – gyžta, įgristi – įgrysta, tižti – tyžta); <b>y</b> rašoma: lysti „plonėti“, ryžtas, ryžtis, ryžtingas, pasiryžęs; mastas, mastelis (ne mąst-); asla, brasta, lysvė, gryčia, gražinti „puošti“, ražas, ražiena, pažastis, vaškas, žastas; tesėti (žodį).</p>
+<p><b>2.3.3.</b> Rašomos, kai garsai ilgi ir kirčiuotame, ir nekirčiuotame skiemenyje: a) <b>daiktavardžiuose</b> – ąsa, ąsotis, ąžuolas, ląsta, ląstelė, lęšis, vąšas, žąsis, žąslai, įsčios; b) <b>veiksmažodžių esamojo laiko</b> šaknyse – bąla, gęsta, glęžta, mąžta, sąla, šąla, šąšta, tęžta, tręšta, kęžta, knęžta, žabąla (ir jų formose: gęstantis, šąlant).<br><i>Bet</i> bendratyje, kituose laikuose ir dariniuose – be nosinių: apsalti, nušašęs, pabalęs, balina, šalti, pašalas, sutežęs, sutrešęs, užges, gesina, gesdamas.</p>
+<p><b>2.3.4–2.3.5.</b> Priešdėliai <b>są-</b> (sąjunga, sąrašas) ir <b>į-</b> (įtaka, įdomus) – su nosine; jų variantai sam-, san-, in-, im- – be nosinės (sambūris, sandara, santaka, intakas).</p>`,
 
-  saknis: `<p>Šaknis giminiškuose žodžiuose rašoma <b>vienodai</b>. Rask giminišką žodį ar bendratį, kur balsis aiškiai girdisi.</p>
-<p><b>Ilgasis ar trumpasis balsis:</b> būti – būdas – būtina – būtis (ū); kurti – kūryba (u kaitaliojasi su ū); šaukti – šūkis – iššūkis (au kaitaliojasi su ū); gyti – gijo – įgytų (i kaitaliojasi su y); likti – likimas, trikti – sutrikimas (trumpas i).</p>
-<p><b>e ar ė:</b> kvėpti – įkvėpimas, dėmesys – įdėmiai, ištverti – ištvėrė – ištvėrimas, bet semti – semiasi, atvejis – atvejais.</p>
-<p>Jei giminiškas žodis nepadeda – žodį reikia įsiminti (byloja, siūlyti, santykis).</p>`,
+  saknis: SRC_R("2.1 ir 2.2 p.") + `<p><b>2.1.1–2.1.2.</b> Šaknies balsiai paprastai rašomi taip, kaip tariami: ilgai ir įtemptai tariami garsai žymimi <b>y, ū</b> (yla, knyga, mylėti, tylus), trumpi – <b>i, u</b>.</p>
+<p><b>2.1.3.</b> Pagrindinių veiksmažodžio formų šaknyse trumpieji ir ilgieji balsiai gali kaitaliotis: gyti, gyja, gijo; lyti, lyja, lijo; griūti, griūva, griuvo; pūti, pūva, puvo.</p>
+<p><b>2.1.7.</b> Veiksmažodinių daiktavardžių šaknyje paprastai rašoma tokio pat ilgumo balsė kaip toje veiksmažodžio formoje, iš kurios jie padaryti: apvija (apvijo), apžiūra (apžiūri), trūkis (trūko).</p>
+<p>Darinių šaknyje dėl balsių kaitos gali būti rašoma y, ū (plg. 2.1.8): kurti – kūryba, šaukti – iššūkis. Trumpas balsis lieka: likti – likimas, trikti – sutrikimas.</p>
+<p><b>2.2.4.</b> Lietuviškų žodžių šaknyse rašoma tik <b>e</b>, negali būti ia: semti – semiasi, atvejis – atvejais.</p>`,
 
-  priesagos: `<p><b>-ymas</b> daromas iš <b>-yti</b> veiksmažodžių: papildyti → papildymas, aprašyti → aprašymas, atsakyti → atsakymas, išbandyti → išbandymas.</p>
-<p><b>-imas</b> – iš kitų veiksmažodžių: klausti → klausimas, rausti → rausimas, kasti → kasimas. Iš <b>-inti</b>: gaivinti → gaivinimas.</p>
-<p><b>-esnis, -esnė</b> – aukštesnysis laipsnis: gilus → gilesnis, laisvas → laisvesnė.</p>
-<p><b>-umas</b> iš būdvardžių: įžvalgus → įžvalgumas, gražus → gražumas. <b>-ybė</b>: puikus → puikybė.</p>
-<p><b>-uoti, -auti</b> veiksmažodžių būtajame laike <b>-avo</b>: studijuoti → studijavo → išstudijavęs, dainuoti → dainavo, keliauti → keliavo.</p>`,
+  priesagos: SRC_R("2.1, 2.2 p.") + `<p><b>-ymas / -imas.</b> Veiksmažodiniai daiktavardžiai daromi iš veiksmažodžio: -yti → <b>-ymas</b> (papildyti → papildymas, atsakyti → atsakymas, išbandyti → išbandymas); -ti, -inti → <b>-imas</b> (klausti → klausimas, rausti → rausimas, gaivinti → gaivinimas).</p>
+<p><b>Aukštesnysis laipsnis:</b> -esnis, -esnė (gilus → gilesnis, laisvas → laisvesnė). <b>2.2.12.</b> Aukščiausiajame laipsnyje rašoma -(i)ausias: didžiausias, greičiausias.</p>
+<p><b>-umas, -ybė</b> iš būdvardžių: įžvalgus → įžvalgumas, puikus → puikybė.</p>
+<p><b>-uoti, -auti</b> veiksmažodžių būtajame laike <b>-avo</b>: studijuoti → studijavo → išstudijavęs, keliauti → keliavo.</p>`,
 
-  galunes: `<p><b>Minkštas priebalsis:</b> prieš a, o, u, ų rašoma i: panašiais, istoriniame, realiame, pačiai, didžiųjų.</p>
-<p><b>Daugiskaitos kilmininkas</b> visada baigiasi <b>-ų</b>: archaiškų, žmonių, mokytojų.</p>
-<p><b>Būdvardžiai su -us</b> daugiskaitos vardininke vyr. g.: <b>-ūs</b> (gražūs, pajėgūs, gausūs).</p>
-<p><b>Daiktavardžiai su -ė</b> naudininke: <b>-ei</b> (tikrovė → tikrovei, realybė → realybei).</p>
-<p>Nustatyk: kokia kalbos dalis → koks linksnis → koks skaičius → tada galūnė.</p>`,
+  galunes: SRC_R("2.1.15, 2.2.1, 2.2.8, 2.3.7–2.3.9 p.") + `<p><b>2.2.1.</b> <b>e</b> rašoma galūnėse, jei vardininke yra <b>-ė</b>: tikrovė → tikrovei, realybė → realybei.</p>
+<p><b>2.2.8.</b> <b>(i)a</b> rašoma galūnėse, kai vienaskaitos vardininke nėra ė: panašus → panašiais, istorinis → istoriniame, reali → realiame, pati → pačiai.</p>
+<p><b>2.1.15.</b> <b>ū</b> rašoma (i)u linksniuotės būdvardžių vyr. g. daugiskaitos vardininke: pajėgūs, malonūs, ryškūs.</p>
+<p><b>2.3.7.</b> ą, ę, į, ų – vienaskaitos <b>galininke</b> (knygą, gėlę, brolį, sūnų). <b>2.3.9.</b> ų – daugiskaitos <b>kilmininke</b> (archajiškų, knygų, brolių).</p>
+<p><b>2.3.8 c.</b> Nosinės <b>nerašomos</b> bevardės giminės galūnėse: <i>Visa palikau namie</i> – todėl ir „visa ko teorija“.</p>`,
 
-  ivardz: `<p><b>Įvardžiuotinė forma = paprastoji forma + įvardžio jis / ji forma.</b></p>
-<p>geras + jis → gerasis · gera + ji → geroji<br>gerame + jame → gerajame · geroje + joje → gerojoje<br>gerų + jų → gerųjų · geram + jam → gerajam<br>gerai + jai → gerajai · gerą + jį → gerąjį · gerą + ją → gerąją</p>
-<p>Nosinė rašoma ten, kur ji yra paprastojoje formoje ir įvardyje: gimtą + ją → <b>gimtąją</b>, didžių + jų → <b>didžiųjų</b>.</p>
-<p>Pvz.: pirmajame amžiuje, mirtingajam žmogui, žmogiškajai puikybei.</p>`,
+  ivardz: SRC_R("2.3.11 p.") + `<p><b>Įvardžiuotinė forma</b> = paprastoji forma + įvardžio jis / ji forma: gerame + jame → gerajame, gerų + jų → gerųjų, geram + jam → gerajam, gerai + jai → gerajai.</p>
+<p><b>2.3.11.</b> Nosinės rašomos: a) vienaskaitos <b>galininko</b> ir daugiskaitos <b>kilmininko</b> abiejuose galūnės skiemenyse – gražųjį, gražiąją, naująjį, naująją, antrąjį; gražiųjų, naujųjų, didžiųjų; b) ą – mot. g. vns. įnagininko ir dgs. galininko priešpaskutiniame skiemenyje – gražiąja, naująsias.</p>
+<p><i>Vienaskaitos naudininko ir vietininko galūnėse nosinės nerašomos:</i> naujajai, naujajam, naujajame, pirmajame, mirtingajam, žmogiškajai.</p>`,
 
-  dalyviai: `<p><b>Veikiamieji dalyviai:</b><br>es. l. – einąs, einantis (dgs. einantys, gyvenantys, gaivinantys); trumpoji vyr. g. forma su <b>-ąs</b>: pradedąs, darąs<br>būt. k. l. – ėjęs, ėjusi (dgs. ėję, pastebėję); vns. vyr. g. su <b>-ęs</b>: perskaitęs, išstudijavęs<br>būt. d. l. – eidavęs · būs. l. – eisiąs, eisiantis</p>
-<p><b>Neveikiamieji dalyviai:</b><br>es. l. – daromas (daromas iš esamojo laiko: pateikia → pateikiamas, daro → daromas)<br>būt. l. – darytas · būs. l. – darysimas</p>
-<p><b>Padalyvis:</b> einant, ėjus, eidavus, eisiant · <b>Pusdalyvis:</b> eidamas, eidama</p>`,
+  dalyviai: SRC_R("2.3.10, 2.2.9 p.") + `<p><b>2.3.10 a.</b> <b>ą, į</b> rašomos veikiamųjų dalyvių trumpųjų formų vyr. g. vardininke: es. l. klausąs, rašąs, <b>pradedąs</b>, stovįs, tylįs; būs. l. rašysiąs, tylėsiąs.</p>
+<p><b>2.3.10 b.</b> <b>ę</b> rašoma būtojo kartinio ir dažninio laiko vyr. g. dalyvių vardininke: vns. matęs, <b>perskaitęs</b>, <b>išstudijavęs</b>; dgs. matę, <b>pastebėję</b>; rašydavęs, rašydavę.</p>
+<p><b>Ilgosios formos</b> es. l.: einantis, dgs. einantys (gaivinantys, gyvenantys).</p>
+<p><b>Neveikiamieji</b> es. l. dalyviai daromi iš esamojo laiko; <b>2.2.9 a</b> – esamojo laiko 3 asm. baigmenyje rašoma (i)a: pateikia → pateikiamas, pateikiamos.</p>`,
 
-  tariamoji: `<p><b>Tariamoji nuosaka</b> reiškia galimą ar norimą veiksmą: daryčiau, darytum, <b>darytų</b>, darytume, darytumėte.</p>
-<p>3 asmuo visada baigiasi <b>-tų</b>: nevirstų, vestų, įgytų, turėtų.</p>
-<p>Dažnai eina po <b>kad, jei, jeigu</b>: <i>Kad grįžimas nevirstų…, o vestų…</i></p>`,
+  tariamoji: SRC_R("2.3.12 p.") + `<p><b>2.3.12.</b> Nosinė <b>ų</b> rašoma tariamosios nuosakos <b>trečiajame asmenyje</b>: aiškintų, bėgtų, eitų, lauktų, matytų, norėtų, rašytų, reikėtų – ir nevirstų, vestų, įgytų.</p>
+<p>Sangrąžos dalelytė -si galūnės nekeičia: juoktųsi, mokytųsi.</p>
+<p>Tariamoji nuosaka dažnai eina po <b>kad, jei</b>: <i>Kad grįžimas nevirstų…, o vestų…</i></p>`,
 
-  tarpt: `<p><b>Tarptautiniai žodžiai</b> rašomi pagal kilmės kalbą ir tarptautinį tarimą.</p>
-<p>Junginiai <b>io, ia</b> po priebalsio: racionalus, aviacija, specialus.</p>
-<p><b>ea</b> rašoma, kai kilmės kalboje yra e (lot. realis, gr. theatron): realus, realybė, idealas, teatras.</p>
-<p>Kai kuriuose žodžiuose tarp balsių rašoma <b>j</b>: archajiškas, trajektorija.</p>`,
+  tarpt: SRC_R("2.2.4, 2.2.11, 2.3.5 p.") + `<p><b>2.2.4.</b> Lietuviškų žodžių šaknyse rašoma tik e. Nelietuviškos kilmės žodžiai rašomi pagal kilmę: <b>e</b> – realus, realybė, idealas, teatras (lot. realis); <b>2.2.11.</b> su <b>ia</b> rašomi tik kai kurie nelietuviški žodžiai (aliarmas, miniatiūra, pliažas).</p>
+<p>Junginys <b>io</b> po priebalsio: racionalus, aviacija, specialus.</p>
+<p><b>2.3.5 2*.</b> Tarptautiniuose žodžiuose pradžioje rašoma <b>i</b> (idealas, iracionalus), lietuviškuose – y (yla, ypač).</p>
+<p>Tarp balsių kai kuriuose žodžiuose rašoma j: archajiškas, trajektorija.</p>`,
 
-  sudurt: `<p><b>Išskaidyk žodį į dalis</b> – kiekviena dalis rašoma taip, kaip atskirai:</p>
-<p>aki + vaizdu → akivaizdu · dvi + dešimt → dvidešimt · kas + diena → kasdienė · kiek + vienas → kiekvienas · ana + pus → anapus<br><i>Išimtis:</i> ne + yra → nėra (susilieja į ė).</p>
-<p><b>Priešdėliai:</b> san- / sam- / su- – to paties priešdėlio variantai (sam- prieš b, p: sambūris; san- prieš d, t, g, k: santykis, sandora); iš- visada su š (išbėgti).</p>`,
+  sudurt: SRC_R("2.1.12, 2.3.4, 4 p.") + `<p><b>Išskaidyk žodį į dalis</b> – kiekviena dalis rašoma kaip atskirai: aki + vaizdu → akivaizdu, dvi + dešimt → dvidešimt, kas + diena → kasdienė, kiek + vienas → kiekvienas, ana + pus → anapus.</p>
+<p><b>4.4.</b> Sudurtinių žodžių dėmenų sandūroje paprastai rašomos visos susidūrusios balsės ir priebalsės.</p>
+<p><b>2.1.12.</b> Kai priešdėlis ne- susilieja su būti formomis, rašoma viena raidė: ne + yra → <b>nėra</b>.</p>
+<p><b>2.3.4.</b> Priešdėlis są- turi variantus sam-, san- (be nosinės): sambūris, sandara, <b>santykis</b>, santaka.</p>`,
 
-  ne: `<p><b>1. Kartu</b> su daiktavardžiais, būdvardžiais, veiksmažodžiais ir būdvardiniais prieveiksmiais, jei <b>nėra priešpriešos</b>: nelaimė, negeras, nežino. Su veiksmažodžiais – irgi kartu, jei nėra priešpriešos: negali.</p>
-<p><b>Atskirai</b>, jei yra priešprieša (o, bet, tačiau): <i>Knyga buvo ne nauja, o aptrinta.</i></p>
-<p><b>2. Visada atskirai:</b><br>su nebūdvardiniais prieveiksmiais – ne visada, ne kaip, ne taip, ne čia, ne dabar<br>su įvardžiais – ne aš, ne toks, ne kokioje nors<br>su skaitvardžiais – ne vienas, ne pirmas<br>su dalelytėmis – ne tik, ne vien, ne tiktai<br>su prielinksniais – ne be reikalo, ne iš namų<br>tarp dviejų vienodų žodžių – kas ne kas, kur ne kur</p>
-<p><b>3. Įsidėmėk:</b> kartu, kai reikšmė priešinga – nekoks (prastas), nekaip (prastai), nekiek (mažai).</p>`,
+  ne: SRC_R("5.2.1–5.2.5 p.") + `<p><b>5.2.1. Kartu</b>, kai ne suteikia priešingą ar kitą reikšmę: su daiktavardžiais (nelaimė, nesėkmė), būdvardžiais (negeras, nedidelis), <b>veiksmažodžiais ir jų formomis</b> (negalėti, nematyti), būdvardiniais prieveiksmiais (negerai, nemažai); su įvardžiais ir įvardiniais prieveiksmiais, kai sudaro kitos reikšmės žodžius – nekaip „prastai“, nekoks „prastas“, nekiek „nedaug“.</p>
+<p><b>5.2.2. Atskirai nuo visų kalbos dalių</b>, kai prieštaraujama ar norima paneigti: <i>Uždavinys buvo ne lengvas, o labai sunkus. Jis ne bėga, o lėkte lekia.</i></p>
+<p><b>5.2.4.</b> Atskirai su aukštesniuoju / aukščiausiuoju laipsniu, kai nurodomas lyginamasis objektas: <i>Jis ne prastesnis mokinys už kitus.</i></p>
+<p><b>5.2.5. Visada atskirai:</b> a) nuo įvardžių ir skaitvardžių – ne aš, ne toks, ne koks, ne kiekvienas, ne vienas; b) nuo įvardinių ir kai kurių kitų prieveiksmių – ne visada, ne taip, ne čia, ne dabar, ne veltui, ne tiktai, ne vien; c) tarp dviejų vienodų žodžių – kas ne kas, kur ne kur; d) po dalelyčių – ar ne, dar ne, vos ne.</p>`,
 
-  kartu: `<p><b>GI</b> – kartu su nekaitomais vienskiemeniais žodžiais: argi, betgi, irgi, netgi, kurgi, vėlgi. Atskirai nuo kitų: kas gi, kodėl gi. Išimtys: kadangi, nejaugi.</p>
-<p><b>VIS</b> – visada atskirai (vis tiek, vis dėlto, vis dar), išskyrus <b>visgi</b>.</p>
-<p><b>PER</b> – atskirai (per daug, per vėlai), išskyrus <b>pernelyg</b>; kartu su sutrumpėjusiais: perniek, pernakt.</p>
-<p><b>BET, KAI, KAŽIN, NORS, IR, JAU, PAT, TIK</b> – visada atskirai: bet kas, bet kuris, kai kas, kas nors, kada nors, kol kas, vos tik.</p>
-<p><b>TE, BE, TEBE</b> – kartu su veiksmažodžiais ir būdvardžiais: tebetoli, bekalbant.</p>
-<p><b>galbūt</b> – vienas žodis, rašomas kartu.</p>`,
+  kartu: SRC_R("5.2.7–5.2.9 p.") + `<p><b>5.2.9 b. GI kartu</b> su nekaitomais vienskiemeniais žodžiais: argi, betgi, irgi, kaipgi, netgi, taigi, vėlgi, visgi. <b>5.2.8 d. Atskirai</b> nuo kaitomų, daugiaskiemenių žodžių ir samplaikų: kas gi, kodėl gi, rytoj gi. <b>5.2.9 c.</b> Suaugę: kadangi, nejaugi.</p>
+<p><b>5.2.8 c. PER atskirai:</b> per didelis, per vėlai. <b>5.2.9 a.</b> Kartu: pernelyg, nepernelyg, perdėm; nė – nėmaž, nėkart.</p>
+<p><b>5.2.8 b.</b> Nė, nei – atskirai: nė vieno, nei vienas, nei du.</p>
+<p><b>5.2.7.</b> Nebe, te, be, tebe – kartu su veiksmažodžiais ir būdvardžiais (nebegalėti, tebetoli, bekalbant), atskirai nuo daiktavardžių, įvardžių ir kai prieštaraujama (nebe tas; Dangus nebe mėlynas, o pilkas).</p>
+<p>Dalelytės <b>nors, bet, kai, kažin</b> rašomos atskirai: kas nors, kada nors, bet kuris, kai kas, kol kas. <b>Galbūt</b> – vienas žodis.</p>`,
 
-  prielinks: `<p><b>1. Atskirai</b> nuo nesutrumpėjusių žodžių ir bevardės giminės formų: be abejo, be galo, be reikalo, be to, dėl ko, iki galo, iš anksto, iš dalies, iš karto, iš tiesų, iš tikrųjų, iš viso, ko gero, per pusę, už dyką.</p>
-<p><b>2. Kartu</b> su sutrumpėjusiais žodžiais: bemaž, iškart, išsyk, išties, išvien, išvis, perdien, perpus, popiet, suvis, užvis, užtat.</p>`
+  prielinks: SRC_R("5.1, 5.3 p.") + `<p><b>5.3.1.</b> Prielinksniai visada rašomi <b>atskirai</b>, kai sudaro konstrukcijas su linksniuojamais ar nekaitomais žodžiais: be abejo, be galo, be reikalo, be to, dėl ko, iki galo, iš anksto, iš dalies, iš eilės, iš esmės…</p>
+<p><b>5.1.</b> <b>Kartu</b> rašomi sutrumpėję žodžiai: bemaž, iškart, išsyk, išties, išvis, perdien, perpus, popiet, suvis, užvis, užtat.</p>
+<p><b>5.3.2.</b> Polinksniai dėka, link – visada atskirai.</p>`
 };
-const fullRule = cat => FULL[cat] ? `<details class="full"><summary>Visa taisyklė</summary><div class="body">${FULL[cat]}</div></details>` : "";
+const fullRule = cat => FULL[cat] ? `<details class="full"><summary>Visa taisyklė (VLKK)</summary><div class="body">${FULL[cat]}</div></details>` : "";
