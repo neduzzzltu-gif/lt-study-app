@@ -3,217 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rašybos treniruoklis</title>
+<title>Lietuvių kalbos treniruoklis</title>
 <style>
-  :root { --bg:#f6f4ef; --card:#fff; --ink:#1d1d1f; --muted:#6b6b70; --line:#e3e0d8; --ok:#1f8a4c; --bad:#c62828; --accent:#2b4cff; }
+  :root { --bg:#f6f4ef; --card:#fff; --ink:#1d1d1f; --muted:#6b6b70; --line:#e3e0d8; --accent:#2b4cff; }
   * { box-sizing:border-box; }
   body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; background:var(--bg); color:var(--ink); }
-  main { max-width:760px; margin:0 auto; padding:24px 16px 120px; }
-  h1 { font-size:22px; margin:0 0 4px; }
-  .sub { color:var(--muted); margin:0 0 20px; font-size:14px; }
-  .picker { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
-  .picker button { width:40px; height:40px; border:1px solid var(--line); background:var(--card); border-radius:10px; font-size:15px; cursor:pointer; }
-  .picker button.active { background:var(--ink); color:#fff; border-color:var(--ink); }
-  .picker button.done { border-color:var(--ok); color:var(--ok); }
-  .picker button.random { width:auto; padding:0 14px; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px; }
-  .sentence { font-size:19px; line-height:2.3; }
-  .sentence input { font:inherit; font-size:18px; text-align:center; border:none; border-bottom:2px solid var(--accent); background:#eef1ff; border-radius:6px 6px 0 0; padding:0 2px; margin:0 1px; outline:none; }
-  .sentence input:focus { background:#dfe5ff; }
-  .sentence input.ok { border-color:var(--ok); background:#e6f5ec; color:var(--ok); }
-  .sentence input.bad { border-color:var(--bad); background:#fdecec; color:var(--bad); text-decoration:line-through; }
-  .hint { color:var(--muted); font-size:15px; }
-  .actions { display:flex; gap:10px; margin-top:20px; }
-  .actions button { font:inherit; font-size:16px; padding:12px 20px; border-radius:12px; border:none; cursor:pointer; }
-  .primary { background:var(--ink); color:#fff; }
-  .secondary { background:var(--line); color:var(--ink); }
-  .result { margin-top:20px; }
-  .score { font-weight:600; margin-bottom:12px; }
-  .mistake { border-left:4px solid var(--bad); background:#fff7f7; padding:10px 14px; border-radius:0 10px 10px 0; margin-bottom:10px; }
-  .mistake .w { font-size:17px; }
-  .mistake .w s { color:var(--bad); }
-  .mistake .w b { color:var(--ok); }
-  .mistake .r { color:#444; font-size:14px; margin-top:4px; }
-  .allok { color:var(--ok); font-weight:600; }
-  .keys { position:fixed; left:0; right:0; bottom:0; background:var(--card); border-top:1px solid var(--line); padding:10px; display:flex; justify-content:center; flex-wrap:wrap; gap:6px; }
-  .keys button { width:42px; height:42px; font-size:18px; border:1px solid var(--line); background:var(--bg); border-radius:10px; cursor:pointer; }
+  main { max-width:760px; margin:0 auto; padding:40px 16px; }
+  h1 { font-size:28px; margin:0 0 6px; }
+  .sub { color:var(--muted); margin:0 0 28px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:14px; }
+  .topic { display:block; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:20px; text-decoration:none; color:inherit; transition:transform .15s ease, border-color .15s ease; }
+  a.topic:hover { transform:translateY(-2px); border-color:var(--accent); }
+  .topic .icon { font-size:28px; }
+  .topic h2 { font-size:18px; margin:10px 0 4px; }
+  .topic p { color:var(--muted); font-size:14px; margin:0; line-height:1.4; }
+  .topic.soon { opacity:.5; cursor:default; }
+  .tag { display:inline-block; margin-top:10px; font-size:12px; padding:3px 8px; border-radius:999px; background:var(--line); color:var(--muted); }
 </style>
 </head>
 <body>
 <main>
-  <h1>Rašybos treniruoklis</h1>
-  <p class="sub">Pasirink sakinį ir įrašyk praleistas raides. Skliaustuose esančius žodžius parašyk kartu arba skyrium.</p>
-  <div class="picker" id="picker"></div>
-  <div class="card">
-    <div class="sentence" id="sentence"></div>
-    <div class="actions">
-      <button class="primary" id="check">Tikrinti</button>
-      <button class="secondary" id="next">Kitas sakinys →</button>
-    </div>
-    <div class="result" id="result"></div>
-  </div>
+  <h1>Lietuvių kalbos treniruoklis</h1>
+  <p class="sub">Pasirink, ką nori mokytis.</p>
+  <div class="grid" id="grid"></div>
 </main>
-<div class="keys" id="keys"></div>
 
 <script>
-// Rules reused across blanks
-const R = {
-  ymas: "Priesaga -ymas daroma iš -yti veiksmažodžių: papildyti → papildymas, aprašyti → aprašymas, atsakyti → atsakymas, išbandyti → išbandymas.",
-  imas: "Priesaga -imas (trumpas i): gaivinti → gaivinimas, sutrikti → sutrikimas, klausti → klausimas, likti → likimas.",
-  buti: "Šaknis būt-/būd- (būti, būdas, būtina, būtis) rašoma su ilguoju ū.",
-  kuryba: "kurti → kūryba, kūrybingas: šios šaknies daiktavardžiuose rašoma ilgoji ū.",
-  tu: "Tariamosios nuosakos 3 asmuo baigiasi -tų: nevirstų, vestų, įgytų.",
-  esnis: "Aukštesnysis laipsnis daromas su priesaga -esnis, -esnė: gilesnė, laisvesnė.",
-  masty: "Nosinė ą, nes giminiškuose žodžiuose ilgieji balsiai kaitaliojasi tarpusavyje: mąstyti – mįslė (taisyklė II).",
-  grizti: "Nosinė į, nes kaitaliojasi su ą: grįžti – grąža – grąžinti (taisyklė II).",
-  ivardz: "Įvardžiuotinė forma = paprastoji forma + įvardžio jis/ji galūnė: pirmame → pirmajame, didžių → didžiųjų, mirtingam → mirtingajam, žmogiškai → žmogiškajai, gimtą → gimtąją.",
-  antys: "Esamojo laiko veikiamasis dalyvis, vyr. g. dgs.: -antys (gaivinantys, gyvenantys).",
-  tarpt: "Tarptautinis žodis rašomas kaip kilmės kalboje: racionalus, realus, realybė.",
-  ia: "Po minkštojo priebalsio galūnėje rašoma -ia-: panašiais, istoriniame, realiame, pačiai.",
-  gyti: "Šaknyje y: gyventi, gyvas, įgyti (įgijo).",
-  nekaip: "Ne su nebūdvardiniais prieveiksmiais rašoma atskirai: ne kaip, ne taip, ne čia. Kartu „nekaip“ rašoma tik kai reiškia „prastai“.",
-  nors: "Dalelytė nors visada rašoma atskirai: kas nors, kada nors, koks nors."
-};
-
-// Each sentence: text with blanks.  {answer|rule}  = letters,  {{hint|answer|rule}} = kartu/skyrium
-const SENTENCES = [
-  "Į šiuolaikinio žmogaus gyvenimą vėl gr{į|"+R.grizti+"}žta mitas – kaip įprastos tikrovės papild{y|"+R.ymas+"}mas ir jos praturtinimas, {{gal, būt|galbūt|„galbūt“ yra vienas prieveiksmis, rašomas kartu.}} kaip alternatyvi tikrovė, bet jokiu b{ū|"+R.buti+"}du {{ne, kaip|ne kaip|"+R.nekaip+"}} radikali opozicija įprastai tikrovei, {{ne, kaip|ne kaip|"+R.nekaip+"}} nesutaikomas jos paneigimas.",
-
-  "Kad gr{į|"+R.grizti+"}žimas prie mito nevirst{ų|"+R.tu+"} archa{i|Žodis archaiškas: dvibalsis ai (archaika), nosinės nėra.}šk{ų|Būdvardžio dgs. kilmininkas: archaiškų (kokių?).} atavistinių polinkių bei egzistencinių rudimentų gaiv{i|"+R.imas+"}nimu, o vest{ų|"+R.tu+"} prie laisvos k{ū|"+R.kuryba+"}rybos ir laisv{e|"+R.esnis+"}snės b{ū|"+R.buti+"}ties versmių, mito prigimtį b{ū|"+R.buti+"}tina apm{ą|"+R.masty+"}styti naujai – naujai klausti tiek apie paties mito esmę, tiek apie mito s{a|Priešdėlis san- (santykis, sandora) rašomas be nosinės.}nt{y|Šaknis -tyk- (tykoti): santykis.}kį su tuo, kas n{ė|nėra = ne + yra, todėl rašoma ė.}ra mitas.",
-
-  "Ak{i|Akivaizdu = aki- (akis) + vaizdu.} vaizdu, kad vis gil{e|"+R.esnis+"}snės prarajos tarp mito ir logo, rac{i|"+R.tarpt+"}onalaus proto ir intuicijos, m{ą|"+R.masty+"}stymo ir vaizduotės raus{i|"+R.imas+" (rausti → rausimas)}mas tikrai {{ne, gali|negali|Ne su veiksmažodžiais rašoma kartu, kai sakinyje nėra priešpriešos.}} pasitarnauti tiems, kuriems lemta gyventi dv{i|dvi + dešimt: dvidešimt (trumpas i).}dešimt pirm{a|"+R.ivardz+"}j{a|"+R.ivardz+"}me amžiuje.",
-
-  "Mito išmintis ir mite įš{a|šalti → šaldyti → įšaldyti: šaknyje a.}ldyti gaivalingos vaizduotės kristalai, gaivinant{y|"+R.antys+"}s šiuolaikinio žmogaus k{ū|"+R.kuryba+"}rybingumą, pajėg{ū|Būdvardžiai su -us daugiskaitoje vyr. g. turi galūnę -ūs: pajėgus → pajėgūs.}s suteikti vilties ir įkv{ė|kvėpti → kvėpavimas → įkvėpimas: šaknyje ė.}pimo tiems, kurie kenčia nuo dvasinės disharmonijos ir egzistencinio sutr{i|"+R.imas+"}kimo.",
-
-  "T{u|turėti – šaknyje trumpas u.}rėtume – kaip ir kitais panaš{ia|"+R.ia+"}is atv{e|atvejis → atvejais: šaknyje e.}jais – pasikliauti senovės graikų, didži{ų|"+R.ivardz+"}j{ų|"+R.ivardz+"} mūsų mokytojų, įžvalg{u|įžvalgus → įžvalgumas: priesaga -umas (trumpas u).}mu, kurio jie s{e|semti → semiasi: šaknyje e.}miasi tiek iš mitinės vaizduotės versmių, tiek ir iš loginių proto galių.",
-
-  "Senovės graikų m{ą|"+R.masty+"}stytojai yra pastebėj{ę|Būtojo kartinio laiko veikiamasis dalyvis, vyr. g. dgs.: pastebėję (jie pastebėję).}, kad mitai b{y|byla → byloti: šaknyje y.}loja ne apie tai, kas {{kada, nors|kada nors|"+R.nors+"}} buvo įvykę m{į|Nosinė į, nes kaitaliojasi su ą: mįslė – mąstyti (taisyklė II).}slingame istorin{ia|"+R.ia+"}me laike ir erdvėje, o apie tai, kas an{a|anapus = ana + pus: rašoma a.}pus erdvės ir laiko egzistuoja visada.",
-
-  "Mitai kalba apie archetipines, nuolat pasikartojančias egzistencines situacijas, į kurias patenka {{ne, tik|ne tik|Ne su dalelytėmis rašoma atskirai: ne tik, ne vien, ne tiktai.}} mitų herojai, bet ir įprastame laike bei erdvėje gyvenant{y|"+R.antys+"}s žmonės.",
-
-  "Mitai kalba apie amžinuosius išš{ū|šaukti → šūkis → iššūkis: ū kaitaliojasi su au.}kius, kuriuos tikrovė meta žmogui, ir apie laiko patikrintus b{ū|"+R.buti+"}dus dorotis su jais.",
-
-  "Kartu su dievams, pusdieviams ir žmonėms tenkančių išband{y|"+R.ymas+"}mų apraš{y|"+R.ymas+"}mais mituose, {{be, ab_jo|be abejo|Prielinksniai rašomi atskirai nuo nesutrumpėjusių žodžių: be abejo, be galo, be reikalo.}} pateik{ia|Neveikiamasis dalyvis daromas iš esamojo laiko: pateikia → pateikiamos.}mos ir jų ištv{ė|ištverti → ištvėrė → ištvėrimas: iš būtojo laiko kamieno, rašoma ė.}rimo istorijos, si{ū|siūlyti: šaknyje ilgasis ū.}lančios mirting{a|"+R.ivardz+"}j{a|"+R.ivardz+"}m atsak{y|"+R.ymas+"}mus į klaus{i|"+R.imas+"}mus, kuriuos ka{s|kasdienė = kas + diena (kasdien): rašoma s.}dienė egzistencija nuolat kelia k{i|kiek + vienas: kiekvienas.}ekvienam iš mūsų.",
-
-  "Visi mes gyvenimo kelionėje esame priversti ieškoti kelio į gimt{ą|"+R.ivardz+"}j{ą|"+R.ivardz+"} Itakę kaip Odisėjas, r{y|ryžtis – pavojingas žodis BE nosinės: ryžtis, pasiryžti, ryžtingai.}žtingai ieškotis naujos tėvynės kaip Enėjas, siekti šlovės kaip Achilas ar amžinojo gyvenimo – kaip šumerų pusdievis Gilgamešas.",
-
-  "Mitai kalba ir apie žmogišk{a|"+R.ivardz+"}j{a|"+R.ivardz+"}i puik{y|puikus → puikybė: priesaga -ybė.}bei, kuriai taip dažnai pasiduoda šiuolaikinis žmogus, gr{ė|grėsti (grėsė) – pavojingas žodis BE nosinės: kaitaliojasi su ė, o ne su nosine (grasinti, grėsmė).}siančius pavojus: Sizifo, Tantalo, Belerofonto ar Iksijono l{i|likti → likimas: šaknyje trumpas i.}kimas gali ištikti {{bet, kurį|bet kurį|Dalelytė bet visada rašoma atskirai: bet kas, bet kuris, bet koks.}} iš mūsų {{ne, kokioje, nors|ne kokioje nors|Ne su įvardžiais rašoma atskirai, o dalelytė nors – irgi atskirai.}} mitinėje amžinybėje, o r{e|"+R.tarpt+"}aliame laike ir erdvėje.",
-
-  "Šiuolaikinis žmogus, laikantis save {{kol, kas|kol kas|„kol kas“ rašoma atskirai.}} mirtingu dievu ar {{net, gi|netgi|Gi rašoma kartu su nekaitomais vienskiemeniais žodžiais: netgi, argi, irgi.}} praded{ą|Esamojo laiko veikiamasis dalyvis, vyr. g. vns. trumpoji forma: pradedąs (= pradedantis).}s vaidinti patį Dievą, įg{y|"+R.gyti+"}tų daugiau išminties ir naudos įd{ė|įdėmus → įdėmiai (dėmesys): šaknyje ė.}miai perskait{ę|Būtojo kartinio laiko veikiamasis dalyvis, vyr. g. vns.: -ęs (perskaitęs, išstudijavęs).}s graikiškų mitų rinktinę, nei išstudij{a|studijuoti → išstudijavo → išstudijavęs: rašoma a.}vęs kokį nors genų inžinerijos, klonavimo ar vadinamosios „vis{a|„Visa ko teorija“: įvardis visa (kilm. visa ko), rašoma a.} ko teorijos“ vadovėlį.",
-
-  "Pagaliau tikroviški mito pasauliai suteikia daugiau tikroviškumo ir dažnai {{per, ne, lyg|pernelyg|Per rašoma atskirai, išskyrus pernelyg.}} nusivadėjusiai, tikrumo stokojančiai mūsų r{e|"+R.tarpt+"}alybei.",
-
-  "Iš vaizduotės gelmių iškelti tikroviški mito pasauliai gali suteikti daugiau tikrumo pač{ia|"+R.ia+"}i tikrov{e|tikrovė → tikrovei (naudininkas -ei).}i, ypač kai ji tampa vis labiau netikra – virtuali, simuliuota ar kitaip falsifikuota."
+// Add new topics here. Leave href empty to show it as "Netrukus".
+const TOPICS = [
+  { icon: "✍️", title: "Rašyba", desc: "Įrašyk praleistas raides ir parašyk žodžius kartu arba skyrium.", href: "rasyba.html" },
+  { icon: "❝", title: "Skyryba", desc: "Padėk trūkstamus skyrybos ženklus.", href: "" }
 ];
 
-const norm = s => s.trim().toLowerCase().replace(/\s+/g, " ");
-const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
-
-// Turn a sentence string into parts: text, letter blank, or word blank
-function parse(src) {
-  const parts = [], re = /\{\{([^|}]*)\|([^|}]*)\|([^}]*)\}\}|\{([^|}]*)\|([^}]*)\}/g;
-  let last = 0, m;
-  while ((m = re.exec(src))) {
-    if (m.index > last) parts.push({ t: src.slice(last, m.index) });
-    if (m[1] !== undefined) parts.push({ word: true, hint: m[1], ans: m[2], rule: m[3] });
-    else parts.push({ ans: m[4], rule: m[5] });
-    last = re.lastIndex;
-  }
-  if (last < src.length) parts.push({ t: src.slice(last) });
-  return parts;
-}
-
-let current = 0, parts = [], focused = null;
-const done = new Set();
-
-function renderPicker() {
-  const p = document.getElementById("picker");
-  p.innerHTML = SENTENCES.map((_, i) =>
-    `<button class="${i === current ? "active" : ""} ${done.has(i) ? "done" : ""}" data-i="${i}">${i + 1}</button>`).join("")
-    + `<button class="random" data-i="r">🎲 Atsitiktinis</button>`;
-}
-
-function load(i) {
-  current = i;
-  parts = parse(SENTENCES[i]);
-  document.getElementById("sentence").innerHTML = parts.map((p, k) => {
-    if (p.t !== undefined) return esc(p.t);
-    if (p.word) return `<span class="hint">(${esc(p.hint)})</span> <input data-k="${k}" style="width:${Math.max(p.hint.length, 8) + 2}ch" autocomplete="off" autocapitalize="off" spellcheck="false">`;
-    return `<input data-k="${k}" style="width:${p.ans.length + 1.6}ch" autocomplete="off" autocapitalize="off" spellcheck="false">`;
-  }).join("");
-  document.getElementById("result").innerHTML = "";
-  renderPicker();
-  document.querySelector(".sentence input")?.focus();
-}
-
-// Rebuild the word around a blank so mistakes show in context
-function wordAround(k, fill) {
-  let left = "", right = "";
-  for (let j = k - 1; j >= 0; j--) {
-    const p = parts[j];
-    const s = p.t !== undefined ? p.t : (p.word ? null : p.ans);
-    if (s === null) break;
-    const m = s.match(/[\p{L}-]*$/u)[0]; left = m + left;
-    if (m.length < s.length) break;
-  }
-  for (let j = k + 1; j < parts.length; j++) {
-    const p = parts[j];
-    const s = p.t !== undefined ? p.t : (p.word ? null : p.ans);
-    if (s === null) break;
-    const m = s.match(/^[\p{L}-]*/u)[0]; right += m;
-    if (m.length < s.length) break;
-  }
-  return left + fill + right;
-}
-
-function check() {
-  const inputs = [...document.querySelectorAll(".sentence input")];
-  let wrong = [];
-  inputs.forEach(inp => {
-    const k = +inp.dataset.k, p = parts[k];
-    const ok = norm(inp.value) === norm(p.ans);
-    inp.classList.toggle("ok", ok);
-    inp.classList.toggle("bad", !ok);
-    if (!ok) wrong.push({ k, p, val: inp.value.trim() });
-  });
-  const total = inputs.length, good = total - wrong.length;
-  let html = `<div class="score">${good} / ${total} teisingai</div>`;
-  if (!wrong.length) { html += `<div class="allok">Viskas teisingai! 🎉</div>`; done.add(current); renderPicker(); }
-  wrong.forEach(({ k, p, val }) => {
-    const right = p.word ? p.ans : wordAround(k, p.ans);
-    const yours = p.word ? (val || "—") : wordAround(k, val || "_");
-    html += `<div class="mistake"><div class="w"><s>${esc(yours)}</s> → <b>${esc(right)}</b></div><div class="r">${esc(p.rule)}</div></div>`;
-  });
-  document.getElementById("result").innerHTML = html;
-}
-
-document.getElementById("picker").addEventListener("click", e => {
-  const b = e.target.closest("button"); if (!b) return;
-  if (b.dataset.i === "r") {
-    let i; do { i = Math.floor(Math.random() * SENTENCES.length); } while (i === current && SENTENCES.length > 1);
-    load(i);
-  } else load(+b.dataset.i);
-});
-document.getElementById("check").onclick = check;
-document.getElementById("next").onclick = () => load((current + 1) % SENTENCES.length);
-document.getElementById("sentence").addEventListener("focusin", e => { if (e.target.tagName === "INPUT") focused = e.target; });
-document.getElementById("sentence").addEventListener("keydown", e => {
-  if (e.key === "Enter") { e.preventDefault(); check(); }
-});
-
-// On-screen LT letters for keyboards without them
-const keys = document.getElementById("keys");
-keys.innerHTML = "ą č ę ė į š ų ū ž y".split(" ").map(c => `<button>${c}</button>`).join("");
-keys.addEventListener("mousedown", e => e.preventDefault());
-keys.addEventListener("click", e => {
-  const b = e.target.closest("button"); if (!b || !focused) return;
-  const s = focused.selectionStart, en = focused.selectionEnd;
-  focused.value = focused.value.slice(0, s) + b.textContent + focused.value.slice(en);
-  focused.setSelectionRange(s + 1, s + 1);
-  focused.focus();
-});
-
-load(0);
+document.getElementById("grid").innerHTML = TOPICS.map(t => t.href
+  ? `<a class="topic" href="${t.href}"><div class="icon">${t.icon}</div><h2>${t.title}</h2><p>${t.desc}</p></a>`
+  : `<div class="topic soon"><div class="icon">${t.icon}</div><h2>${t.title}</h2><p>${t.desc}</p><span class="tag">Netrukus</span></div>`
+).join("");
 </script>
 </body>
 </html>
