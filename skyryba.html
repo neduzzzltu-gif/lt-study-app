@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skyrybos treniruoklis</title>
+<style>
+  :root { --bg:#f6f4ef; --card:#fff; --ink:#1d1d1f; --muted:#6b6b70; --line:#e3e0d8; --ok:#1f8a4c; --bad:#c62828; --accent:#2b4cff; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; background:var(--bg); color:var(--ink); }
+  main { max-width:760px; margin:0 auto; padding:24px 16px 60px; }
+  .top { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+  .back { color:var(--muted); text-decoration:none; font-size:14px; }
+  .mode { font-size:14px; color:var(--accent); text-decoration:none; }
+  h1 { font-size:22px; margin:0 0 4px; }
+  .sub { color:var(--muted); margin:0 0 20px; font-size:14px; line-height:1.5; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px; }
+  .sentence { font-size:19px; line-height:2.2; }
+  /* clickable gap between words */
+  .gap { display:inline-block; min-width:14px; height:28px; padding:0 3px; margin:0 1px; vertical-align:middle; border:none; border-radius:6px; background:transparent; font:inherit; font-size:20px; font-weight:700; color:var(--accent); cursor:pointer; line-height:28px; transition:background .12s; }
+  .gap:hover { background:#e4e9ff; }
+  .gap.set { background:#eef1ff; }
+  .gap.ok { color:var(--ok); background:#e6f5ec; }
+  .gap.bad { color:var(--bad); background:#fdecec; }
+  .gap.miss { background:#fdecec; box-shadow:inset 0 -2px 0 var(--bad); }
+  .gap.locked { cursor:default; color:var(--ink); font-weight:400; background:none; min-width:0; padding:0; }
+  .actions { display:flex; gap:10px; margin-top:20px; flex-wrap:wrap; }
+  .actions button { font:inherit; font-size:16px; padding:12px 20px; border-radius:12px; border:none; cursor:pointer; }
+  .primary { background:var(--ink); color:#fff; }
+  .secondary { background:var(--line); color:var(--ink); }
+  .result { margin-top:20px; }
+  .score { font-weight:600; margin-bottom:12px; }
+  .mistake { border-left:4px solid var(--bad); background:#fff7f7; padding:10px 14px; border-radius:0 10px 10px 0; margin-bottom:10px; }
+  .mistake .w, .good .w { font-size:17px; }
+  .mistake .w s { color:var(--bad); }
+  .mistake .w b, .good .w b { color:var(--ok); }
+  .mistake .r, .good .r { color:#444; font-size:14px; margin-top:4px; }
+  .allok { color:var(--ok); font-weight:600; }
+  .empty { color:var(--muted); line-height:1.6; }
+  .fixbtn { display:inline-block; margin-top:6px; padding:10px 16px; border-radius:12px; background:var(--bad); color:#fff; text-decoration:none; font-weight:600; font-size:15px; }
+  .rightlist { margin:14px 0 10px; }
+  .rightlist > summary { cursor:pointer; color:var(--ok); font-weight:600; list-style:none; user-select:none; margin-bottom:10px; }
+  .rightlist > summary::-webkit-details-marker { display:none; }
+  .rightlist > summary::after { content:" ▾"; display:inline-block; transition:transform .2s; }
+  .rightlist[open] > summary::after { transform:rotate(180deg); }
+  .good { border-left:4px solid var(--ok); background:#f3faf6; padding:10px 14px; border-radius:0 10px 10px 0; margin-bottom:10px; animation:slide .25s ease-out; }
+  .full { margin-top:8px; font-size:14px; }
+  .full summary { cursor:pointer; color:var(--accent); font-weight:600; list-style:none; user-select:none; }
+  .full summary::-webkit-details-marker { display:none; }
+  .full summary::after { content:" ▾"; display:inline-block; transition:transform .2s; }
+  .full[open] summary::after { transform:rotate(180deg); }
+  .full .body { margin-top:8px; padding:10px 12px; background:#fff; border:1px solid var(--line); border-radius:10px; color:#333; line-height:1.55; animation:slide .25s ease-out; }
+  .full .body p { margin:0 0 8px; } .full .body p:last-child { margin:0; }
+  @keyframes slide { from { opacity:0; transform:translateY(-8px); } }
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <a class="back" href="index.html">← Visos temos</a>
+    <a class="mode" id="modeLink" href="klaidos.html#skyryba">Mano klaidos →</a>
+  </div>
+  <h1 id="title">Skyrybos treniruoklis</h1>
+  <p class="sub" id="sub">Spausk tarpą tarp žodžių, kad padėtum ženklą. Kiekvienas paspaudimas keičia: <b>nieko → , → – → :</b></p>
+  <div class="card">
+    <div class="sentence" id="sentence"></div>
+    <div class="actions" id="actions">
+      <button class="primary" id="check">Tikrinti</button>
+      <button class="secondary" id="next">Kitas sakinys →</button>
+    </div>
+    <div class="result" id="result"></div>
+  </div>
+</main>
+
+<script src="data.js"></script>
+<script src="skyryba-data.js"></script>
+<script>
+const MISTAKE_MODE = new URLSearchParams(location.search).has("klaidos");
+if (MISTAKE_MODE) {
+  document.getElementById("title").textContent = "Skyrybos klaidų treniruotė";
+  document.getElementById("sub").textContent = "Tik tie tarpai, kuriuose suklydai. Atsakyk teisingai 2 kartus iš eilės – klaida dingsta.";
+  document.getElementById("modeLink").textContent = "← Klaidų sąrašas";
+}
+
+const MARKS = ["", ",", "–", ":"];
+let current = -1, sent = null, checked = false;
+
+function load(i) {
+  current = i; checked = false;
+  sent = skParse(SK_SENTENCES[i]);
+  const m = MISTAKE_MODE ? skLoadMistakes() : null;
+  document.getElementById("sentence").innerHTML = sent.words.map((w, g) => {
+    if (g >= sent.gaps.length) return esc(w);
+    if (m && !m[i + ":" + g]) {
+      // Not a past mistake: show the correct mark, not clickable
+      const a = sent.gaps[g].ans[0];
+      return esc(w) + (a === "–" ? " – " : a ? a + " " : " ");
+    }
+    return `${esc(w)}<button class="gap" data-g="${g}" data-m=""></button>`;
+  }).join("");
+  document.getElementById("result").innerHTML = "";
+}
+
+document.getElementById("sentence").addEventListener("click", e => {
+  const b = e.target.closest(".gap"); if (!b || b.classList.contains("locked")) return;
+  const next = MARKS[(MARKS.indexOf(b.dataset.m) + 1) % MARKS.length];
+  b.dataset.m = next; b.textContent = next;
+  b.className = "gap" + (next ? " set" : "");
+});
+
+function check() {
+  const first = !checked; checked = true;
+  const wrong = [], correct = [];
+  document.querySelectorAll(".sentence .gap").forEach(b => {
+    const g = +b.dataset.g, gap = sent.gaps[g], val = b.dataset.m;
+    const ok = gap.ans.includes(val);
+    b.className = "gap " + (ok ? (val ? "ok" : "") : (val ? "bad" : "miss"));
+    // Only remember gaps that matter: a mark was expected, or a wrong mark was added
+    if (first && (!gap.def || !ok)) skRecord(current, g, ok, val);
+    if (!ok) wrong.push({ g, gap, val });
+    else if (!gap.def) correct.push({ g, gap, val });
+  });
+  const a = sent.words;
+  let html = `<div class="score">${wrong.length ? `${wrong.length} ${wrong.length === 1 ? "klaida" : "klaidos"}` : "Viskas teisingai! 🎉"}</div>`;
+  wrong.forEach(({ g, gap, val }) => {
+    const right = gap.ans.map(x => skJoin(a[g], x, a[g + 1])).join("  arba  ");
+    html += `<div class="mistake"><div class="w"><s>${esc(skJoin(a[g], val, a[g + 1]))}</s> → <b>${esc(right)}</b></div><div class="r">${esc(gap.rule)}</div>${skFullRule(gap.cat)}</div>`;
+  });
+  if (correct.length) html += `<details class="rightlist"><summary>Teisingos vietos (${correct.length})</summary>${correct.map(({ g, gap, val }) =>
+    `<div class="good"><div class="w"><b>${esc(skJoin(a[g], val, a[g + 1]))}</b></div><div class="r">${esc(gap.rule)}</div>${skFullRule(gap.cat)}</div>`).join("")}</details>`;
+  const n = Object.keys(skLoadMistakes()).length;
+  if (n && !MISTAKE_MODE) html += `<a class="fixbtn" href="skyryba.html?klaidos">🎯 Taisyti klaidas (${n}) →</a>`;
+  document.getElementById("result").innerHTML = html;
+  updateModeLink();
+}
+
+function updateModeLink() {
+  if (MISTAKE_MODE) return;
+  const n = Object.keys(skLoadMistakes()).length;
+  document.getElementById("modeLink").textContent = n ? `Mano klaidos (${n}) →` : "Mano klaidos →";
+}
+
+// Shuffled deck, never the same sentence twice in a row
+let deck = [];
+function pool() {
+  if (!MISTAKE_MODE) return SK_SENTENCES.map((_, i) => i);
+  return [...new Set(Object.keys(skLoadMistakes()).map(id => +id.split(":")[0]))];
+}
+function nextRandom() {
+  if (MISTAKE_MODE) deck = deck.filter(i => pool().includes(i));
+  if (!deck.length) {
+    deck = pool();
+    if (!deck.length) return showNoMistakes();
+    for (let i = deck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [deck[i], deck[j]] = [deck[j], deck[i]]; }
+    const last = deck.length - 1;
+    if (deck.length > 1 && deck[last] === current) [deck[last], deck[0]] = [deck[0], deck[last]];
+  }
+  load(deck.pop());
+}
+function showNoMistakes() {
+  document.getElementById("sentence").innerHTML = `<div class="empty">Klaidų neliko! 🎉<br>Paspręsk daugiau sakinių <a href="skyryba.html">įprastame režime</a>.</div>`;
+  document.getElementById("actions").style.display = "none";
+  document.getElementById("result").innerHTML = "";
+}
+
+document.getElementById("check").onclick = check;
+document.getElementById("next").onclick = nextRandom;
+document.addEventListener("keydown", e => { if (e.key === "Enter" && !e.target.closest("button")) check(); });
+updateModeLink();
+nextRandom();
+</script>
+</body>
+</html>

@@ -29,17 +29,18 @@
 </main>
 
 <script src="data.js"></script>
+<script src="skyryba-data.js"></script>
 <script>
 // Add new topics here. Leave href empty to show it as "Netrukus".
 const TOPICS = [
   { icon: "✍️", title: "Rašyba", desc: "Įrašyk praleistas raides ir parašyk žodžius kartu arba skyrium.", href: "rasyba.html" },
   { icon: "🎯", title: "Mano klaidos", desc: "Silpniausios vietos ir treniruotė tik su klaidomis.", href: "klaidos.html" },
-  { icon: "❝", title: "Skyryba", desc: "Padėk trūkstamus skyrybos ženklus.", href: "" }
+  { icon: "❝", title: "Skyryba", desc: "Padėk trūkstamus kablelius, brūkšnius ir dvitaškius.", href: "skyryba.html" }
 ];
 
 // Show how many mistakes are waiting
 try {
-  const n = Object.keys(loadMistakes()).length;
+  const n = Object.keys(loadMistakes()).length + Object.keys(skLoadMistakes()).length;
   if (n) TOPICS.find(t => t.href === "klaidos.html").desc = `${n} ${n % 10 === 1 && n % 100 !== 11 ? "klaida laukia" : (n % 10 === 0 || (n % 100 > 10 && n % 100 < 20)) ? "klaidų laukia" : "klaidos laukia"} pataisymo.`;
 } catch {}
 

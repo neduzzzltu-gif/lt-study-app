@@ -30,6 +30,9 @@
   .word .w b { color:var(--ok); }
   .word .w small { color:var(--muted); font-size:13px; margin-left:6px; }
   .word .r { color:#444; font-size:14px; margin-top:4px; }
+  .tabs { display:flex; gap:8px; margin-bottom:18px; }
+  .tab { font:inherit; font-size:15px; padding:8px 16px; border-radius:999px; border:1px solid var(--line); background:var(--card); cursor:pointer; }
+  .tab.on { background:var(--ink); color:#fff; border-color:var(--ink); }
   .empty { color:var(--muted); line-height:1.6; }
   .full { margin-top:8px; font-size:14px; }
   .full summary { cursor:pointer; color:var(--accent); font-weight:600; list-style:none; user-select:none; }
@@ -45,57 +48,92 @@
 <main>
   <a class="back" href="index.html">← Visos temos</a>
   <h1>Mano klaidos</h1>
-  <p class="sub">Čia kaupiasi langeliai, kuriuose suklydai. Atsakyk teisingai 2 kartus iš eilės – klaida dingsta.</p>
+  <p class="sub">Čia kaupiasi vietos, kuriose suklydai. Atsakyk teisingai 2 kartus iš eilės – klaida dingsta.</p>
   <div id="content"></div>
 </main>
 
 <script src="data.js"></script>
+<script src="skyryba-data.js"></script>
 <script>
-function render() {
-  const m = loadMistakes(), items = [];
-  for (const id in m) {
-    const [si, k] = id.split(":").map(Number);
-    if (!SENTENCES[si]) continue;
-    const parts = parse(SENTENCES[si]), p = parts[k];
-    if (!p || p.t !== undefined) continue;
-    items.push({ ...m[id], p, parts, k });
+const plural = n => n % 10 === 1 && n % 100 !== 11 ? "klaida" : (n % 10 === 0 || (n % 100 > 10 && n % 100 < 20)) ? "klaidų" : "klaidos";
+
+// Each topic turns its saved mistakes into the same item shape
+const SECTIONS = {
+  rasyba: {
+    title: "Rašyba", gen: "rašybos", page: "rasyba.html",
+    items() {
+      const m = loadMistakes(), out = [];
+      for (const id in m) {
+        const [si, k] = id.split(":").map(Number), parts = parse(SENTENCES[si]), p = parts[k];
+        out.push({
+          wrong: m[id].wrong, cat: p.cat, catName: CATS[p.cat]?.name, catHint: CATS[p.cat]?.hint, rule: p.rule, full: fullRule(p.cat),
+          right: p.word ? p.ans : wordAround(parts, k, p.ans.split("/")[0]),
+          yours: p.word ? (m[id].last || "—") : wordAround(parts, k, m[id].last || "_")
+        });
+      }
+      return out;
+    },
+    clear: () => saveMistakes({})
+  },
+  skyryba: {
+    title: "Skyryba", gen: "skyrybos", page: "skyryba.html",
+    items() {
+      const m = skLoadMistakes(), out = [];
+      for (const id in m) {
+        const [si, g] = id.split(":").map(Number), s = skParse(SK_SENTENCES[si]), gap = s.gaps[g], a = s.words;
+        out.push({
+          wrong: m[id].wrong, cat: gap.cat, catName: SK_CATS[gap.cat]?.name, catHint: "", rule: gap.rule, full: skFullRule(gap.cat),
+          right: gap.ans.map(x => skJoin(a[g], x, a[g + 1])).join("  arba  "),
+          yours: skJoin(a[g], m[id].last || "", a[g + 1])
+        });
+      }
+      return out;
+    },
+    clear: () => skSaveMistakes({})
   }
+};
+
+let tab = location.hash === "#skyryba" ? "skyryba" : "rasyba";
+
+function render() {
+  const sec = SECTIONS[tab], items = sec.items();
+  const counts = Object.fromEntries(Object.entries(SECTIONS).map(([k, s]) => [k, s.items().length]));
+  const tabs = `<div class="tabs">${Object.entries(SECTIONS).map(([k, s]) =>
+    `<button class="tab ${k === tab ? "on" : ""}" data-t="${k}">${s.title}${counts[k] ? ` (${counts[k]})` : ""}</button>`).join("")}</div>`;
   const el = document.getElementById("content");
   if (!items.length) {
-    el.innerHTML = `<div class="card empty">Klaidų dar nėra. 🎉<br>Spręsk sakinius <a href="rasyba.html">rašybos treniruoklyje</a> – čia atsiras vietos, kuriose suklydai.</div>`;
+    el.innerHTML = tabs + `<div class="card empty">Klaidų dar nėra. 🎉<br>Spręsk sakinius <a href="${sec.page}">${sec.gen} treniruoklyje</a> – čia atsiras vietos, kuriose suklydai.</div>`;
     return;
   }
 
   // Weak spots: total wrong answers per rule type
   const byCat = {};
-  items.forEach(it => { const c = it.p.cat || "kita"; byCat[c] = (byCat[c] || 0) + it.wrong; });
-  const cats = Object.entries(byCat).sort((a, b) => b[1] - a[1]);
-  const max = cats[0][1];
-
+  items.forEach(it => { byCat[it.cat] = byCat[it.cat] || { n: 0, name: it.catName, hint: it.catHint }; byCat[it.cat].n += it.wrong; });
+  const cats = Object.values(byCat).sort((a, b) => b.n - a.n), max = cats[0].n;
   items.sort((a, b) => b.wrong - a.wrong);
 
-  el.innerHTML = `
-    <a class="btn primary" href="rasyba.html?klaidos">Treniruoti klaidas (${items.length}) →</a>
+  el.innerHTML = tabs + `
+    <a class="btn primary" href="${sec.page}?klaidos">Treniruoti klaidas (${items.length}) →</a>
     <h2>Silpniausios vietos</h2>
-    <div class="card">${cats.map(([c, n]) => `
+    <div class="card">${cats.map(c => `
       <div class="cat">
-        <div class="row">${esc(CATS[c]?.name || "Kita")} <span>${n} ${n === 1 ? "klaida" : (n % 10 === 0 || (n % 100 > 10 && n % 100 < 20)) ? "klaidų" : n % 10 === 1 ? "klaida" : "klaidos"}</span></div>
-        <div class="bar"><i style="width:${Math.round(n / max * 100)}%"></i></div>
-        ${CATS[c] ? `<p>${esc(CATS[c].hint)}</p>` : ""}
+        <div class="row">${esc(c.name || "Kita")} <span>${c.n} ${plural(c.n)}</span></div>
+        <div class="bar"><i style="width:${Math.round(c.n / max * 100)}%"></i></div>
+        ${c.hint ? `<p>${esc(c.hint)}</p>` : ""}
       </div>`).join("")}
     </div>
-    <h2>Žodžiai, kuriuose klydai</h2>
-    ${items.map(it => {
-      const right = it.p.word ? it.p.ans : wordAround(it.parts, it.k, it.p.ans.split("/")[0]);
-      const yours = it.p.word ? (it.last || "—") : wordAround(it.parts, it.k, it.last || "_");
-      return `<div class="word"><div class="w"><s>${esc(yours)}</s> → <b>${esc(right)}</b><small>×${it.wrong}</small></div><div class="r">${esc(it.p.rule)}</div>${fullRule(it.p.cat)}</div>`;
-    }).join("")}
-    <button class="btn ghost" id="clear">Išvalyti visas klaidas</button>`;
+    <h2>Vietos, kuriose klydai</h2>
+    ${items.map(it => `<div class="word"><div class="w"><s>${esc(it.yours)}</s> → <b>${esc(it.right)}</b><small>×${it.wrong}</small></div><div class="r">${esc(it.rule)}</div>${it.full}</div>`).join("")}
+    <button class="btn ghost" id="clear">Išvalyti visas ${sec.gen} klaidas</button>`;
 
   document.getElementById("clear").onclick = () => {
-    if (confirm("Tikrai išvalyti visas klaidas?")) { saveMistakes({}); render(); }
+    if (confirm("Tikrai išvalyti visas klaidas?")) { sec.clear(); render(); }
   };
 }
+document.getElementById("content").addEventListener("click", e => {
+  const b = e.target.closest(".tab"); if (!b) return;
+  tab = b.dataset.t; history.replaceState(null, "", "#" + tab); render();
+});
 render();
 </script>
 </body>
