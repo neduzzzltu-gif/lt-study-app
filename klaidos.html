@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mano klaidos</title>
+<style>
+  :root { --bg:#f6f4ef; --card:#fff; --ink:#1d1d1f; --muted:#6b6b70; --line:#e3e0d8; --ok:#1f8a4c; --bad:#c62828; --accent:#2b4cff; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; background:var(--bg); color:var(--ink); }
+  main { max-width:760px; margin:0 auto; padding:24px 16px 60px; }
+  .back { display:inline-block; color:var(--muted); text-decoration:none; font-size:14px; margin-bottom:12px; }
+  h1 { font-size:22px; margin:0 0 4px; }
+  h2 { font-size:17px; margin:28px 0 12px; }
+  .sub { color:var(--muted); margin:0 0 20px; font-size:14px; }
+  .btn { display:inline-block; font:inherit; font-size:16px; padding:12px 20px; border-radius:12px; border:none; cursor:pointer; text-decoration:none; }
+  .primary { background:var(--ink); color:#fff; }
+  .ghost { background:none; color:var(--muted); font-size:14px; padding:8px 0; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; }
+  .cat { margin-bottom:14px; }
+  .cat:last-child { margin-bottom:0; }
+  .cat .row { display:flex; justify-content:space-between; font-size:15px; margin-bottom:6px; }
+  .cat .row span { color:var(--muted); }
+  .bar { height:8px; background:var(--line); border-radius:999px; overflow:hidden; }
+  .bar i { display:block; height:100%; background:var(--bad); border-radius:999px; }
+  .cat p { margin:6px 0 0; font-size:13px; color:var(--muted); line-height:1.4; }
+  .word { border-left:4px solid var(--bad); background:var(--card); padding:10px 14px; border-radius:0 10px 10px 0; margin-bottom:10px; }
+  .word .w { font-size:17px; }
+  .word .w s { color:var(--bad); }
+  .word .w b { color:var(--ok); }
+  .word .w small { color:var(--muted); font-size:13px; margin-left:6px; }
+  .word .r { color:#444; font-size:14px; margin-top:4px; }
+  .empty { color:var(--muted); line-height:1.6; }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="index.html">← Visos temos</a>
+  <h1>Mano klaidos</h1>
+  <p class="sub">Čia kaupiasi langeliai, kuriuose suklydai. Atsakyk teisingai 2 kartus iš eilės – klaida dingsta.</p>
+  <div id="content"></div>
+</main>
+
+<script src="data.js"></script>
+<script>
+function render() {
+  const m = loadMistakes(), items = [];
+  for (const id in m) {
+    const [si, k] = id.split(":").map(Number);
+    if (!SENTENCES[si]) continue;
+    const parts = parse(SENTENCES[si]), p = parts[k];
+    if (!p || p.t !== undefined) continue;
+    items.push({ ...m[id], p, parts, k });
+  }
+  const el = document.getElementById("content");
+  if (!items.length) {
+    el.innerHTML = `<div class="card empty">Klaidų dar nėra. 🎉<br>Spręsk sakinius <a href="rasyba.html">rašybos treniruoklyje</a> – čia atsiras vietos, kuriose suklydai.</div>`;
+    return;
+  }
+
+  // Weak spots: total wrong answers per rule type
+  const byCat = {};
+  items.forEach(it => { const c = it.p.cat || "kita"; byCat[c] = (byCat[c] || 0) + it.wrong; });
+  const cats = Object.entries(byCat).sort((a, b) => b[1] - a[1]);
+  const max = cats[0][1];
+
+  items.sort((a, b) => b.wrong - a.wrong);
+
+  el.innerHTML = `
+    <a class="btn primary" href="rasyba.html?klaidos">Treniruoti klaidas (${items.length}) →</a>
+    <h2>Silpniausios vietos</h2>
+    <div class="card">${cats.map(([c, n]) => `
+      <div class="cat">
+        <div class="row">${esc(CATS[c]?.name || "Kita")} <span>${n} ${n === 1 ? "klaida" : (n % 10 === 0 || (n % 100 > 10 && n % 100 < 20)) ? "klaidų" : n % 10 === 1 ? "klaida" : "klaidos"}</span></div>
+        <div class="bar"><i style="width:${Math.round(n / max * 100)}%"></i></div>
+        ${CATS[c] ? `<p>${esc(CATS[c].hint)}</p>` : ""}
+      </div>`).join("")}
+    </div>
+    <h2>Žodžiai, kuriuose klydai</h2>
+    ${items.map(it => {
+      const right = it.p.word ? it.p.ans : wordAround(it.parts, it.k, it.p.ans.split("/")[0]);
+      const yours = it.p.word ? (it.last || "—") : wordAround(it.parts, it.k, it.last || "_");
+      return `<div class="word"><div class="w"><s>${esc(yours)}</s> → <b>${esc(right)}</b><small>×${it.wrong}</small></div><div class="r">${esc(it.p.rule)}</div></div>`;
+    }).join("")}
+    <button class="btn ghost" id="clear">Išvalyti visas klaidas</button>`;
+
+  document.getElementById("clear").onclick = () => {
+    if (confirm("Tikrai išvalyti visas klaidas?")) { saveMistakes({}); render(); }
+  };
+}
+render();
+</script>
+</body>
+</html>

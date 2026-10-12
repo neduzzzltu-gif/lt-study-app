@@ -32,8 +32,15 @@
 // Add new topics here. Leave href empty to show it as "Netrukus".
 const TOPICS = [
   { icon: "✍️", title: "Rašyba", desc: "Įrašyk praleistas raides ir parašyk žodžius kartu arba skyrium.", href: "rasyba.html" },
+  { icon: "🎯", title: "Mano klaidos", desc: "Silpniausios vietos ir treniruotė tik su klaidomis.", href: "klaidos.html" },
   { icon: "❝", title: "Skyryba", desc: "Padėk trūkstamus skyrybos ženklus.", href: "" }
 ];
+
+// Show how many mistakes are waiting
+try {
+  const n = Object.keys(JSON.parse(localStorage.getItem("rasyba-mistakes")) || {}).length;
+  if (n) TOPICS.find(t => t.href === "klaidos.html").desc = `${n} ${n % 10 === 1 && n % 100 !== 11 ? "klaida laukia" : (n % 10 === 0 || (n % 100 > 10 && n % 100 < 20)) ? "klaidų laukia" : "klaidos laukia"} pataisymo.`;
+} catch {}
 
 document.getElementById("grid").innerHTML = TOPICS.map(t => t.href
   ? `<a class="topic" href="${t.href}"><div class="icon">${t.icon}</div><h2>${t.title}</h2><p>${t.desc}</p></a>`
