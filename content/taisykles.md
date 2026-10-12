@@ -10,23 +10,23 @@ Nosinės raidės – lietuvių kalbos ortografijos tradicija (gr. *orthos* – t
 
 ### I. Ilgieji balsiai kaitaliojasi su dvibalsiais
 Ą, ę, į, ų rašomos šaknyse, kur ilgieji balsiai kaitaliojasi su **an, en, in, un**.
-- bręsti–brendo, galąsti–galanda, grįsti–grindė, išsigąsti–išsigando, kąsti–kando, kęsti–kentė, lįsti–lindo, rąstas–ręsti–rentė, skęsti–skendo, siųsti–siuntė, skųsti–skundė, spąstai–spęsti–spendė, spręsti–sprendė, švęsti–šventė, žįsti–žindo
+- bręsti–brendo, galąsti–galanda, grįsti–grindė, išsigąsti–išsigando, kąsti–kando, kęsti–kentė, lįsti–lindo, pažįsta–pažinti, rąstas–ręsti–rentė, skęsti–skendo, siųsti–siuntė, skųsti–skundė, spąstai–spęsti–spendė, spręsti–sprendė, švęsti–šventė, žįsti–žindo
 - **Pavojingi be nosinių:** akti–anka–ako, gesti–genda–gedo
 
 ### II. Ilgieji balsiai kaitaliojasi tarpusavyje
 Ą, ę, į rašomos, kai giminiškuose žodžiuose garsai kaitaliojasi tarpusavyje (**bet ne su ė!**).
-- drįsti–drąsa, grįžti–grąža–gręžti–grąžtas, mąstyti–mįslė, rąžytis–ręžtis, tęsti–tįsti–tąsa
-- **Pavojingi be nosinių:** draskyti (drėskė), dvesia (dvėsė), grasinti (grėsė), drikti–dryksta–drisko, gižti–gyžta–gižo, įgristi–įgrysta–įgriso, tižti–tyžta–tižo, gryželėti, lysti (plonėti), pasiryžti, ryžtis, tysoti (išsitiesus), tesėti žodį
+- drįsti–drąsa, grįžti–grąža–gręžti–grąžtas, mąstyti–mįslė, rąžytis–ręžtis, tęsti–tįsti–tąsa, tręšti–trąša
+- **Pavojingi be nosinių:** draskyti (drėskė), dvesia (dvėsė), grasinti (grėsė), driksti–dryksta–drisko, gižti–gyžta–gižo, įgristi–įgrysta–įgriso, tižti–tyžta–tižo, gryžtelėti, lysti (plonėti), pasiryžti, ryžtis, tysoti (išsitiesus), tesėti žodį
 
 ### III. Ilgieji balsiai senuose daiktavardžiuose
 Ą, ę, į, ų rašomos pagal istorinę kilmę (kirčiuotuose ir nekirčiuotuose skiemenyse).
-- ąsa, ąsotis, ąselė, ąžuolas, įsčios, lęšis, vąšas, žąsis (?)
-- **Pavojingi be nosinių:** asla, lysvė, mastas, mastelis, gryčia, ražas, ražiena, žastas, ypač
+- ąsa, ąsotis, ąselė, ąžuolas, įsčios, ląsta, ląstelė, lęšis, vąšas, žąsis, žąslai
+- **Pavojingi be nosinių:** asla, lysvė, mastas, mastelis, gryčia, ražas, ražiena, žastas, ypatybė, ypač
 
 ### IV. Ilgieji balsiai esamojo laiko veiksmažodžiuose
 Ą, ę, į, ų rašomos kai kurių veiksmažodžių **esamajame laike** ir iš jo padarytose formose.
-- bąla, gęsta, glęžta, kąra, knęža, mąžta, sąla, šąla, šąšta, tęžta, tręšta, žąbla (?)
-- **Bet nerašomos** bendratyje, kituose laikuose ir iš jų padarytose formose: apsalęs, nušalęs, pabalęs, pašalas, sutežęs, sutrešęs, užgesęs, gesimas, balimas, gesdamas (iš *gesti*), baldamas (iš *balti*)
+- bąla, gęsta, glęžta, kąra, knęžta, kęžta, mąžta, sąla, šąla, šąšta, tęžta, tręšta, žabąla
+- **Bet nerašomos** bendratyje, kituose laikuose ir iš jų padarytose formose: apsalęs, nušašęs, pabalęs, pašalas, sutežęs, sutrešęs, užges, gesina, balina, gesdamas (iš *gesti*), baldamas (iš *balti*)
 
 ---
 
@@ -71,8 +71,8 @@ Visada **atskirai**, išskyrus **visgi**: vis dėlto, vis tiek, vis vien, vis da
 Visada **atskirai**: bet kas, kai kas, kažin kas, kas nors, kur nors, net ir, kad ir, tuoj pat, vos tik, šiaip sau, ko čia, ko ten
 
 ### Prielinksninės konstrukcijos
-1. **Atskirai** nuo nesutrumpėjusių žodžių: be abejo, be galo, be reikalo, dėl to, iki galo, iš anksto, iš dalies, iš karto, iš lėto, iš mažens, iš netyčių, iš tiesų, iš tikrųjų, iš viso, nuo seno, per pusę, po laiko, po visam, pro šalį, už dyką
-2. **Kartu** su sutrumpėjusiais: bemaž, iškart, išsyk, ištiek, išvien, išvis, perdien, perniek, perpus, pervis, popiet, suvirš, užvis, užtat
+1. **Atskirai** nuo nesutrumpėjusių žodžių ir bevardės giminės formų: be abejo, be galo, be reikalo, be to, dėl ko, iki galo, iš anksto, iš dalies, iš karto, iš lėto, iš mažens, iš netyčių, iš tiesų, iš tikrųjų, iš viso, ko gero, nuo seno, per pusę, po laiko, po visam, pro šalį, už dyką
+2. **Kartu** su sutrumpėjusiais: bemaž, iškart, išsyk, išties, išvien, išvis, perdien, perniek, perpus, pervis, popiet, suvirš, suvis, užvis, užtat
 
 ### Nelietuviški dėmenys
 1. **Kartu:** aero-, agro-, auto-, avia-, foto-, hidro-, mikro-, makro-, moto-, pseudo-, termo-: aeroklubas, autotransportas, fotoaparatas, mikroklimatas, videoaparatūra
@@ -131,8 +131,8 @@ Visada **atskirai**: bet kas, kai kas, kažin kas, kas nors, kur nors, net ir, k
 | Papildinio | ko? ką? kam? kuo? | kad, jog, kas, kada, kaip, kuris, kodėl | *Ko jaunas neišmoksi, to senas nežinosi.* |
 | Pažyminio | koks? kuris? | kuris, koks, kur | *Šuo, kuris daug loja, nekanda.* |
 | Vietos | kur? | kur, iš kur | *Kur kraujas tiško, rožė žydėjo.* |
-| Laiko | kada? | kai, kada, kol, vos, vos tik, ligi | *Kol saulė šviečia, neatstoja šešėlis.* |
-| Būdo | kaip? | kad, jog, kaip, lyg, tarytum, tarsi | *Juza padarė, kaip liepė Vinciūnės sūnus.* |
+| Laiko | kada? | kai, kada, kol, vos, vos tik, ligi | *Kol saulė šviečia, neatstoja nuo žmogaus ir šešėlis.* |
+| Būdo | kaip? | kad, jog, kaip, lyg, tarytum, tarsi | *Juza padarė, kaip liepė jam Vinciūnės sūnus.* |
 | Kiekybės | kiek? | kad, jog, kiek, negu, juo...juo, kuo...tuo | *Kiek akys norės, tiek niekas neturės.* |
 | Priežasties | kodėl? dėl ko? | nes, kadangi, kad | *Mėgo susirinkimus, nes buvo plepys.* |
 | Sąlygos | kokiai sąlygai esant? | jei, jeigu, kad | *Jei vilkas dantų neturėtų, niekas jo nebijotų.* |
