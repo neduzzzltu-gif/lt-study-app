@@ -33,6 +33,14 @@
   .mistake .w b { color:var(--ok); }
   .mistake .r { color:#444; font-size:14px; margin-top:4px; }
   .fixbtn { display:inline-block; margin-top:6px; padding:10px 16px; border-radius:12px; background:var(--bad); color:#fff; text-decoration:none; font-weight:600; font-size:15px; }
+  .rightlist { margin:14px 0 10px; }
+  .rightlist > summary { cursor:pointer; color:var(--ok); font-weight:600; list-style:none; user-select:none; margin-bottom:10px; }
+  .rightlist > summary::-webkit-details-marker { display:none; }
+  .rightlist > summary::after { content:" ▾"; display:inline-block; transition:transform .2s; }
+  .rightlist[open] > summary::after { transform:rotate(180deg); }
+  .good { border-left:4px solid var(--ok); background:#f3faf6; padding:10px 14px; border-radius:0 10px 10px 0; margin-bottom:10px; animation:slide .25s ease-out; }
+  .good .w { font-size:17px; } .good .w b { color:var(--ok); }
+  .good .r { color:#444; font-size:14px; margin-top:4px; }
   .allok { color:var(--ok); font-weight:600; }
   .empty { color:var(--muted); line-height:1.6; }
   /* "?" hint bubble */
@@ -106,7 +114,7 @@ function load(i) {
 function check() {
   const inputs = [...document.querySelectorAll(".sentence input")];
   const first = !checked; checked = true;
-  let wrong = [];
+  let wrong = [], correct = [];
   inputs.forEach(inp => {
     const k = +inp.dataset.k, p = parts[k];
     const ok = p.ans.split("/").some(a => norm(inp.value) === norm(a));
@@ -114,6 +122,7 @@ function check() {
     inp.classList.toggle("bad", !ok);
     if (first && inp.value.trim()) recordAnswer(current, k, ok, inp.value.trim());
     if (!ok) wrong.push({ k, p, val: inp.value.trim() });
+    else correct.push({ k, p });
   });
   const total = inputs.length, good = total - wrong.length;
   let html = `<div class="score">${good} / ${total} teisingai</div>`;
@@ -123,7 +132,12 @@ function check() {
     const yours = p.word ? (val || "—") : wordAround(parts, k, val || "_");
     html += `<div class="mistake"><div class="w"><s>${esc(yours)}</s> → <b>${esc(right)}</b></div><div class="r">${esc(p.rule)}</div>${fullRule(p.cat)}</div>`;
   });
-  const n = Object.keys(loadMistakes()).length;
+  // Rules for the words you got right, folded away
+  if (correct.length) html += `<details class="rightlist"><summary>Teisingi žodžiai (${correct.length})</summary>${correct.map(({ k, p }) => {
+    const w = p.word ? p.ans : wordAround(parts, k, p.ans.split("/")[0]);
+    return `<div class="good"><div class="w"><b>${esc(w)}</b></div><div class="r">${esc(p.rule)}</div>${fullRule(p.cat)}</div>`;
+  }).join("")}</details>`;
+  const n =Object.keys(loadMistakes()).length;
   if (n && !MISTAKE_MODE) html += `<a class="fixbtn" href="rasyba.html?klaidos">🎯 Taisyti klaidas (${n}) →</a>`;
   document.getElementById("result").innerHTML = html;
   updateModeLink();
