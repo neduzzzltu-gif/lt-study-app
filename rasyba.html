@@ -106,7 +106,7 @@ function check() {
     const ok = p.ans.split("/").some(a => norm(inp.value) === norm(a));
     inp.classList.toggle("ok", ok);
     inp.classList.toggle("bad", !ok);
-    if (first) recordAnswer(current, k, ok, inp.value.trim());
+    if (first && inp.value.trim()) recordAnswer(current, k, ok, inp.value.trim());
     if (!ok) wrong.push({ k, p, val: inp.value.trim() });
   });
   const total = inputs.length, good = total - wrong.length;
@@ -152,14 +152,15 @@ sentenceEl.addEventListener("keydown", e => { if (e.key === "Enter") { e.prevent
 
 // Hold the mouse on a blank for 2 s → "?" appears above it → click shows which rule to use
 let holdTimer = null, qEl = null, tipEl = null, qFor = null;
-function hideHint() { qEl?.remove(); tipEl?.remove(); qEl = tipEl = qFor = null; }
+function hideHint() { clearTimeout(holdTimer); qEl?.remove(); tipEl?.remove(); qEl = tipEl = qFor = null; }
 function placeAbove(el, target, gap) {
   const r = target.getBoundingClientRect();
-  el.style.left = (r.left + r.width / 2 + scrollX) + "px";
+  const half = Math.min(el.offsetWidth / 2, innerWidth / 2);
+  el.style.left = (Math.min(Math.max(r.left + r.width / 2, half + 8), innerWidth - half - 8) + scrollX) + "px";
   el.style.top = (r.top + scrollY - gap) + "px";
 }
 function showQ(inp) {
-  if (qFor === inp) return;
+  if (qFor === inp || !inp.isConnected) return;
   hideHint();
   qFor = inp;
   qEl = document.createElement("button");
@@ -174,7 +175,7 @@ function showQ(inp) {
     tipEl.className = "tip";
     tipEl.innerHTML = cat ? `<b>${esc(cat.name)}</b>${esc(cat.hint)}` : "Užuominos šiam langeliui nėra.";
     document.body.appendChild(tipEl);
-    placeAbove(tipEl, qEl, 34);
+    placeAbove(tipEl, inp, 8);
     qEl.style.display = "none";
   };
 }
@@ -187,6 +188,7 @@ sentenceEl.addEventListener("mouseover", e => {
 sentenceEl.addEventListener("mouseout", e => { if (e.target.tagName === "INPUT") clearTimeout(holdTimer); });
 document.addEventListener("click", e => { if (!e.target.closest(".qmark, .tip")) hideHint(); });
 addEventListener("resize", hideHint);
+document.addEventListener("keydown", e => { if (e.key === "Escape") hideHint(); });
 
 // On-screen LT letters for keyboards without them
 const keys = document.getElementById("keys");

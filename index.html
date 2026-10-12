@@ -28,6 +28,7 @@
   <div class="grid" id="grid"></div>
 </main>
 
+<script src="data.js"></script>
 <script>
 // Add new topics here. Leave href empty to show it as "Netrukus".
 const TOPICS = [
@@ -38,7 +39,7 @@ const TOPICS = [
 
 // Show how many mistakes are waiting
 try {
-  const n = Object.keys(JSON.parse(localStorage.getItem("rasyba-mistakes")) || {}).length;
+  const n = Object.keys(loadMistakes()).length;
   if (n) TOPICS.find(t => t.href === "klaidos.html").desc = `${n} ${n % 10 === 1 && n % 100 !== 11 ? "klaida laukia" : (n % 10 === 0 || (n % 100 > 10 && n % 100 < 20)) ? "klaidų laukia" : "klaidos laukia"} pataisymo.`;
 } catch {}
 

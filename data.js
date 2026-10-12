@@ -4,12 +4,12 @@
 const CATS = {
   nosines:   { name: "Nosinės šaknyje", hint: "Nosinės šaknyje. Rask giminišką žodį: ar balsis kaitaliojasi su an, en, in, un ar su kitu ilguoju balsiu (ą – į – ę)? Jei kaitaliojasi su ė ar y – nosinės nėra (pavojingi žodžiai)." },
   saknis:    { name: "Šaknies balsiai", hint: "Šaknies balsis. Rask giminišką žodį ar bendratį ir pažiūrėk, kaip ten rašoma šaknis (ilgas ar trumpas balsis?)." },
-  priesagos: { name: "Priesagos", hint: "Priesaga. Iš kokio žodžio padarytas šis žodis? Prisimink: -yti → -ymas, -ti / -inti → -imas, būdvardis → -esnis, -umas, -ybė." },
+  priesagos: { name: "Priesagos", hint: "Priesaga. Iš kokio žodžio (veiksmažodžio ar būdvardžio) padarytas šis žodis? Kokia priesaga čia tinka?" },
   galunes:   { name: "Galūnės", hint: "Galūnė. Kokia kalbos dalis, linksnis ir skaičius? Ar priebalsis prieš galūnę minkštas?" },
   ivardz:    { name: "Įvardžiuotinės formos", hint: "Įvardžiuotinė forma. Paimk paprastąją formą ir pridėk įvardžio jis / ji galūnę." },
-  dalyviai:  { name: "Dalyviai", hint: "Dalyvis. Nustatyk laiką, giminę ir skaičių: es. l. -antis / -ąs, būt. l. -ęs / -ę, neveikiamasis -amas." },
+  dalyviai:  { name: "Dalyviai", hint: "Dalyvis. Nustatyk laiką, giminę, skaičių ir rūšį (veikiamasis ar neveikiamasis)." },
   tariamoji: { name: "Veiksmažodžio formos", hint: "Veiksmažodžio forma. Kokia čia nuosaka ir asmuo? Po „kad“ dažnai eina tariamoji nuosaka." },
-  tarpt:     { name: "Tarptautiniai žodžiai", hint: "Tarptautinis žodis. Rašoma taip, kaip kilmės kalboje (lot. ratio, realis)." },
+  tarpt:     { name: "Tarptautiniai žodžiai", hint: "Tarptautinis žodis. Prisimink, kaip jis rašomas kitose kalbose (pvz. anglų)." },
   sudurt:    { name: "Sudurtiniai žodžiai, priešdėliai", hint: "Išskaidyk žodį į dalis: iš kokių žodžių ar priešdėlio jis sudarytas?" },
   ne:        { name: "NE rašymas", hint: "NE rašymas. Su kokia kalbos dalimi eina ne? Veiksmažodžiai, įvardžiai, prieveiksmiai ir dalelytės turi skirtingas taisykles." },
   kartu:     { name: "Dalelytės, kartu ar skyrium", hint: "Kartu ar skyrium. Kokia čia dalelytė ar junginys? Pasitikrink GI, PER, NORS, BET taisykles." },
@@ -19,7 +19,7 @@ const CATS = {
 // Rules reused across blanks ("rule text|type")
 const R = {
   ymas: "Priesaga -ymas daroma iš -yti veiksmažodžių: papildyti → papildymas, aprašyti → aprašymas, atsakyti → atsakymas, išbandyti → išbandymas.|priesagos",
-  imas: "Priesaga -imas (trumpas i): gaivinti → gaivinimas, sutrikti → sutrikimas, klausti → klausimas, likti → likimas.|priesagos",
+  imas: "Priesaga -imas (trumpas i): klausti → klausimas, rausti → rausimas, kasti → kasimas.|priesagos",
   buti: "Šaknis būt-/būd- (būti, būdas, būtina, būtis) rašoma su ilguoju ū.|saknis",
   kuryba: "kurti → kūryba, kūrybingas: šios šaknies daiktavardžiuose rašoma ilgoji ū.|saknis",
   tu: "Tariamosios nuosakos 3 asmuo baigiasi -tų: nevirstų, vestų, įgytų.|tariamoji",
@@ -39,11 +39,11 @@ const R = {
 const SENTENCES = [
   "Į šiuolaikinio žmogaus gyvenimą vėl gr{į|"+R.grizti+"}žta mitas – kaip įprastos tikrovės papild{y|"+R.ymas+"}mas ir jos praturtinimas, {{gal, būt|galbūt|„galbūt“ yra vienas prieveiksmis, rašomas kartu.|kartu}} kaip alternatyvi tikrovė, bet jokiu b{ū|"+R.buti+"}du {{ne, kaip|ne kaip|"+R.nekaip+"}} radikali opozicija įprastai tikrovei, {{ne, kaip|ne kaip|"+R.nekaip+"}} nesutaikomas jos paneigimas.",
 
-  "Kad gr{į|"+R.grizti+"}žimas prie mito nevirst{ų|"+R.tu+"} archa{ji/i|Žodis archajiškas (taip pat archaiškas): nosinės nėra, tarp balsių rašoma j.|saknis}šk{ų|Būdvardžio dgs. kilmininkas: archaiškų (kokių?).|galunes} atavistinių polinkių bei egzistencinių rudimentų gaiv{i|"+R.imas+"}nimu, o vest{ų|"+R.tu+"} prie laisvos k{ū|"+R.kuryba+"}rybos ir laisv{e|"+R.esnis+"}snės b{ū|"+R.buti+"}ties versmių, mito prigimtį b{ū|"+R.buti+"}tina apm{ą|"+R.masty+"}styti naujai – naujai klausti tiek apie paties mito esmę, tiek apie mito s{a|Priešdėlis san- (santykis, sandora) rašomas be nosinės.|sudurt}nt{y|santykis, santykiai: šaknyje rašoma y.|saknis}kį su tuo, kas n{ė|nėra = ne + yra, todėl rašoma ė.|sudurt}ra mitas.",
+  "Kad gr{į|"+R.grizti+"}žimas prie mito nevirst{ų|"+R.tu+"} archa{ji/i|Žodis archajiškas (taip pat archaiškas): nosinės nėra, tarp balsių rašoma j.|tarpt}šk{ų|Būdvardžio dgs. kilmininkas: archaiškų (kokių?).|galunes} atavistinių polinkių bei egzistencinių rudimentų gaiv{i|gaivinti → gaivinimas: veiksmažodžio priesaga -inti, rašoma trumpas i.|priesagos}nimu, o vest{ų|"+R.tu+"} prie laisvos k{ū|"+R.kuryba+"}rybos ir laisv{e|"+R.esnis+"}snės b{ū|"+R.buti+"}ties versmių, mito prigimtį b{ū|"+R.buti+"}tina apm{ą|"+R.masty+"}styti naujai – naujai klausti tiek apie paties mito esmę, tiek apie mito s{a|Priešdėlis san- (santykis, sandora) rašomas be nosinės.|sudurt}nt{y|santykis, santykiai: šaknyje rašoma y.|saknis}kį su tuo, kas n{ė|nėra = ne + yra, todėl rašoma ė.|sudurt}ra mitas.",
 
-  "Ak{i|Akivaizdu = aki- (akis) + vaizdu.|sudurt}vaizdu, kad vis gil{e|"+R.esnis+"}snės prarajos tarp mito ir logo, rac{i|"+R.tarpt+"}onalaus proto ir intuicijos, m{ą|"+R.masty+"}stymo ir vaizduotės raus{i|rausti → rausimas. "+R.imas+"}mas tikrai {{ne, gali|negali|Ne su veiksmažodžiais visada rašoma kartu: negali, nežino, nebuvo.|ne}} pasitarnauti tiems, kuriems lemta gyventi dv{i|dvi + dešimt: dvidešimt (trumpas i).|sudurt}dešimt pirm{a|"+R.ivardz+"}j{a|"+R.ivardz+"}me amžiuje.",
+  "Ak{i|Akivaizdu = aki- (akis) + vaizdu.|sudurt}vaizdu, kad vis gil{e|"+R.esnis+"}snės prarajos tarp mito ir logo, rac{i|"+R.tarpt+"}onalaus proto ir intuicijos, m{ą|"+R.masty+"}stymo ir vaizduotės raus{i|"+R.imas+"}mas tikrai {{ne, gali|negali|Ne su veiksmažodžiais visada rašoma kartu: negali, nežino, nebuvo.|ne}} pasitarnauti tiems, kuriems lemta gyventi dv{i|dvi + dešimt: dvidešimt (trumpas i).|sudurt}dešimt pirm{a|"+R.ivardz+"}j{a|"+R.ivardz+"}me amžiuje.",
 
-  "Mito išmintis ir mite įš{a|šalti → šaldyti → įšaldyti: šaknyje a.|saknis}ldyti gaivalingos vaizduotės kristalai, gaivinant{y|"+R.antys+"}s šiuolaikinio žmogaus k{ū|"+R.kuryba+"}rybingumą, pajėg{ū|Būdvardžiai su -us daugiskaitoje vyr. g. turi galūnę -ūs: pajėgus → pajėgūs.|galunes}s suteikti vilties ir įkv{ė|kvėpti → kvėpavimas → įkvėpimas: šaknyje ė.|saknis}pimo tiems, kurie kenčia nuo dvasinės disharmonijos ir egzistencinio sutr{i|"+R.imas+"}kimo.",
+  "Mito išmintis ir mite įš{a|šalti → šaldyti → įšaldyti: šaknyje a.|saknis}ldyti gaivalingos vaizduotės kristalai, gaivinant{y|"+R.antys+"}s šiuolaikinio žmogaus k{ū|"+R.kuryba+"}rybingumą, pajėg{ū|Būdvardžiai su -us daugiskaitoje vyr. g. turi galūnę -ūs: pajėgus → pajėgūs.|galunes}s suteikti vilties ir įkv{ė|kvėpti → kvėpavimas → įkvėpimas: šaknyje ė.|saknis}pimo tiems, kurie kenčia nuo dvasinės disharmonijos ir egzistencinio sutr{i|trikti → sutrikimas: šaknyje trumpas i.|saknis}kimo.",
 
   "T{u|turėti – šaknyje trumpas u.|saknis}rėtume – kaip ir kitais panaš{ia|"+R.ia+"}is atv{e|atvejis → atvejais: šaknyje e.|saknis}jais – pasikliauti senovės graikų, didži{ų|"+R.ivardz+"}j{ų|"+R.ivardz+"} mūsų mokytojų, įžvalg{u|įžvalgus → įžvalgumas: priesaga -umas (trumpas u).|priesagos}mu, kurio jie s{e|semti → semiasi: šaknyje e.|saknis}miasi tiek iš mitinės vaizduotės versmių, tiek ir iš loginių proto galių.",
 
@@ -53,13 +53,13 @@ const SENTENCES = [
 
   "Mitai kalba apie amžinuosius išš{ū|šaukti → šūkis → iššūkis: ū kaitaliojasi su au.|saknis}kius, kuriuos tikrovė meta žmogui, ir apie laiko patikrintus b{ū|"+R.buti+"}dus dorotis su jais.",
 
-  "Kartu su dievams, pusdieviams ir žmonėms tenkančių išband{y|"+R.ymas+"}mų apraš{y|"+R.ymas+"}mais mituose, {{be, ab__jo|be abejo|Prielinksniai rašomi atskirai nuo nesutrumpėjusių žodžių: be abejo, be galo, be reikalo.|prielinks}} pateik{ia|Neveikiamasis dalyvis daromas iš esamojo laiko: pateikia → pateikiamos.|dalyviai}mos ir jų ištv{ė|ištverti → ištvėrė → ištvėrimas: iš būtojo laiko kamieno, rašoma ė.|priesagos}rimo istorijos, si{ū|siūlyti: šaknyje ilgasis ū.|saknis}lančios mirting{a|"+R.ivardz+"}j{a|"+R.ivardz+"}m atsak{y|"+R.ymas+"}mus į klaus{i|"+R.imas+"}mus, kuriuos ka{s|kasdienė = kas + diena (kasdien): rašoma s.|sudurt}dienė egzistencija nuolat kelia k{i|kiek + vienas: kiekvienas.|sudurt}ekvienam iš mūsų.",
+  "Kartu su dievams, pusdieviams ir žmonėms tenkančių išband{y|"+R.ymas+"}mų apraš{y|"+R.ymas+"}mais mituose, {{be, ab__jo|be abejo|Prielinksniai rašomi atskirai nuo nesutrumpėjusių žodžių: be abejo, be galo, be reikalo.|prielinks}} pateik{ia|Neveikiamasis dalyvis daromas iš esamojo laiko: pateikia → pateikiamos.|dalyviai}mos ir jų ištv{ė|ištverti → ištvėrė → ištvėrimas: iš būtojo laiko kamieno, rašoma ė.|saknis}rimo istorijos, si{ū|siūlyti: šaknyje ilgasis ū.|saknis}lančios mirting{a|"+R.ivardz+"}j{a|"+R.ivardz+"}m atsak{y|"+R.ymas+"}mus į klaus{i|"+R.imas+"}mus, kuriuos ka{s|kasdienė = kas + diena (kasdien): rašoma s.|sudurt}dienė egzistencija nuolat kelia k{i|kiek + vienas: kiekvienas.|sudurt}ekvienam iš mūsų.",
 
   "Visi mes gyvenimo kelionėje esame priversti ieškoti kelio į gimt{ą|"+R.ivardz+"}j{ą|"+R.ivardz+"} Itakę kaip Odisėjas, r{y|ryžtis – pavojingas žodis BE nosinės: ryžtis, pasiryžti, ryžtingai.|nosines}žtingai ieškotis naujos tėvynės kaip Enėjas, siekti šlovės kaip Achilas ar amžinojo gyvenimo – kaip šumerų pusdievis Gilgamešas.",
 
   "Mitai kalba ir apie žmogišk{a|"+R.ivardz+"}j{a|"+R.ivardz+"}i puik{y|puikus → puikybė: priesaga -ybė.|priesagos}bei, kuriai taip dažnai pasiduoda šiuolaikinis žmogus, gr{ė|grėsti (grėsė) – pavojingas žodis BE nosinės: kaitaliojasi su ė, o ne su nosine (grasinti, grėsmė).|nosines}siančius pavojus: Sizifo, Tantalo, Belerofonto ar Iksijono l{i|likti → likimas: šaknyje trumpas i.|saknis}kimas gali ištikti {{bet, kurį|bet kurį|Dalelytė bet visada rašoma atskirai: bet kas, bet kuris, bet koks.|kartu}} iš mūsų {{ne, kokioje, nors|ne kokioje nors|Ne su įvardžiais rašoma atskirai, o dalelytė nors – irgi atskirai.|ne}} mitinėje amžinybėje, o r{e|"+R.tarpt+"}aliame laike ir erdvėje.",
 
-  "Šiuolaikinis žmogus, laikantis save {{kol, kas|kol kas|„kol kas“ rašoma atskirai.|kartu}} mirtingu dievu ar {{net, gi|netgi|Gi rašoma kartu su nekaitomais vienskiemeniais žodžiais: netgi, argi, irgi.|kartu}} praded{ą|Esamojo laiko veikiamasis dalyvis, vyr. g. vns. trumpoji forma: pradedąs (= pradedantis).|dalyviai}s vaidinti patį Dievą, įg{y|"+R.gyti+"}tų daugiau išminties ir naudos įd{ė|įdėmus → įdėmiai (dėmesys): šaknyje ė.|saknis}miai perskait{ę|Būtojo kartinio laiko veikiamasis dalyvis, vyr. g. vns.: -ęs (perskaitęs, išstudijavęs).|dalyviai}s graikiškų mitų rinktinę, nei išstudij{a|studijuoti → išstudijavo → išstudijavęs: rašoma a.|dalyviai}vęs kokį nors genų inžinerijos, klonavimo ar vadinamosios „vis{a|„Visa ko teorija“ – nusistovėjęs terminas (angl. theory of everything), rašoma visa.|galunes} ko teorijos“ vadovėlį.",
+  "Šiuolaikinis žmogus, laikantis save {{kol, kas|kol kas|„kol kas“ rašoma atskirai.|kartu}} mirtingu dievu ar {{net, gi|netgi|Gi rašoma kartu su nekaitomais vienskiemeniais žodžiais: netgi, argi, irgi.|kartu}} praded{ą|Esamojo laiko veikiamasis dalyvis, vyr. g. vns. trumpoji forma: pradedąs (= pradedantis).|dalyviai}s vaidinti patį Dievą, įg{y|"+R.gyti+"}tų daugiau išminties ir naudos įd{ė|įdėmus → įdėmiai (dėmesys): šaknyje ė.|saknis}miai perskait{ę|Būtojo kartinio laiko veikiamasis dalyvis, vyr. g. vns.: -ęs (perskaitęs, išstudijavęs).|dalyviai}s graikiškų mitų rinktinę, nei išstudij{a|studijuoti → studijavo → išstudijavęs: -uoti veiksmažodžių būtajame laike yra -avo, todėl rašoma a.|priesagos}vęs kokį nors genų inžinerijos, klonavimo ar vadinamosios „vis{a|„Visa ko teorija“ – nusistovėjęs terminas (angl. theory of everything), rašoma visa.|galunes} ko teorijos“ vadovėlį.",
 
   "Pagaliau tikroviški mito pasauliai suteikia daugiau tikroviškumo ir dažnai {{per, ne, lyg|pernelyg|pernelyg – vienas prieveiksmis, rašomas kartu (bet: per daug, per mažai – atskirai).|kartu}} nusivadėjusiai, tikrumo stokojančiai mūsų r{e|"+R.tarpt+"}alybei.",
 
@@ -104,7 +104,14 @@ function wordAround(parts, k, fill) {
 // Mistakes saved in the browser: { "sentence:part": { wrong, streak, last } }
 // A mistake is cleared after 2 correct answers in a row.
 const MISTAKES_KEY = "rasyba-mistakes";
-const loadMistakes = () => { try { return JSON.parse(localStorage.getItem(MISTAKES_KEY)) || {}; } catch { return {}; } };
+function loadMistakes() {
+  let m; try { m = JSON.parse(localStorage.getItem(MISTAKES_KEY)) || {}; } catch { m = {}; }
+  for (const id in m) {
+    const [si, k] = id.split(":").map(Number), p = SENTENCES[si] && parse(SENTENCES[si])[k];
+    if (!p || p.t !== undefined) delete m[id];
+  }
+  return m;
+}
 const saveMistakes = m => localStorage.setItem(MISTAKES_KEY, JSON.stringify(m));
 function recordAnswer(si, k, ok, given) {
   const m = loadMistakes(), id = si + ":" + k;
