@@ -45,6 +45,7 @@
   .hint { color:var(--muted); font-size:15px; }
   .gap { display:inline-block; min-width:14px; height:28px; padding:0 3px; margin:0 1px; vertical-align:middle; border:none; border-radius:6px; background:transparent; font:inherit; font-size:20px; font-weight:700; color:var(--accent); cursor:pointer; line-height:28px; }
   .gap:hover { background:#e4e9ff; }
+  .gap:focus { outline:2px solid var(--accent); outline-offset:1px; background:#dfe5ff; }
   .gap.set { background:#eef1ff; }
   .picker { position:absolute; display:flex; gap:4px; padding:5px; background:var(--ink); border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,.18); transform:translate(-50%, -100%); z-index:10; }
   .picker::after { content:""; position:absolute; left:50%; bottom:-5px; width:10px; height:10px; background:var(--ink); transform:translateX(-50%) rotate(45deg); }
@@ -159,7 +160,8 @@ function showItem() {
   document.getElementById("next") && (document.getElementById("next").onclick = () => go(state.pos + 1));
   document.getElementById("finish").onclick = () => finish(false);
   wireSentence(it, ans);
-  app.querySelector(".sentence input")?.focus();
+  const f = app.querySelector(".sentence input, .sentence .gap");
+  if (f && (f.tagName === "INPUT" || !matchMedia("(hover: none)").matches)) f.focus({ preventScroll: true });
 }
 function go(k) { state.pos = k; showItem(); }
 
@@ -188,9 +190,14 @@ function renderS(it, ans) {
 }
 function wireSentence(it, ans) {
   const el = document.getElementById("sentence");
+  arrowKeys(el, (b, dir) => {
+    setMark(b, MARKS[(MARKS.indexOf(b.dataset.m) + dir + MARKS.length) % MARKS.length], ans);
+    if (pickFor === b) showPicker(b, ans);
+  }, hidePicker);
+  // Enter = next sentence (or finish on the last one)
+  el.addEventListener("keydown", e => { if (e.key === "Enter" && !e.repeat) { e.preventDefault(); state.pos < state.items.length - 1 ? go(state.pos + 1) : finish(false); } });
   if (it.type === "r") {
     el.addEventListener("input", e => { if (e.target.dataset.k) { ans[e.target.dataset.k] = e.target.value; markDot(); } });
-    el.addEventListener("keydown", e => { if (e.key === "Enter" && !e.repeat) { e.preventDefault(); state.pos < state.items.length - 1 ? go(state.pos + 1) : finish(false); } });
   } else {
     el.addEventListener("click", e => {
       const b = e.target.closest(".gap"); if (!b) return;

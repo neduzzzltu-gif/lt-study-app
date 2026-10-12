@@ -33,7 +33,8 @@
 
   // Grab selected text before the click clears it
   let picked = "";
-  btn.addEventListener("mousedown", () => { picked = String(getSelection()).trim(); });
+  let viaMouse = false;
+  btn.addEventListener("mousedown", () => { picked = String(getSelection()).trim(); viaMouse = true; });
 
   const page = (document.querySelector("h1")?.textContent || document.title).trim();
   const context = () => (document.getElementById("sentence")?.innerText || "").replace(/\s+/g, " ").trim();
@@ -95,6 +96,6 @@
     if (clear) clear.onclick = () => { if (confirm("Ištrinti visus pranešimus?")) { save([]); label(); list(); } };
   }
 
-  btn.addEventListener("click", form);
+  btn.addEventListener("click", () => { if (!viaMouse) picked = String(getSelection()).trim(); viaMouse = false; form(); });
   document.addEventListener("keydown", ev => { if (ev.key === "Escape") close(); });
 })();

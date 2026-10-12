@@ -169,19 +169,19 @@ const SK_SENTENCES = [
     // Kelionės
     "Anksčiau nesupratau[,|"+T.sal+"] kodėl mane taip traukia kelionės į užsienį.",
 
-    "Vis mėgindavau pats save apgaudinėti[,|"+T.sal+"] kad gal tas alkis yra išlikęs iš geležinės uždangos laikų[,|"+T.sal+"] kai pasaulio geografinis žemėlapis buvo padalytas[/,|Sakinio dalis su lyginamąja dalelyte tarytum gali būti išskiriama kableliais iš abiejų pusių arba neskiriama (VLKK 4.6 p.).|aplinkybe#p1] tarytum[/,|Sakinio dalis su lyginamąja dalelyte tarytum gali būti išskiriama kableliais iš abiejų pusių arba neskiriama (VLKK 4.6 p.).|aplinkybe#p1] į du raudona spalva nudažytą kalėjimo lopą ir kitomis spalvomis laisvės ar pusiau laisvės teritoriją.",
+    "Vis mėgindavau pats save apgaudinėti[,|"+T.sal+"] kad gal tas alkis yra išlikęs iš geležinės uždangos laikų[,|"+T.sal+"] kai pasaulio geografinis žemėlapis buvo padalytas[/,|Sakinio dalis su lyginamąja dalelyte tarytum gali būti atskirta kableliu arba neskiriama (VLKK 4.6 p.). Pati dalelytė nuo tolesnių žodžių neatskiriama.|aplinkybe] tarytum į du raudona spalva nudažytą kalėjimo lopą ir kitomis spalvomis laisvės ar pusiau laisvės teritoriją.",
 
-    "Ir kai pagaliau sienos griuvo[,|"+T.salEnd+"] tas alkis niekur nedingo[,|"+T.sal+"] nors pradėjau jau kitaip motyvuoti[,|"+T.sal+"] kodėl vis dažniau aptinku save kraunantį lagaminą.",
+    "Ir[/,|Tarp sujungiamojo jungtuko ir šalutinio dėmens jungtuko gali būti rašomas kablelis (VLKK 11.9 p.).|salutinis] kai pagaliau sienos griuvo[,|"+T.salEnd+"] tas alkis niekur nedingo[,|"+T.sal+"] nors pradėjau jau kitaip motyvuoti[,|"+T.sal+"] kodėl vis dažniau aptinku save kraunantį lagaminą.",
 
-    "Motyvas[,|"+T.sal+"] kad keliauju trokšdamas įkvėpti laisvės oro[,|"+T.salEnd+"] ilgainiui išbluko.",
+    "Motyvas[,|"+T.sal+"] kad keliauju[/,|"+S.apl+"] trokšdamas įkvėpti laisvės oro[,|"+T.salEnd+"] ilgainiui išbluko.",
 
-    "Tuomet atsirado kitas[–/:|Vietoj praleistos sakinio dalies (motyvas) rašomas brūkšnys (VLKK 10 p.), galimas ir dvitaškis aiškinimui.|dvitaskis] pažinimo[,|"+T.vien+"] akiračio plėtimo.",
+    "Tuomet atsirado kitas[–/|Vietoj praleistos sakinio dalies (motyvas) gali būti rašomas brūkšnys (VLKK 10 p.).|bruksnys] pažinimo[,|"+T.vien+"] akiračio plėtimo.",
 
-    "Kodėl vokietis[,|"+T.vien+"] italas[,|"+T.vien+"] norvegas[,|"+T.vien+"] amerikietis neršia po visą pasaulį[,|Bejungtukio sakinio dėmenys (kodėl …, kodėl …) atskiriami kableliu (VLKK 13.1 p.).|sujung] kodėl atsipūtęs gali gerti sau vyną Barselonos Les Rambloj[,|"+T.vien+"] Paryžiuj[/,|Vieta gali būti patikslinta kableliu (VLKK 4.1 p.).|vienarusis] Lotynų kvartale[,|Vienarūšiai tariniai (gerti, grožėtis) atskiriami kableliu (VLKK 3.1 p.).|vienarusis] grožėtis[,|"+T.sal+"] kaip vakaro saulė meta pustonių gamą ant Notre Dame fasado[,|Prieš jungtuką o rašomas kablelis (VLKK 12.1 p.).|sujung] o tu negali?",
+    "Kodėl vokietis[,|"+T.vien+"] italas[,|"+T.vien+"] norvegas[,|"+T.vien+"] amerikietis neršia po visą pasaulį[,|Bejungtukio sakinio dėmenys (kodėl …, kodėl …) atskiriami kableliu (VLKK 13.1 p.).|sujung] kodėl atsipūtęs gali gerti sau vyną Barselonos Les Rambloj[,|"+T.vien+"] Paryžiuj[/,|Vieta gali būti patikslinta kableliu (VLKK 4.1 p.).|pazyminys] Lotynų kvartale[,|Vienarūšiai tariniai (gerti, grožėtis) atskiriami kableliu (VLKK 3.1 p.).|vienarusis] grožėtis[,|"+T.sal+"] kaip vakaro saulė meta pustonių gamą ant Notre Dame fasado[,|Prieš jungtuką o rašomas kablelis (VLKK 12.1 p.).|sujung] o tu negali?",
 
     "„Galiu ir aš“[/–|Vietoj praleistos jungties gali būti rašomas brūkšnys (VLKK 10 p.).|bruksnys] tai toks donkichotiškas atsakas[,|"+T.pazPo+"] panašus į tragikomišką ubago maištą kviestinių puotoje.",
 
-    "Bet kai maištas įgyvendintas[,|"+T.salEnd+"] vėl supranti[,|"+T.sal+"] kad ne tai tave varė.",
+    "Bet[/,|Tarp sujungiamojo jungtuko ir šalutinio dėmens jungtuko gali būti rašomas kablelis (VLKK 11.9 p.).|salutinis] kai maištas įgyvendintas[,|"+T.salEnd+"] vėl supranti[,|"+T.sal+"] kad ne tai tave varė.",
 
     "Tau neįdomūs tie muziejai ir visokios senų laikų relikvijos[,|"+T.vien+"] sarkofagai ir antikinių šventyklų liekanos.",
 
@@ -195,7 +195,11 @@ const SK_SENTENCES = [
 
     "Ir štai tu jau leidiesi nuo Aušros Vartų žemyn[,|"+T.vien+"] dardi su lagaminu Didžiąja[,|Vienarūšės sakinio dalys (Didžiąja, Pilies gatve) atskiriamos kableliu (VLKK 3.1 p.).|vienarusis] Pilies gatve.",
 
-    "Viešpatie[,|Jaustukas ar kreipinys išskiriamas kableliu (VLKK 8.4, 9.1 p.).|iterpinys] koks gražus ir jaukus Vilnius[,|Bejungtukio sakinio dėmenys atskiriami kableliu (VLKK 13.1 p.).|sujung] nesvarbu[,/:|Bejungtukio sakinio dėmuo – kablelis (galimas ir dvitaškis aiškinimui) (VLKK 13.1 p.).|sujung] naktis[,|"+T.vien+"] rytas ar vakaras."
+    "Viešpatie[,|Kreipinys visada išskiriamas kableliu (VLKK 9.1 p.).|iterpinys] koks gražus ir jaukus Vilnius[,/–|Bejungtukio sakinio dėmenys atskiriami kableliu, o nuolaidai reikšti dažniau brūkšniu (VLKK 13.1 p.).|sujung] nesvarbu[,/–/:|Bejungtukio sakinio dėmuo – kablelis arba brūkšnys (VLKK 13.1 p.).|sujung] naktis[,|"+T.vien+"] rytas ar vakaras.",
+
+    "Būtent iš čia Leonardo[,|"+T.pried+"] naujojo Dedalo[,|"+T.pried+"] be jokių skrupulų tarnavusio tironams[,|"+T.vien+"] savo talentą ir paslaugas jiems pardavinėjusio meistro[,|"+T.pried+"] ir moderniojo meistro[,|"+T.pazPo+"] galinčio vienu metu tarnauti ir grožiui[,|"+T.kart+"] ir blogiui[,|"+T.pazPo+"] reputacija[,|Prieš jungtuką o rašomas kablelis (VLKK 3.5 a).|vienarusis] o gal mitas[,|"+T.sal+"] nuo kurio lieka tik žingsnis iki daktaro Fausto idėjos.",
+
+    "Moljeras buvo šventai įsitikinęs[,|"+T.sal+"] kad V. Šekspyrui buvo svetimas formos pojūtis[|Vienarūšiai šalutiniai dėmenys su nekartojamu ir neatskiriami (VLKK 11.10 pastaba).|salutinis] ir kad jis neskyrė komedijos nuo tragedijos[,|Sujungiamojo sakinio dėmenys prieš o atskiriami kableliu (VLKK 12.1 p.).|sujung] o Volteras V. Šekspyrą yra pavadinęs anglų barbaru."
   );
 })();
 

@@ -93,9 +93,9 @@ const SENTENCES = [
   const P = (t, c = "priebalsiai") => N.pr + " " + t + "|" + c;
 
   SENTENCES.push(
-    "„Hamletas“ yra tragedija, paremta ne hero{ji/i|herojus → herojiškas: tarp balsių rašoma j (galima ir heroiškas).|tarpt}ška asmenybe, bet žmogum. Pagrindinis personažas Hamletas – nauj{ų|"+N.gal+"}jų laikų žmogus, smalsus, lankstaus proto, nuolat besisteng{ią|"+N.trump+"}s suvo{k|"+P("suvokia → suvokti.")+"}ti savo situaciją būtyje ir nebūties ak{i|Akivaizdoje = aki- (akis) + vaizdas.|sudurt}vazdoje.",
+    "„Hamletas“ yra tragedija, paremta ne hero{ji|herojus → herojiškas: tarptautinių žodžių priesagoje -iškas po balsio rašoma j (VLKK 3.4.3 d).|tarpt}ška asmenybe, bet žmogum. Pagrindinis personažas Hamletas – nauj{ų|"+N.gal+"}jų laikų žmogus, smalsus, lankstaus proto, nuolat besisteng{ią|"+N.trump+"}s suvo{k|"+P("suvokia → suvokti.")+"}ti savo situaciją būtyje ir nebūties ak{i|Akivaizdoje = aki- (akis) + vaizdas.|sudurt}vaizdoje.",
 
-    "Hamletas {{ne, g_sdinančio|negąsdinančio|Ne su dalyviais rašoma kartu, kai nėra priešpriešos (VLKK 5.2.1 c); gąsdinti – nosinė, nes kaitaliojasi su an (išsigando, VLKK 2.3.1).|ne}} likimo neišveng{ia|"+N.dal+"}mybės auka. Užtekt{ų|"+N.tuk+"} jam a{ts|at- + si: atsižadėti (sandūroje rašomos visos priebalsės).|sudurt}ižadėti atsakomybės sau ir viskas išsispr{ę|"+N.nos1+" spręsti – sprendė.|nosines}stų savaim{e|Prieveiksmis savaime baigiasi -e.|galunes}.",
+    "Hamletas {{ne, g_sdinančio|negąsdinančio|Ne su dalyviais rašoma kartu, kai nėra priešpriešos (VLKK 5.2.1 c); gąsdinti – nosinė, nes kaitaliojasi su an (išsigando, VLKK 2.3.1).|ne}} likimo neišveng{ia|"+N.dal+"}mybės auka. Užtekt{ų|"+N.tuk+"} jam a{ts|Priešdėlis at- rašomas visada vienodai (VLKK 3.2.3): at + si → atsižadėti.|sudurt}ižadėti atsakomybės sau ir viskas išsispr{ę|"+N.nos1+" spręsti – sprendė.|nosines}stų savaim{e|Prieveiksmis savaime baigiasi -e.|galunes}.",
 
     "Jis nėra nei ner{y|ryžtas, ryžtingas – pavojingas žodis, rašoma y (VLKK 2.3.2 4*).|nosines}žtingas, nei bevalis, {{tik, tai|tiktai|„Tiktai“ – vienas žodis (dalelytė), rašomas kartu.|kartu}} jo veiksmams tr{ū|trūkti, trūksta, trūko – šaknyje ū.|saknis}ksta barbariškos aistros, jo valią paralyž{iuo|paralyžiuoti → paralyžiuoja (-iuoti veiksmažodis).|priesagos}ja m{ą|"+R.masty+"}stymas.",
 
@@ -103,19 +103,19 @@ const SENTENCES = [
 
     "Hamletas yra vienas įsp{ū|įspūdis, įspūdingas – šaknyje ū.|saknis}dingiausių personažų visoje Vakarų literatūroje. Tatai li{u|liudyti, liudininkas – šaknyje iu.|saknis}d{i|"+N.ija+"}ja ir tas faktas, kad jis nesiduoda galutinai atskleidž{ia|"+N.dal+"}mas ir padedamas literatūros istorijos lentyno{n|Kryptinis vietininkas (kur?): lentynon = į lentyną.|galunes}.",
 
-    "Laikui bėgant jis, nel{y|lygus → nelyginant: šaknyje y.|saknis}ginant gen{ia|genialus – tarptautinis žodis, rašoma ia.|tarpt}alaus kūrėjo paleistas satelitas, skrieja intelektualinio pasaulio orbitoje, nuolat persik{u|Pusdalyvis daromas iš bendraties kamieno: kurti → kurdamas, todėl trumpas u.|saknis}rdamas ir k{ie|"+N.kiek+"}kvienai epochai atskleisdamas naujus savo prasmės aspektus.",
+    "Laikui bėgant jis, nel{y|lygus → nelyginant: šaknyje y.|saknis}ginant gen{i|genialus – tarptautinis žodis, rašoma i (geni-alus).|tarpt}alaus kūrėjo paleistas satelitas, skrieja intelektualinio pasaulio orbitoje, nuolat persik{u|Pusdalyvis daromas iš bendraties kamieno: kurti → kurdamas, todėl trumpas u.|saknis}rdamas ir k{ie|"+N.kiek+"}kvienai epochai atskleisdamas naujus savo prasmės aspektus.",
 
     "Nuo antrosios XVIII a. pusės kritikai daugiausia dėm{e|dėmesys – šaknyje e.|saknis}sio skyrė Hamleto charakterio analizei, bandydami įminti jo dels{i|delsti → delsimas. "+R.imas+"}mo m{į|"+N.nos2+" mįslė – mąstyti.|nosines}slę, atsakyti į klaus{i|"+R.imas+"}mą, ar jis tikrai pamiš{ė|Priesaga -ėlis: pamišti → pamišėlis (kaip nevykėlis, nusikaltėlis).|priesagos}lis, ar tik apsimeta.",
 
     "Subjektyvistams Hamleto motyvai gl{ū|glūdėti, glūdi – šaknyje ū.|saknis}di jo charakteryje ir yra grynai vidinio pob{ū|"+R.buti+"}džio. J. V. Gėtė dėl vis{a|Bevardės giminės galūnėje nosinė nerašoma (VLKK 2.3.8 c): visa ko.|galunes} ko kaltina kiln{ią|"+N.gal+"}j{ą|"+N.gal+"} Hamleto prigimtį, {{per, ne, lyg|pernelyg|Pernelyg rašoma kartu (VLKK 5.2.9 a).|kartu}} silpną kerštui, kaip gėlei skirt{a|"+N.vard+"}sis vazonas {ą|ąžuolas – nosinė senuose daiktavardžiuose (VLKK 2.3.3 a).|nosines}žuolo šaknims.",
 
-    "Objektyvistai keršto įvy{k|"+P("įvykti → įvykdyti, įvykdymas.")+"}dymo sta{b|"+P("stabdyti → stabdis, stabdžiu.")+"}džiu laiko išorin{e|Raidė e rašoma, jei vardininke yra -ė (VLKK 2.2.1): išorinė → išorines.|galunes}s kl{iū|kliūtis – šaknyje iū (kliudyti, kliuvo).|saknis}tis: karalius {{vis_, laik|visąlaik|Sąaugos su galininku rašomos kartu ir su nosine: visąlaik, šįryt, kitąkart (VLKK 4.2).|sudurt}} saugomas, tr{ū|trūkti, trūksta – šaknyje ū.|saknis}ksta t{ie|tiesa, tiesioginis – šaknyje ie.|saknis}sioginių kaltės įrod{y|"+N.ymas+"}mų, jei ž{u|"+N.bus+"}s karalius, {{iš, vis|išvis|Prielinksniai rašomi kartu su sutrumpėjusiais žodžiais: išvis, iškart (VLKK 5.1).|prielinks}} b{u|"+N.bus+"}s sunaikinta vienint{e|vienintelis, vienintelė – rašoma e.|saknis}lė galim{y|"+N.yb+"}bė įrodyti kaltę.",
+    "Objektyvistai keršto įvy{k|"+P("įvykti → įvykdyti, įvykdymas.")+"}dymo sta{b|"+P("stabdyti → stabdis, stabdžiu.")+"}džiu laiko išorin{e|Raidė e rašoma, jei vardininke yra -ė (VLKK 2.2.1): išorinė → išorines.|galunes}s kli{ū|kliūtis – šaknyje ū (kliudyti, kliuvo).|saknis}tis: karalius {{vis_, laik|visąlaik|Sąaugos su galininku rašomos kartu ir su nosine: visąlaik, šįryt, kitąkart (VLKK 4.2).|sudurt}} saugomas, tr{ū|trūkti, trūksta – šaknyje ū.|saknis}ksta t{ie|tiesa, tiesioginis – šaknyje ie.|saknis}sioginių kaltės įrod{y|"+N.ymas+"}mų, jei ž{u|"+N.bus+"}s karalius, {{iš, vis|išvis|Prielinksniai rašomi kartu su sutrumpėjusiais žodžiais: išvis, iškart (VLKK 5.1).|prielinks}} b{u|"+N.bus+"}s sunaikinta vienint{e|vienintelis, vienintelė – rašoma e.|saknis}lė galim{y|"+N.yb+"}bė įrodyti kaltę.",
 
-    "K{ie|"+N.kiek+"}kvienas šimtmetis ar žym{e|"+R.esnis+"}snis literatūrinis sąj{ū|sąjūdis – šaknyje ū (judėti, jūdinti).|saknis}dis davė skirtingą Hamleto interpretaciją. XX a. Hamleto portretai pasiž{y|žymė, žymėti → pasižymi: šaknyje y.|saknis}mi {{ne, tik|ne tik|Ne su dalelytėmis rašoma atskirai: ne tik, ne vien (VLKK 5.2.5 b).|ne}} gausa, bet ir įvairove.",
+    "K{ie|"+N.kiek+"}kvienas šimtmetis ar žym{e|"+R.esnis+"}snis literatūrinis sąj{ū|sąjūdis – šaknyje ū (judėti, jūdinti).|saknis}dis davė skirtingą Hamleto interpretaciją. XX a. Hamleto portretai pasiž{y|žymė, žymėti → pasižymi: šaknyje y.|saknis}mi {{ne, tik|ne tik|Ne su dalelytėmis rašoma atskirai: ne tik, ne vien (VLKK 5.2.5 b).|ne}} gausa, bet ir įvairove. Iš jų b{ū|"+R.buti+"}dingiausiais laikytini psichoanalitiniai portretai, paremti Z. Froido Edipo komplekso teorija.",
 
     "Pasak E. Jones, Hamletas nekenčia Klaudijaus {{ne, dėl, to|ne dėl to|Prielinksnis rašomas atskirai (dėl to), o ne – atskirai, kai prieštaraujama (ne dėl to, bet todėl) (VLKK 5.2.2, 5.3.1).|ne}}, kad jis nuž{u|žudyti, žudo – šaknyje trumpas u.|saknis}dė, bet todėl, kad užėmė šio vietą, į kurią pats pretenduoja.",
 
-    "Hamleto pas{ą|"+N.sa+"}monėje Klaudijus yra jo paties užgniau{ž|"+P("gniaužti, gniaužia → užgniaužtų.")+"}tų siekimų įsik{ū|kūnas → įsikūnyti: šaknyje ū.|saknis}n{i|"+N.ija+"}jimas, ir jis negal{į|"+N.trump+"}s atkeršyti niekšing{a|"+N.vns+"}j{a|"+N.vns+"}m dėdei, nenuž{u|žudyti – šaknyje trumpas u.|saknis}dydamas sav{ę|Įvardžių manęs, tavęs, savęs kilmininke rašoma ę (VLKK 2.3.8 a).|galunes}s.",
+    "Hamleto pas{ą|"+N.sa+"}monėje Klaudijus yra jo paties užgniau{ž|"+P("gniaužti, gniaužia → užgniaužtų.")+"}tų siekimų įsik{ū|kūnas → įsikūnyti: šaknyje ū.|saknis}n{i|"+N.ija+"}jimas, ir jis negal{į|"+N.trump+"}s atkeršyti niekšing{a|"+N.vns+"}j{a|"+N.vns+"}m dėdei, nenuž{u|žudyti – šaknyje trumpas u.|saknis}dydamas sav{ę|Įvardžių manęs, tavęs, savęs kilmininke rašoma ę (VLKK 2.3.8 a).|galunes}s. Psichoanalitikai atmeta tradicines neveiksmingumo priež{a|priežastis – rašoma a.|saknis}sčių teorijas.",
 
     "Klaudijus yra antr{a|"+N.vard+"}sis savo reikšme tragedijos personažas. Ilgainiui teatrinė tradicija jam primetė treč{ia|Tarp sudurtinių žodžių dėmenų rašoma (i)a (VLKK 2.2.14): trečiaeilis.|sudurt}eilio niekšo vaidmenį, skirtą Hamleto kilnumui pabrė{ž|"+P("brėžti, brėžia → pabrėžti.")+"}ti.",
 
@@ -123,26 +123,26 @@ const SENTENCES = [
 
     "Jis {{taip, pat|taip pat|„Taip pat“ rašoma atskirai.|kartu}} lankstaus proto, kilnios laikys{e|Priesaga -sena: laikysena, eisena.|priesagos}nos, gražb{y|gražbylys – šaknyje y (byla, bylóti).|saknis}lys, mok{ą|"+N.trump+"}s tinkamai prab{i|prabilti, prabilo – šaknyje trumpas i.|saknis}lti.",
 
-    "Jis myli Gertrūdą ir nesulaikomai rieda į pakalnę, suvo{k|"+P("suvokia → suvokdamas.")+"}damas likiminę nusikalt{i|"+R.imas+"}mo logiką. Šekspyrologai ab{e|abejoti – šaknyje e.|saknis}joja Ofelijos nekaltumu. Tatai iš dalies paremia Hamleto elg{e|Priesaga -esys: elgesys.|priesagos}sys, b{e|beje – rašoma e.|saknis}j{e|beje – rašoma e.|saknis}, ji šnipinėja tėvo ir karaliaus naudai.",
+    "Jis myli Gertrūdą ir nesulaikomai rieda į pakalnę, suvo{k|"+P("suvokia → suvokdamas.")+"}damas likiminę nusikalt{i|"+R.imas+"}mo logiką. Ofelijos vaidmuo, priešingai, buvo dirbtinai iškeltas. Šekspyrologai ab{e|abejoti – šaknyje e.|saknis}joja Ofelijos nekaltumu. Tatai iš dalies paremia Hamleto elg{e|Priesaga -esys: elgesys.|priesagos}sys, b{e|beje – rašoma e.|saknis}j{e|beje – rašoma e.|saknis}, ji šnipinėja tėvo ir karaliaus naudai.",
 
     "Kiti personažai – Polonijus, Horacijus, Laertas, Rozenkrancas ir Gildensternas, Gertrūda – visi ryšk{ū|"+N.ue+"}s ir gyvi žmonės.",
 
     // Hamletas, 2 dalis (pagal R. Tamošaitį)
     "Pasaulio nuop{uo|pulti, puolė → nuopuolis: šaknyje uo.|saknis}lio, krizės b{ū|"+R.buti+"}sena Šekspyro tragedijoje nusakyta gars{ią|"+N.inag+"}j{a|"+N.inag+"} išnirusio laiko metafora. Tai Hamletas konstatuoja sužinoj{ę|Būtojo kartinio laiko veikiamasis dalyvis vyr. g. vns.: -ęs (VLKK 2.3.10 b).|dalyviai}s tėvo mirties aplink{y|"+N.yb+"}bes.",
 
-    "Veikėjas tiesiog pasmer{k|"+P("smerkti, smerkia → pasmerktas.")+"}tas hero{ji/i|herojus → herojiškas: tarp balsių rašoma j.|tarpt}škam veiksmui, turi tapti lemties vykd{y|vykdyti → vykdytojas: rašoma y.|priesagos}toju.",
+    "Veikėjas tiesiog pasmer{k|"+P("smerkti, smerkia → pasmerktas.")+"}tas hero{ji|herojus → herojiškas: tarptautinių žodžių priesagoje -iškas po balsio rašoma j (VLKK 3.4.3 d).|tarpt}škam veiksmui, turi tapti lemties vykd{y|vykdyti → vykdytojas: rašoma y.|priesagos}toju.",
 
-    "Hamletui norėt{ų|"+N.tuk+"}si i{šs|iš + si: išsilaisvinti (sandūroje rašomos visos priebalsės).|sudurt}ilaisvinti iš dvejonių, jo netenkina l{i|Ligi – gi rašoma kartu su vienskiemeniais nekaitomais žodžiais (VLKK 5.2.9 b).|kartu}gi galo neįsis{ą|"+N.sa+"}moninti veiksmai.",
+    "Hamletui norėt{ų|"+N.tuk+"}si i{šs|Priešdėlis iš- rašomas visada vienodai (VLKK 3.2.3): iš + si → išsilaisvinti.|sudurt}ilaisvinti iš dvejonių, jo netenkina l{i|Ligi – gi rašoma kartu su vienskiemeniais nekaitomais žodžiais (VLKK 5.2.9 b).|kartu}gi galo neįsis{ą|"+N.sa+"}moninti veiksmai.",
 
-    "Treči{a|"+N.vns+"}j{a|"+N.vns+"}m{e|Vietininko galūnė -e.|galunes} veiksme Hamleto surežisuotas vaidinimas atskleidžia Klaudijaus niekšybę: nusikalt{ė|Priesaga -ėlis: nusikaltėlis.|priesagos}lis {{ne, be, gali|nebegali|Dalelytės nebe, be su veiksmažodžiais rašomos kartu (VLKK 5.2.7 a).|ne}} nuslėpti sutrik{i|trikti → sutrikimas: šaknyje trumpas i.|saknis}mo, jis dr{a|draskyti (drėskė) – pavojingas žodis BE nosinės: a kaitaliojasi su ė (VLKK 2.3.2 1*).|nosines}skomas sl{e|slėgti – slegia: esamajame laike trumpas e.|saknis}giančių s{ą|"+N.sa+"}žinės priekaištų.",
+    "Trečiaj{a|"+N.vns+"}m{e|Vietininko galūnė -e.|galunes} veiksme Hamleto surežisuotas vaidinimas atskleidžia Klaudijaus niekšybę: nusikalt{ė|Priesaga -ėlis: nusikaltėlis.|priesagos}lis {{ne, be, gali|nebegali|Dalelytės nebe, be su veiksmažodžiais rašomos kartu (VLKK 5.2.7 a).|ne}} nuslėpti sutrik{i|trikti → sutrikimas: šaknyje trumpas i.|saknis}mo, jis dr{a|draskyti (drėskė) – pavojingas žodis BE nosinės: a kaitaliojasi su ė (VLKK 2.3.2 1*).|nosines}skomas sl{e|slėgti – slegia: esamajame laike trumpas e.|saknis}giančių s{ą|"+N.sa+"}žinės priekaištų.",
 
     "„Hamleto“ pabaigoje stiprėja ni{ū|niūrus – šaknyje ū.|saknis}r{ū|"+N.ue+"}s akcentai, artimi baroko pasaulėjautai: žmogaus trumpalaikišk{u|Priesaga -umas: trumpalaikiškumas.|priesagos}mo apm{ą|"+R.masty+"}stymai, g{ą|"+N.nos1+" gąsdinti – išsigando.|nosines}sdinant{y|"+R.antys+"}s kapų ir sutr{e|tręšta, bet sutrešęs: dariniuose iš bendraties nosinė nerašoma (VLKK 2.3.3 4*).|nosines}šusių kaukolių vaizdiniai.",
 
     "Pasirodo duo{b|"+P("duobė → duobkasys.")+"}kasiai, kurie dr{a|drastiškas – tarptautinis žodis (gr. drastikos), nesusijęs su drąsa, todėl be nosinės.|tarpt}stiškai juokauja k{ie|"+N.kiek+"}kvienam gr{e|grėsti, grėsė, bet esamasis laikas gresia, todėl dalyvis gresiantis, gresiančius rašomas su e; nosinės nėra (VLKK 2.3.2 1*).|nosines}siančios mirties tema, atsainiai elg{ia|"+N.sar+"}si su žmogaus palaikais.",
 
-    "Hamletas tartum papra{s|"+P("paprastas → paprasčiausias (st → sč).")+"}čiausią dai{k|"+P("daiktai, daiktas.")+"}tą ranko{j|Sutrumpinta vietininko forma: rankoj = rankoje.|galunes} laiko buvusio juo{k|"+P("juokas → juokdarys.")+"}dario Joriko kaukolę, st{e|stebėti(s) – šaknyje e.|saknis}bėdamasis žmogaus gyvenimo netvarumu.",
+    "Hamletas tartum papra{s|"+P("paprastas → paprasčiausias (st → sč).")+"}čiausią dai{k|"+P("daiktai, daiktas.")+"}tą ranko{j|Sutrumpinta vietininko forma: rankoj = rankoje.|galunes} laiko buvusio juo{k|"+P("juokas → juokdarys.")+"}dario Joriko kaukolę, st{e|stebėti(s) – šaknyje e.|saknis}bėdamasis žmogaus gyvenimo netvarumu ir tarytum atpažindamas joje savo lemtį.",
 
-    "Svarbiausia idėja – viskas {{kaip, mat|kaipmat|Kaipmat – vienas prieveiksmis, rašomas kartu.|kartu}} praeina, egzistencijos su{i|irti → suirimas: trumpas i.|saknis}rimas neišveng{ia|"+N.dal+"}mas. Viskas d{ū|dūlėti – šaknyje ū.|saknis}lėja – tokia šio pasaulio išmintis.",
+    "Svarbiausia idėja – viskas {{kaip, mat|kaipmat|Kaipmat (iš kaip matai) – sutrumpėjęs žodis, rašomas kartu (VLKK 5.1.1).|kartu}} praeina, egzistencijos su{i|irti → suirimas: trumpas i.|saknis}rimas neišveng{ia|"+N.dal+"}mas. Viskas d{ū|dūlėti – šaknyje ū.|saknis}lėja – tokia šio pasaulio išmintis.",
 
     "Tragedijos atomazga – veikėjų likimo išsipild{y|"+N.ymas+"}mas. Laertas ir Hamletas sužeidžia vienas kitą, karalienė netyč{ia|Prieveiksmių tyčia, nejučia, netyčia gale rašoma (i)a (VLKK 2.2.13).|galunes} nusinuod{i|"+N.ija+"}ja, Hamletas pagaliau atkerš{i|"+N.ija+"}ja niekšing{a|"+N.vns+"}j{a|"+N.vns+"}m Klaudijui.",
 
@@ -156,7 +156,7 @@ const SENTENCES = [
 
     "Pavienės blogio apraiškos gali būti atpaž{į|"+N.nos1+" pažįsta – pažinti.|nosines}stamos ir {{iš, vis|išvis|Kartu su sutrumpėjusiais žodžiais: išvis (VLKK 5.1).|prielinks}} išraunamos, tačiau kai jis darosi visuotinis, gyvenimas gri{ū|griūti, griūva – esamajame laike ū (VLKK 2.1.3).|saknis}va.",
 
-    "Tad ir liej{a|"+N.sar+"}si kraujas, įsisiautėj{ę|Būtojo kartinio laiko veikiamasis dalyvis vyr. g. vns.: -ęs (VLKK 2.3.10 b).|dalyviai}s blogis naikina viską, net patį sav{e|Įvardžių mane, tave, save galininke nosinė nerašoma (VLKK 2.3.8 a).|galunes}, {{dėl, to|dėl to|Prielinksnis su įvardžiu rašomas atskirai (VLKK 5.3.1).|prielinks}} vis{a|visa + apimantis → visaapimantis (sandūroje rašomos abi balsės, VLKK 4.4).|sudurt}apimančiuose mirties vaizduose esama išg{i|gyti, gijo → išgijimas: trumpas i.|saknis}jimo, prisik{ė|prisikelti, prisikėlė → prisikėlimas: ė.|saknis}limo nuojautos, išlieka gyvenimo vilties prošvai{s|"+P("prošvaistė → prošvaisčių.")+"}čių.",
+    "Tad ir liej{a|"+N.sar+"}si kraujas, įsisiautėj{ę|Būtojo kartinio laiko veikiamasis dalyvis vyr. g. vns.: -ęs (VLKK 2.3.10 b).|dalyviai}s blogis naikina viską, net patį sav{e|Įvardžių mane, tave, save galininke nosinė nerašoma (VLKK 2.3.8 a).|galunes}, {{dėl, to|dėl to|Prielinksnis su įvardžiu rašomas atskirai (VLKK 5.3.1).|prielinks}} vis{a|Bevardės giminės visa galūnėje nosinė nerašoma (VLKK 2.3.8 c): visa apimantis.|galunes} apimančiuose mirties vaizduose esama išg{i|gyti, gijo → išgijimas: trumpas i.|saknis}jimo, prisik{ė|prisikelti, prisikėlė → prisikėlimas: ė.|saknis}limo nuojautos, išlieka gyvenimo vilties prošvai{s|"+P("prošvaistė → prošvaisčių.")+"}čių.",
 
     "Hamletui svarbu, kad po mirties išlikt{ų|"+N.tuk+"} jo garbingas vardas, todėl Horacijus turi gyventi ir pali{u|liudyti – šaknyje iu.|saknis}dyti, {{kas, gi|kas gi|Gi nuo kaitomų žodžių rašoma atskirai: kas gi, ko gi (VLKK 5.2.8 d).|kartu}} atsitiko Elsinore, – {{tik, tai|tiktai|„Tiktai“ – vienas žodis, rašomas kartu.|kartu}} taip neliks niekšybių, br{ę|"+N.nos1+" bręsti – brendo.|nosines}stančių s{ą|"+N.sa+"}mokslų, pasaulis atgims, o herojaus auka įg{i|"+N.bus+"}s prasmę.",
 
@@ -180,17 +180,17 @@ const SENTENCES = [
     "Tačiau nesvarstysime, ar budistai teis{ū|"+N.ue+"}s, nes rizikuotume leistis į niūrią metafizikos prarają. Tai neleistina tokia lengvab{ū|"+R.buti+"}diška proga, kaip apm{ą|"+R.masty+"}stymai apie keliones.",
 
     // Testas 3: kelionės ir smalsumas
-    "Pasak daug{e|daugelis – rašoma e.|saknis}lio kartų pat{y|patirti, patyrė → patyrimas: y.|saknis}rimo, kurį mums neab{e|abejoti – šaknyje e.|saknis}jotinai {{kaži, kaip|kaži kaip|Dalelytės kaži, kažin rašomos atskirai: kaži kaip, kažin kas.|kartu}} įskiep{i|"+N.ija+"}jo evoliucija, pasaulis nedraugiškas mums, tad t{u|turėti – trumpas u.|saknis}rėtume saugotis naujų dalykų, s{ė|sėdėti – ė.|saknis}dėti gerai paž{į|"+N.nos1+" pažinti.|nosines}stamuose kampuose ir vaikščioti išmintais takais.",
+    "Pasak daug{e|daugelis – rašoma e.|saknis}lio kartų pat{y|patirti, patyrė → patyrimas: y.|saknis}rimo, kurį mums neab{e|abejoti – šaknyje e.|saknis}jotinai {{kaži, kaip|kaži kaip|Kaži, kažin rašomi atskirai: kaži kaip, kažin kas (VLKK 5.1.3).|kartu}} įskiep{i|"+N.ija+"}jo evoliucija, pasaulis nedraugiškas mums, tad t{u|turėti – trumpas u.|saknis}rėtume saugotis naujų dalykų, s{ė|sėdėti – ė.|saknis}dėti gerai paž{į|"+N.nos1+" pažinti.|nosines}stamuose kampuose ir vaikščioti išmintais takais.",
 
     "Bet taip nėra. Kodėl vaikystėje skaitome m{į|"+N.nos2+" mįslė – mąstyti.|nosines}slingas kelionių knygas? Kodėl žmonės, vos panaikinę balt{ą|"+N.inag+"}s{ia|"+N.inag+"}s dėmes žemėlapiuose, dr{ą|"+N.nos2+" drąsa – drįsti.|nosines}siai puolė į dar nesen{ia|Prieveiksmis neseniai: po minkšto priebalsio -iai.|galunes}i neįsivaizduojamas keliones po didž{ia|Aukščiausiojo laipsnio priesaga -(i)ausias (VLKK 2.2.12).|priesagos}usias erdves ir svajoja apie dar did{e|"+R.esnis+"}snes?",
 
-    "Kalbėdami apie keliones, mes turime galvoje {{ne, bet, kokį|ne bet kokį|Ne nuo įvardžių ir junginių su bet rašoma atskirai: ne bet kaip, ne bet koks (VLKK 5.2.5).|ne}} judėjimą erdvėje, bet tokį, kur pati kelionė yra tikslas.",
+    "Kalbėdami apie keliones, mes turime galvoje {{ne, bet, kokį|ne bet kokį|Ne nuo įvardžių ir junginių su bet rašoma atskirai: ne bet kaip, ne bet koks (VLKK 5.2.5).|ne}} judėjimą erdvėje, bet tokį, kur pati kelionė yra tikslas, kai visai nėra b{ū|"+R.buti+"}tinybės tvarkyti reikalų, kuriuos išspr{ę|"+N.nos1+" spręsti – sprendė.|nosines}stume ir be keliavimo.",
 
     "Verslininkai, reng{ia|Esamojo laiko dalyvis iš 3 asm.: rengia → rengiantys (VLKK 2.2.9).|dalyviai}ntys susitikimus oro uostų konferencijų salėse, {{iš, kart|iškart|Kartu su sutrumpėjusiais žodžiais: iškart (VLKK 5.1).|prielinks}} po jų gr{į|"+R.grizti+"}žta į savo įstaigas ir visiškai nekeliauja.",
 
     "Kažin ar galima keliavimu laikyti tokią m{a|masinis – tarptautinis žodis (masė), rašoma a.|tarpt}sinio turizmo r{ū|rūšis – ū.|saknis}šį, kai, pavy{z|"+P("pavyzdys → pavyzdžiui.")+"}džiui, šalt{ų|"+N.gal+"}j{ų|"+N.gal+"} kraštų gyventojams tiesiog reikia šiltos jūros gabalėlio Ispanijoje, o pati Ispanija jiems {{nė, maž|nėmaž|Nė su sutrumpėjusiais žodžiais rašoma kartu: nėmaž, nėkart (VLKK 5.2.9 a).|kartu}} nerūpi. Mes kalbame apie keliones, kai patir{ia|"+N.dal+"}ma kas nors nauja.",
 
-    "Keliaujant mums {{iš, vis|išvis|Kartu su sutrumpėjusiais žodžiais: išvis (VLKK 5.1).|prielinks}} nėra svarbu ką nors išmokti. Keliaujame ir ne todėl, kad ak{i|akimirka = aki- (akis) + mirka.|sudurt}mirkai atitr{ū|trūkti, trūko – ū.|saknis}ktume nuo ka{s|kasdienis = kas + diena.|sudurt}dienių darbų ir pamirštume sl{e|slėgti – slegia: esamajame laike trumpas e.|saknis}giančius r{ū|rūpėti, rūpestis – ū.|saknis}p{e|Priesaga -estis: rūpestis.|priesagos}sčius.",
+    "Keliaujant mums {{iš, vis|išvis|Kartu su sutrumpėjusiais žodžiais: išvis (VLKK 5.1).|prielinks}} nėra svarbu ką nors išmokti. Keliaujame ir ne todėl, kad ak{i|akimirka = aki- (akis) + mirka.|sudurt}mirkai atitr{ū|trūkti, trūko – ū.|saknis}ktume nuo ka{s|kasdienis = kas + diena.|sudurt}dienių darbų ir pamirštume sl{e|slėgti – slegia: esamajame laike trumpas e.|saknis}giančius rūp{e|Priesaga -estis: rūpestis.|priesagos}sčius.",
 
     "Mus v{y|vyti → vyte (būdinys iš bendraties): y.|saknis}te v{e|vyti, veja, vijo: esamajame laike e.|saknis}ja {{ne, noras|ne noras|Ne atskirai, kai prieštaraujama: ne noras …, bet smalsumas (VLKK 5.2.2).|ne}} pabėgti, bet smalsumas. Mokslininkai tvirtina, jog smalsumas išlieka visą žmogaus gyvenimą ir jog tai yra s{a|savas → savitas: a.|saknis}vitas žmogaus bruožas.",
 
@@ -202,11 +202,11 @@ const SENTENCES = [
 
     "Net ir šiandien, smalsumo nug{i|ginti, gina → nuginti: trumpas i.|saknis}nti į kokią nepaž{į|"+N.nos1+" pažinti.|nosines}stamą šalį ar miestą, galime sakyti tai patys sau atradę, nes atrad{i|"+R.imas+"}mas – tai nebūtinai žinios, kurių dar niekas neturėjo, bet tik naujas pat{y|patirti, patyrė → patyrimas: y.|saknis}rimas.",
 
-    "Tiesa, žmonės kartais išsiruošia į didž{ią|"+N.inag+"}s{ia|"+N.inag+"}s sentimentų keliones – į prarast{ą|"+N.gal+"}j{ą|"+N.gal+"} vaikystės ar jaunystės šalį. Ar tokias išv{y|išvykti → išvyka: y.|saknis}kas irgi galime vadinti kelionėmis?",
+    "Tiesa, žmonės kartais išsiruošia į didž{ią|"+N.inag+"}s{ia|"+N.inag+"}s sentimentų keliones – į apleistas vietas, į prarast{ą|"+N.gal+"}j{ą|"+N.gal+"} vaikystės ar jaunystės šalį. Ar tokias išv{y|išvykti → išvyka: y.|saknis}kas irgi galime vadinti kelionėmis?",
 
     "Atrodo, neatrandame nieko nauja, bet tarsi esame sugr{ą|"+N.nos2+" grąžinti – grįžti.|nosines}žinami patys prie sav{ę|Įvardžių manęs, tavęs, savęs kilmininke rašoma ę (VLKK 2.3.8 a).|galunes}s, į senuosius laikus, atrodo, jog keliaujame laiku, nes tai, ką kadais{e|Prieveiksmis kadaise – rašoma e.|galunes} pat{y|patirti, patyrė: y.|saknis}rėme, yra vėl nauja.",
 
-    "Mumyse gyvas naujovių poreikis, naujovės mus m{a|masinti „vilioti“ – BE nosinės (nepainiok su mąstyti).|nosines}sina, nes tai sus{i|susieti, susijęs – trumpas i.|saknis}j{ę|Būtojo kartinio laiko veikiamojo dalyvio galūnėje rašoma ę: susijęs, susiję (VLKK 2.3.10 b).|dalyviai} su mūsų specifiškai žmogišku laiko išgyvenimu.",
+    "Mumyse gyvas naujovių poreikis, naujovės mus m{a|masinti „vilioti“ – BE nosinės (nepainiok su mąstyti).|nosines}sina, nes tai sus{i|susieti, susijęs – trumpas i.|saknis}ję su mūsų specifiškai žmogišku laiko išgyvenimu.",
 
     "Mes norėtume visuomet būti pradžioje, jausti, jog pasaulis mums atviras, o naujovės išgyvenimas, nors ir a{p|"+P("apgauti → apgaulė, apgaulingai: priešdėlis ap-.")+"}gaulingai, sukelia šį poj{ū|pojūtis – ū (jausti, jutimas).|saknis}tį."
   );
@@ -246,6 +246,31 @@ function wordAround(parts, k, fill) {
     if (m.length < s.length) break;
   }
   return left + fill + right;
+}
+
+// Arrow keys inside a sentence:
+//   blanks (inputs): ← → jump to the prev/next blank at the word's edge, ↑ ↓ always jump
+//   gaps (skyryba):  ← → move between gaps, ↑ ↓ change the mark via cycle(button, ±1)
+//   onMove() runs after focus jumps (e.g. to close a hover picker)
+function arrowKeys(el, cycle, onMove) {
+  el.addEventListener("keydown", e => {
+    const t = e.target, isInput = t.tagName === "INPUT", isGap = t.classList.contains("gap");
+    if (!isInput && !isGap || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    const dir = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -1, ArrowDown: 1 }[e.key];
+    if (!dir) return;
+    const vertical = e.key === "ArrowUp" || e.key === "ArrowDown";
+    if (isGap && vertical) { e.preventDefault(); return cycle?.(t, dir); }
+    if (isInput && !vertical) {
+      const atEdge = t.selectionStart === t.selectionEnd && t.selectionStart === (dir < 0 ? 0 : t.value.length);
+      if (!atEdge) return;
+    }
+    const all = [...el.querySelectorAll(isInput ? "input" : ".gap:not(.locked)")], to = all[all.indexOf(t) + dir];
+    if (!to) return;
+    e.preventDefault();
+    to.focus();
+    onMove?.();
+    if (isInput) { const at = dir < 0 ? to.value.length : 0; to.setSelectionRange(at, at); }
+  });
 }
 
 // Mistakes saved in the browser: { "sentence:part": { wrong, streak, last } }

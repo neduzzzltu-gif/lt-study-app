@@ -19,6 +19,7 @@
   /* clickable gap between words */
   .gap { display:inline-block; min-width:14px; height:28px; padding:0 3px; margin:0 1px; vertical-align:middle; border:none; border-radius:6px; background:transparent; font:inherit; font-size:20px; font-weight:700; color:var(--accent); cursor:pointer; line-height:28px; transition:background .12s; }
   .gap:hover { background:#e4e9ff; }
+  .gap:focus { outline:2px solid var(--accent); outline-offset:1px; background:#dfe5ff; }
   .gap.set { background:#eef1ff; }
   .gap.ok { color:var(--ok); background:#e6f5ec; }
   .gap.bad { color:var(--bad); background:#fdecec; }
@@ -98,7 +99,7 @@
 const MISTAKE_MODE = new URLSearchParams(location.search).has("klaidos");
 if (MISTAKE_MODE) {
   document.getElementById("title").textContent = "Skyrybos klaidų treniruotė";
-  document.getElementById("sub").textContent = "Sakiniai, kuriuose suklydai. Sudėk visus ženklus – atsakyk teisingai 2 kartus iš eilės ir klaida dingsta.";
+  document.getElementById("sub").textContent = "Sakiniai, kuriuose suklydai. Sudėk visus ženklus – atsakyk teisingai 2 kartus iš eilės ir klaida keliauja į pataisytas.";
   document.getElementById("modeLink").textContent = "← Klaidų sąrašas";
 }
 
@@ -114,6 +115,7 @@ function load(i) {
   }).join("");
   document.getElementById("result").innerHTML = "";
   hidePicker();
+  if (!matchMedia("(hover: none)").matches) document.querySelector(".sentence .gap")?.focus({ preventScroll: true });
 }
 
 function setMark(b, mark) {
@@ -157,6 +159,10 @@ document.addEventListener("mouseover", e => {
 });
 addEventListener("resize", hidePicker);
 document.addEventListener("keydown", e => { if (e.key === "Escape") hidePicker(); });
+arrowKeys(document.getElementById("sentence"), (b, dir) => {
+  setMark(b, MARKS[(MARKS.indexOf(b.dataset.m) + dir + MARKS.length) % MARKS.length]);
+  if (pickFor === b) showPicker(b);
+}, hidePicker);
 
 function check() {
   hidePicker();
@@ -233,7 +239,7 @@ document.addEventListener("keydown", e => {
   if (e.target.closest(".gap") || !e.target.closest("button")) { e.preventDefault(); check(); }
 });
 updateModeLink();
-roundStart(Math.min(ROUND_SIZE, pool().length), "skyryba.html?klaidos", nextRandom);
+roundStart(() => Math.min(ROUND_SIZE, pool().length), "skyryba.html?klaidos", nextRandom);
 nextRandom();
 </script>
 <script src="demo-report.js"></script><!-- DEMO: remove later -->

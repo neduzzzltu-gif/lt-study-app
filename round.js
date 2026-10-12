@@ -4,8 +4,9 @@
 const ROUND_SIZE = 10;
 let round = { size: ROUND_SIZE, items: [], fixHref: "", onNext: null };
 
+// size can be a number or a function (re-evaluated for every new round)
 function roundStart(size, fixHref, onNext) {
-  round = { size: Math.max(1, size), items: [], fixHref, onNext };
+  round = { size: Math.max(1, typeof size === "function" ? size() : size), sizeFn: size, items: [], fixHref, onNext };
   document.getElementById("actions").style.display = "";
   roundUpdate();
 }
@@ -45,6 +46,6 @@ function roundSummary() {
   document.getElementById("result").innerHTML = wrong.length
     ? `<div class="score">Klaidos šiame raunde</div>` + wrong.map(x => x.mistakesHtml).join("")
     : `<div class="allok">Be klaidų! 🎉</div>`;
-  document.getElementById("newRound").onclick = () => { roundStart(round.size, round.fixHref, round.onNext); round.onNext(); };
+  document.getElementById("newRound").onclick = () => { roundStart(round.sizeFn, round.fixHref, round.onNext); round.onNext(); };
   scrollTo(0, 0);
 }

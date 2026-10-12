@@ -77,7 +77,7 @@
     <a class="mode" id="modeLink" href="klaidos.html">Mano klaidos →</a>
   </div>
   <h1 id="title">Rašybos treniruoklis</h1>
-  <p class="sub" id="sub">Įrašyk praleistas raides. Skliaustuose esančius žodžius parašyk kartu arba skyrium. Užlaikyk pelę ant langelio 2 sek. – atsiras užuomina.</p>
+  <p class="sub" id="sub">Įrašyk praleistas raides. Skliaustuose esančius žodžius parašyk kartu arba skyrium. Užlaikyk pelę ant langelio 1 sek. – atsiras užuomina.</p>
   <div class="card">
     <div class="progress" id="progress"></div>
     <div class="sentence" id="sentence"></div>
@@ -116,6 +116,7 @@ function load(i) {
 }
 
 function check() {
+  if (document.getElementById("actions").style.display === "none") return;
   const inputs = [...document.querySelectorAll(".sentence input")];
   const first = !checked; checked = true;
   let wrong = [], correct = [];
@@ -185,9 +186,10 @@ document.getElementById("check").onclick = check;
 document.getElementById("next").onclick = roundNext;
 const sentenceEl = document.getElementById("sentence");
 sentenceEl.addEventListener("focusin", e => { if (e.target.tagName === "INPUT") focused = e.target; });
-sentenceEl.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); check(); } });
+sentenceEl.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.tagName === "INPUT") { e.preventDefault(); check(); } });
+arrowKeys(sentenceEl);
 
-// Hold the mouse on a blank for 2 s → "?" appears above it → click shows which rule to use
+// Hold the mouse on a blank for 1 s → "?" appears above it → click shows which rule to use
 let holdTimer = null, qEl = null, tipEl = null, qFor = null;
 function hideHint() { clearTimeout(holdTimer); clearTimeout(leaveTimer); qEl?.remove(); tipEl?.remove(); qEl = tipEl = qFor = null; }
 function placeAbove(el, target, gap) {
@@ -220,7 +222,7 @@ sentenceEl.addEventListener("mouseover", e => {
   if (e.target.tagName !== "INPUT" || e.target === qFor) return;
   clearTimeout(holdTimer);
   const inp = e.target;
-  holdTimer = setTimeout(() => showQ(inp), 2000);
+  holdTimer = setTimeout(() => showQ(inp), 1000);
 });
 sentenceEl.addEventListener("mouseout", e => { if (e.target.tagName === "INPUT") clearTimeout(holdTimer); });
 
@@ -236,7 +238,7 @@ document.addEventListener("click", e => { if (!e.target.closest(".qmark, .tip"))
 addEventListener("resize", hideHint);
 document.addEventListener("keydown", e => { if (e.key === "Escape") hideHint(); });
 
-roundStart(Math.min(ROUND_SIZE, pool().length), "rasyba.html?klaidos", nextRandom);
+roundStart(() => Math.min(ROUND_SIZE, pool().length), "rasyba.html?klaidos", nextRandom);
 nextRandom();
 </script>
 <script src="demo-report.js"></script><!-- DEMO: remove later -->
