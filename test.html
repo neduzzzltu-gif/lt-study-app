@@ -111,7 +111,8 @@ function startTest(t) {
   if (t === "r") items = pick(COUNT, SENTENCES.length).map(i => ({ type: "r", i }));
   else if (t === "s") items = pick(COUNT, SK_SENTENCES.length).map(i => ({ type: "s", i }));
   else items = shuffle([...pick(COUNT / 2, SENTENCES.length).map(i => ({ type: "r", i })), ...pick(COUNT / 2, SK_SENTENCES.length).map(i => ({ type: "s", i }))]);
-  state = { kind: t, items: items.map(x => ({ ...x, only: null, fixed: {} })), answers: items.map(() => ({})), pos: 0, redo: false, started: Date.now(), left: MINUTES * 60 };
+  const now = Date.now();
+  state = { kind: t, items: items.map((x, k) => ({ ...x, orig: k, only: null, fixed: {} })), answers: items.map(() => ({})), pos: 0, redo: false, started: now, deadline: now + MINUTES * 60000, left: MINUTES * 60 };
   startTimer();
   showItem();
 }
@@ -120,7 +121,7 @@ function startTest(t) {
 function startTimer() {
   stopTimer();
   timerId = setInterval(() => {
-    state.left--;
+    state.left = Math.ceil((state.deadline - Date.now()) / 1000);
     const el = document.getElementById("timer");
     if (el) { el.textContent = fmt(Math.max(state.left, 0)); el.classList.toggle("low", state.left <= 60); }
     if (state.left <= 0) { stopTimer(); finish(true); }
@@ -148,8 +149,9 @@ function showItem() {
         ${!last ? `<button class="btn secondary" id="finish">Baigti</button>` : ""}
       </div>
     </div>
-    ${state.redo && state.review ? `<div class="row"><button class="btn secondary" id="review">${state.showReview ? "Slėpti klaidas ▴" : "📋 Peržiūrėti klaidas ▾"}</button></div>
+    ${state.redo ? `<div class="row"><button class="btn secondary" id="toResults">← Atgal į rezultatą</button><button class="btn secondary" id="review">${state.showReview ? "Slėpti klaidas ▴" : "📋 Peržiūrėti klaidas ▾"}</button></div>
     ${state.showReview ? `<div style="margin-top:14px">${state.review}</div>` : ""}` : ""}`;
+  document.getElementById("toResults") && (document.getElementById("toResults").onclick = () => renderResults(state.parent));
   document.getElementById("review") && (document.getElementById("review").onclick = () => { state.showReview = !state.showReview; showItem(); });
   app.querySelectorAll(".dot").forEach(d => d.onclick = () => go(+d.dataset.k));
   document.getElementById("prev").onclick = () => state.pos > 0 && go(state.pos - 1);
@@ -187,7 +189,7 @@ function wireSentence(it, ans) {
   const el = document.getElementById("sentence");
   if (it.type === "r") {
     el.addEventListener("input", e => { if (e.target.dataset.k) { ans[e.target.dataset.k] = e.target.value; markDot(); } });
-    el.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); state.pos < state.items.length - 1 ? go(state.pos + 1) : finish(false); } });
+    el.addEventListener("keydown", e => { if (e.key === "Enter" && !e.repeat) { e.preventDefault(); state.pos < state.items.length - 1 ? go(state.pos + 1) : finish(false); } });
   } else {
     el.addEventListener("click", e => {
       const b = e.target.closest(".gap"); if (!b) return;
@@ -235,21 +237,24 @@ addEventListener("resize", hidePicker);
 
 // ---------- grading ----------
 // Returns { points, max, mistakes:[{yours, right, rule, full, key}] } for one item
-function grade(it, ans) {
+function grade(it, ans, redo) {
   const out = { points: 0, max: 0, mistakes: [], ok: {} };
+  const touched = Object.values(ans).some(v => v);
+  // Skipped sentences don't touch saved mistakes; in a redo only new mistakes are saved
+  const save = ok => touched && !(redo && ok);
   if (it.type === "r") {
     const parts = parse(SENTENCES[it.i]);
     parts.forEach((p, k) => {
       if (p.t !== undefined || (it.only && !it.only.has(k))) return;
       const val = (ans[k] || "").trim(), ok = p.ans.split("/").some(a => norm(val) === norm(a));
       out.max++;
-      if (ok) { out.points++; out.ok[k] = val; }
+      if (ok) { out.points++; out.ok[k] = p.word ? p.ans : p.ans.split("/").find(a => norm(a) === norm(val)); }
       else out.mistakes.push({
         key: k, rule: p.rule, full: fullRule(p.cat),
         right: p.word ? p.ans : wordAround(parts, k, p.ans.split("/")[0]),
         yours: p.word ? (val || "—") : wordAround(parts, k, val || "_")
       });
-      recordAnswer(it.i, k, ok, val || "—");
+      if (save(ok) && (val || !redo)) recordAnswer(it.i, k, ok, val || "—");
     });
   } else {
     const s = skParse(SK_SENTENCES[it.i]), a = s.words;
@@ -265,7 +270,7 @@ function grade(it, ans) {
         if (gap.def) out.max++; // an extra mark counts as a lost point
         out.mistakes.push({ key: g, rule: gap.rule, full: skFullRule(gap.cat), right: gap.ans.map(x => skJoin(a[g], x, a[g + 1])).join("  arba  "), yours: skJoin(a[g], v, a[g + 1]) });
       }
-      if (!gap.def || !ok) skRecord(it.i, g, ok, v);
+      if ((!gap.def || !ok) && save(ok)) skRecord(it.i, g, ok, v);
     });
   }
   return out;
@@ -274,58 +279,64 @@ function grade(it, ans) {
 // ---------- results ----------
 function finish(timeUp) {
   hidePicker();
-  if (!timeUp && !state.redo) {
+  if (!timeUp) {
     const empty = state.items.filter((_, k) => !Object.values(state.answers[k]).some(v => v)).length;
     if (empty && !confirm(`Dar ${empty} sakinių neatsakei. Vis tiek baigti?`)) return;
+    if (!state.redo && Date.now() >= state.deadline) timeUp = true; // time ran out behind the dialog
   }
   stopTimer();
   const used = state.redo ? null : Math.min(MINUTES * 60, Math.round((Date.now() - state.started) / 1000));
-  const results = state.items.map((it, k) => ({ it, ...grade(it, state.answers[k]) }));
+  const results = state.items.map((it, k) => ({ it, ...grade(it, state.answers[k], state.redo) }));
   const points = results.reduce((s, r) => s + r.points, 0), max = results.reduce((s, r) => s + r.max, 0);
-  const pct = max ? Math.round(points / max * 100) : 100;
-  const wrongItems = results.filter(r => r.mistakes.length);
-  const nMist = wrongItems.reduce((s, r) => s + r.mistakes.length, 0);
+  const res = {
+    redo: state.redo, timeUp, used, points, max,
+    pct: max ? Math.round(points / max * 100) : 100,
+    wrongItems: results.filter(r => r.mistakes.length)
+  };
+  res.nMist = res.wrongItems.reduce((s, r) => s + r.mistakes.length, 0);
+  renderResults(res);
+}
 
+const mistakeHtml = r => `
+  <div class="sres">
+    <div class="head">${r.it.orig + 1}. ${r.it.type === "r" ? "Rašyba" : "Skyryba"}</div>
+    ${r.mistakes.map(m => `<div class="mistake"><div class="w"><s>${esc(m.yours)}</s> → <b>${esc(m.right)}</b></div><div class="r">${esc(m.rule)}</div>${m.full}</div>`).join("")}
+  </div>`;
+
+function renderResults(res) {
+  hidePicker();
   app.innerHTML = `
     <a class="back" href="index.html">← Visos temos</a>
-    <h1>${state.redo ? "Taisymo rezultatas" : "Testo rezultatas"}</h1>
-    ${timeUp ? `<p class="sub">⏰ Laikas baigėsi – testas užbaigtas automatiškai.</p>` : ""}
-    <div class="card score ${pct >= 85 ? "good" : pct >= 60 ? "mid" : "low"}">
-      <div class="big">${points} / ${max}</div>
-      <div class="pct">${pct}% teisingai</div>
-      <div class="meta">${nMist} ${plural(nMist)}${used !== null ? ` · laikas ${fmt(used)}` : ""}</div>
+    <h1>${res.redo ? "Taisymo rezultatas" : "Testo rezultatas"}</h1>
+    ${res.timeUp ? `<p class="sub">⏰ Laikas baigėsi – testas užbaigtas automatiškai.</p>` : ""}
+    <div class="card score ${res.pct >= 85 ? "good" : res.pct >= 60 ? "mid" : "low"}">
+      <div class="big">${res.points} / ${res.max}</div>
+      <div class="pct">${res.pct}% teisingai</div>
+      <div class="meta">${res.nMist} ${plural(res.nMist)}${res.used !== null ? ` · laikas ${fmt(res.used)}` : ""}</div>
     </div>
     <div class="row">
-      ${nMist ? `<button class="btn danger" id="redo">🎯 Taisyti klaidas (${nMist})</button>` : ""}
+      ${res.nMist ? `<button class="btn danger" id="redo">🎯 ${state.redo && state.parent === res ? "Tęsti taisymą" : "Taisyti klaidas"} (${res.nMist})</button>` : ""}
       <button class="btn primary" id="again">Naujas testas</button>
     </div>
-    ${nMist ? `<h2>Klaidos</h2>` : `<p class="allok" style="margin-top:20px">Be klaidų! 🎉</p>`}
-    ${wrongItems.map(r => `
-      <div class="sres">
-        <div class="head">${state.items.indexOf(r.it) + 1}. ${r.it.type === "r" ? "Rašyba" : "Skyryba"}</div>
-        ${r.mistakes.map(m => `<div class="mistake"><div class="w"><s>${esc(m.yours)}</s> → <b>${esc(m.right)}</b></div><div class="r">${esc(m.rule)}</div>${m.full}</div>`).join("")}
-      </div>`).join("")}`;
+    ${res.nMist ? `<h2>Klaidos</h2>` : `<p class="allok" style="margin-top:20px">Be klaidų! 🎉</p>`}
+    ${res.wrongItems.map(mistakeHtml).join("")}`;
 
   document.getElementById("again").onclick = startScreen;
   const redo = document.getElementById("redo");
   if (redo) redo.onclick = () => {
+    // Coming back from a redo that's still in progress → continue it
+    if (state.redo && state.parent === res) return showItem();
     // Keep only the wrong spots; everything answered right stays filled in
-    const items = wrongItems.map(r => ({
-      type: r.it.type, i: r.it.i,
+    const items = res.wrongItems.map(r => ({
+      type: r.it.type, i: r.it.i, orig: r.it.orig,
       only: new Set(r.mistakes.map(m => m.key)),
       fixed: { ...r.it.fixed, ...r.ok }
     }));
-    const review = wrongItems.map(r => `
-      <div class="sres">
-        <div class="head">${r.it.type === "r" ? "Rašyba" : "Skyryba"}</div>
-        ${r.mistakes.map(m => `<div class="mistake"><div class="w"><s>${esc(m.yours)}</s> → <b>${esc(m.right)}</b></div><div class="r">${esc(m.rule)}</div>${m.full}</div>`).join("")}
-      </div>`).join("");
-    state = { ...state, items, answers: items.map(() => ({})), pos: 0, redo: true, review, showReview: false };
+    state = { ...state, items, answers: items.map(() => ({})), pos: 0, redo: true, parent: res, review: res.wrongItems.map(mistakeHtml).join(""), showReview: false };
     showItem();
   };
   scrollTo(0, 0);
-}
-const plural = n => n % 10 === 1 && n % 100 !== 11 ? "klaida" : (n % 10 === 0 || (n % 100 > 10 && n % 100 < 20)) ? "klaidų" : "klaidos";
+}const plural = n => n % 10 === 1 && n % 100 !== 11 ? "klaida" : (n % 10 === 0 || (n % 100 > 10 && n % 100 < 20)) ? "klaidų" : "klaidos";
 
 startScreen();
 </script>
