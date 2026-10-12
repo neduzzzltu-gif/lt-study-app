@@ -41,6 +41,17 @@
   .good { border-left:4px solid var(--ok); background:#f3faf6; padding:10px 14px; border-radius:0 10px 10px 0; margin-bottom:10px; animation:slide .25s ease-out; }
   .good .w { font-size:17px; } .good .w b { color:var(--ok); }
   .good .r { color:#444; font-size:14px; margin-top:4px; }
+  .progress { position:relative; height:26px; margin:-6px 0 14px; font-size:13px; color:var(--muted); }
+  .progress span { position:relative; z-index:1; }
+  .progress i { position:absolute; left:0; bottom:0; height:4px; background:var(--accent); border-radius:999px; transition:width .3s ease; z-index:1; }
+  .progress::after { content:""; position:absolute; left:0; right:0; bottom:0; height:4px; background:var(--line); border-radius:999px; }
+  .rsum { text-align:center; padding:10px 0 6px; }
+  .rsum .big { font-size:48px; font-weight:800; line-height:1; }
+  .rsum .pct { font-size:18px; color:var(--muted); margin-top:6px; }
+  .rsum.good .big { color:var(--ok); } .rsum.mid .big { color:#c77700; } .rsum.low .big { color:var(--bad); }
+  .ractions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:16px; }
+  .ractions button { font:inherit; font-size:16px; padding:12px 20px; border-radius:12px; border:none; cursor:pointer; }
+  .ractions .fixbtn { margin-top:0; padding:12px 20px; }
   .allok { color:var(--ok); font-weight:600; }
   .empty { color:var(--muted); line-height:1.6; }
   /* "?" hint bubble */
@@ -68,6 +79,7 @@
   <h1 id="title">Rašybos treniruoklis</h1>
   <p class="sub" id="sub">Įrašyk praleistas raides. Skliaustuose esančius žodžius parašyk kartu arba skyrium. Užlaikyk pelę ant langelio 2 sek. – atsiras užuomina.</p>
   <div class="card">
+    <div class="progress" id="progress"></div>
     <div class="sentence" id="sentence"></div>
     <div class="actions" id="actions">
       <button class="primary" id="check">Tikrinti</button>
@@ -78,32 +90,23 @@
 </main>
 
 <script src="data.js"></script>
+<script src="round.js"></script>
 <script>
 // ?klaidos = practise only blanks you got wrong before
 const MISTAKE_MODE = new URLSearchParams(location.search).has("klaidos");
 if (MISTAKE_MODE) {
   document.getElementById("title").textContent = "Klaidų treniruotė";
-  document.getElementById("sub").textContent = "Tik tie langeliai, kuriuose suklydai. Atsakyk teisingai 2 kartus iš eilės – klaida dingsta.";
+  document.getElementById("sub").textContent = "Sakiniai, kuriuose suklydai. Užpildyk visus langelius – atsakyk teisingai 2 kartus iš eilės ir klaida keliauja į pataisytas.";
   document.getElementById("modeLink").textContent = "← Klaidų sąrašas";
 }
 
 let current = -1, parts = [], focused = null, checked = false;
 
-// Which blanks are inputs in this sentence (all, or only past mistakes)
-function activeBlanks(i) {
-  const ps = parse(SENTENCES[i]);
-  if (!MISTAKE_MODE) return null;
-  const m = loadMistakes();
-  return new Set(ps.map((_, k) => k).filter(k => m[i + ":" + k]));
-}
-
 function load(i) {
   current = i; checked = false;
   parts = parse(SENTENCES[i]);
-  const only = activeBlanks(i);
   document.getElementById("sentence").innerHTML = parts.map((p, k) => {
     if (p.t !== undefined) return esc(p.t);
-    if (only && !only.has(k)) return esc(p.word ? p.ans : p.ans.split("/")[0]);
     if (p.word) return `<span class="hint">(${esc(p.hint)})</span> <input data-k="${k}" style="width:${Math.max(p.hint.length, 8) + 2}ch" autocomplete="off" autocapitalize="off" spellcheck="false">`;
     return `<input data-k="${k}" style="width:${Math.max(...p.ans.split("/").map(a => a.length)) + 1.6}ch" autocomplete="off" autocapitalize="off" spellcheck="false">`;
   }).join("");
@@ -126,13 +129,14 @@ function check() {
     else correct.push({ k, p });
   });
   const total = inputs.length, good = total - wrong.length;
-  let html = `<div class="score">${good} / ${total} teisingai</div>`;
+  let html = `<div class="score">${good} / ${total} teisingai</div>`, mHtml = "";
   if (!wrong.length) html += `<div class="allok">Viskas teisingai! 🎉</div>`;
   wrong.forEach(({ k, p, val }) => {
     const right = p.word ? p.ans : wordAround(parts, k, p.ans.split("/")[0]);
     const yours = p.word ? (val || "—") : wordAround(parts, k, val || "_");
-    html += `<div class="mistake"><div class="w"><s>${esc(yours)}</s> → <b>${esc(right)}</b></div><div class="r">${esc(p.rule)}</div>${fullRule(p.cat)}</div>`;
+    mHtml += `<div class="mistake"><div class="w"><s>${esc(yours)}</s> → <b>${esc(right)}</b></div><div class="r">${esc(p.rule)}</div>${fullRule(p.cat)}</div>`;
   });
+  html += mHtml;
   // Rules for the words you got right, folded away
   if (correct.length) html += `<details class="rightlist"><summary>Teisingi žodžiai (${correct.length})</summary>${correct.map(({ k, p }) => {
     const w = p.word ? p.ans : wordAround(parts, k, p.ans.split("/")[0]);
@@ -141,6 +145,7 @@ function check() {
   const n =Object.keys(loadMistakes()).length;
   if (n && !MISTAKE_MODE) html += `<a class="fixbtn" href="rasyba.html?klaidos">🎯 Taisyti klaidas (${n}) →</a>`;
   document.getElementById("result").innerHTML = html;
+  if (first) roundAdd(good, total, mHtml);
   updateModeLink();
 }
 
@@ -177,7 +182,7 @@ function showNoMistakes() {
 }
 
 document.getElementById("check").onclick = check;
-document.getElementById("next").onclick = nextRandom;
+document.getElementById("next").onclick = roundNext;
 const sentenceEl = document.getElementById("sentence");
 sentenceEl.addEventListener("focusin", e => { if (e.target.tagName === "INPUT") focused = e.target; });
 sentenceEl.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); check(); } });
@@ -231,7 +236,9 @@ document.addEventListener("click", e => { if (!e.target.closest(".qmark, .tip"))
 addEventListener("resize", hideHint);
 document.addEventListener("keydown", e => { if (e.key === "Escape") hideHint(); });
 
+roundStart(Math.min(ROUND_SIZE, pool().length), "rasyba.html?klaidos", nextRandom);
 nextRandom();
 </script>
+<script src="demo-report.js"></script><!-- DEMO: remove later -->
 </body>
 </html>

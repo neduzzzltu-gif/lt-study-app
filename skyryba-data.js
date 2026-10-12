@@ -121,6 +121,85 @@ const SK_SENTENCES = [
   "Turbūt[/,|Modalinis žodis turbūt gali būti išskiriamas kableliu, jei norima suteikti įterptinį pobūdį, bet nebūtinai (VLKK 8.4 p.).|iterpinys] garsiausias šios temos kūrinys[–/|"+S.bruk+"] B. Šo 1912 m. parašyta pjesė „Pigmalionas“[,|"+S.salStart+"] pagal kurią F. Loewe 1956 m. sukūrė miuziklą „Mano puikioji ledi“."
 ];
 
+// More sentences: Leonardas da Vinčis (Diagnostinis testas 3-2024), Kelionės (added 2026-10-12)
+(() => {
+  const T = {
+    sal: S.salStart, salEnd: S.salEnd, vien: S.vienNo, bet: S.vienBet, suj: S.suj, iterp: S.iterp, pazPo: S.pazPo,
+    mod: "Modalinis žodis (iš tikrųjų, visų pirma, pagaliau) gali būti išskiriamas kableliais iš abiejų pusių, bet nebūtinai (VLKK 8.4 p.).|iterpinys",
+    aisk: "Antroji bejungtukio sakinio dalis aiškina pirmąją – dvitaškis arba brūkšnys (VLKK 13.1 c).|dvitaskis",
+    ty: "Aiškinamoji dalis su t. y. (tai yra) išskiriama kableliais iš abiejų pusių (VLKK 4.2 p.).|pazyminys",
+    pried: "Priedėlis po pažymimojo žodžio išskiriamas kableliais (VLKK 6.3 p.).|pazyminys",
+    kart: "Su kartojamu jungtuku (ir … ir) kablelis rašomas prieš antrąjį jungtuką (VLKK 3.5 c).|vienarusis"
+  };
+  SK_SENTENCES.push(
+    "Amerikiečių antropologas ir kultūros teoretikas A. L. Krioberis pastebėjo[,|"+T.sal+"] kad tinkamas genijaus įvertinimas ir Europos genijų galerija tapo įmanomi tik dėl tam tikro kultūros modelio.",
+
+    "Politinio[,|"+T.vien+"] moralinio ir intelektualinio individualizmo kultūroje[,|"+T.sal+"] kurioje svarbiausiais dalykais laikomi novatoriškumas[,|"+T.vien+"] su niekuo nesupainiojamas stilius bei kūrybos unikalumas[,|"+T.salEnd+"] anksčiau ar vėliau atrandami ypatingo talento žmonės[,|Prieš jungtuką o rašomas kablelis (VLKK 3.5 a).|vienarusis] o vėliau ir jų biografijos.",
+
+    "Tiesa[,|Įterpinys tiesa išskiriamas kableliu (VLKK 8.1 p.).|iterpinys] pastarosios gali būti pakoreguotos ir net mitologizuotos.",
+
+    "Leonardas da Vinčis pelnė universalaus kūrėjo vardą ne tik dėl savo kūrybinio genijaus[,|Ne tik …, bet ir … – kablelis prieš bet (VLKK 3.5 b).|vienarusis] bet ir dėl savo laikmečio kultūros modelio[,|"+T.sal+"] kuris buvo palankus tarp meno ir mokslo balansuojantiems kūrėjams.",
+
+    "Viduramžiais menininkai buvo laikomi paprasčiausiais amatininkais[,|"+T.suj+"] tad net jų kūrinių autorystė dažniausiai likdavo nežinoma.",
+
+    "Tik renesansinėje Europoje menininkai pradeda pasirašinėti savo kūrinius[,|"+T.suj+"] o jų socialinis reikšmingumas ir prestižas neįtikėtinai pakyla.",
+
+    "Kita vertus[,|Įterpinys kita vertus išskiriamas kableliu (VLKK 8.1 p.).|iterpinys] jei ne XV a. intelektualinė atmosfera ir jei Leonardas būtų gyvenęs kokiais trimis šimtmečiais vėliau[,|"+T.salEnd+"] griežtos specializacijos ir profesionalumo epocha jį būtų išjuokusi kaip diletantą.",
+
+    "Da Vinčis[/,|"+T.mod+"#p1] iš tikrųjų[/,|"+T.mod+"#p1] buvo stulbinančio universalumo žmogus[:/–|"+T.aisk+"] jis buvo tapytojas[,|"+T.vien+"] architektas[,|"+T.vien+"] skulptorius[,|"+T.vien+"] poetas[,|"+T.vien+"] matematikas[,|"+T.vien+"] inžinierius[,|"+T.vien+"] navigacijos ir fortifikacijos specialistas.",
+
+    "Ne veltui savo gyvenimo saulėlydyje į Prancūzijos karaliaus Pranciškaus I tarnybą Leonardas buvo priimtas[/,|"+T.mod+"#p1] visų pirma[/,|"+T.mod+"#p1] kaip karo inžinierius[,|Išplėstinis pažyminys po pažymimojo žodžio (inžinierius, tobulinęs…) išskiriamas (VLKK 6.1 p.).|pazyminys] tobulinęs bombardas (patrankas[,|"+T.pazPo+"] šaudžiusias akmeniniais sviediniais) ir gynybos įrenginius[,|Prieš jungtuką o rašomas kablelis (VLKK 3.5 a).|vienarusis] o tik po to kaip genialus tapytojas.",
+
+    "Jam teko tarnauti ir itin žiauriems politikams[,|Išplėstinis pažyminys po pažymimojo žodžio (politikams, pagarsėjusiems…) išskiriamas (VLKK 6.1 p.).|pazyminys] pagarsėjusiems klasta ir skrupulų negailestingumu[:/–|"+T.aisk+"] vienas jų buvo Čezarė Bordžija.",
+
+    "Mes žinome[,|"+T.sal+"] kad labai retai istorinė epocha iškart pripažįsta didį menininką.",
+
+    "Tarkim[,|Įterpinys tarkim išskiriamas kableliu (VLKK 8.1 p.).|iterpinys] J. S. Bachas buvo laikomas tiesiog kompozitoriumi[,|Pažyminiai po pažymimojo žodžio išskiriami kableliais (VLKK 6.2 p.).|pazyminys] geru[,|Pažyminiai po pažymimojo žodžio išskiriami kableliais (VLKK 6.2 p.).|pazyminys] profesionaliu[,|Prieš jungtuką bet rašomas kablelis (VLKK 3.5 a).|vienarusis] bet tik ne barokinės muzikos viršūne.",
+
+    "Jo kūrinių autorystė buvo priskiriama ir kitam dramaturgui[/,|Neišplėstas priedėlis po pažymimojo žodžio gali būti išskiriamas, jei norima pabrėžti (VLKK 6.4 p.).|pazyminys#p1] K. Marlou[/,|Neišplėstas priedėlis po pažymimojo žodžio gali būti išskiriamas, jei norima pabrėžti (VLKK 6.4 p.).|pazyminys#p1] ir filosofui F. Beikonui.",
+
+    "Net XIX amžiaus Anglijoje[,|"+T.ty+"] t. y. Viktorijos epochoje[,|"+T.ty+"] buvo atsisakoma tikėti universitetinio išsilavinimo neturėjusio ir neaukštos kilmės aktoriaus galimybėmis parašyti nemirtingus sonetus ir genialias pjeses.",
+
+    "V. Šekspyro vardą iškėlė J. V. Gėtė ir F. Šileris[–/,|Aiškinamoji dalis po vienarūšių sakinio dalių atskiriama brūkšniu (rečiau kableliu) (VLKK 4.5, 6.3 p.).|pazyminys] didieji vokiečių poetai[,|Prieš jungtuką o rašomas kablelis (VLKK 3.5 a).|vienarusis] o vėliau ir vokiečių romantikai.",
+
+    "Be abejo[,|"+T.iterp+"] ne anglų literatūros kritikams[,|Prieš jungtuką o rašomas kablelis (VLKK 3.5 a).|vienarusis] o vokiečių rašytojams priklauso V. Šekspyro mito autorystė.",
+
+    "Pagaliau[/,|"+T.mod+"] nepamirškime[,|"+T.sal+"] kad romantikai sukūrė vienišo[,|"+T.vien+"] paslaptingo[,|"+T.vien+"] nuo pilkos vidutinybių masės atitrūkusio genijaus mitą[,|"+T.suj+"] tad Europos didieji menininkai ne kieno nors kito[,|Prieš jungtuką o rašomas kablelis (VLKK 3.5 a).|vienarusis] o romantikų buvo perkelti į genijų galeriją.",
+
+    // Kelionės
+    "Anksčiau nesupratau[,|"+T.sal+"] kodėl mane taip traukia kelionės į užsienį.",
+
+    "Vis mėgindavau pats save apgaudinėti[,|"+T.sal+"] kad gal tas alkis yra išlikęs iš geležinės uždangos laikų[,|"+T.sal+"] kai pasaulio geografinis žemėlapis buvo padalytas[/,|Sakinio dalis su lyginamąja dalelyte tarytum gali būti išskiriama kableliais iš abiejų pusių arba neskiriama (VLKK 4.6 p.).|aplinkybe#p1] tarytum[/,|Sakinio dalis su lyginamąja dalelyte tarytum gali būti išskiriama kableliais iš abiejų pusių arba neskiriama (VLKK 4.6 p.).|aplinkybe#p1] į du raudona spalva nudažytą kalėjimo lopą ir kitomis spalvomis laisvės ar pusiau laisvės teritoriją.",
+
+    "Ir kai pagaliau sienos griuvo[,|"+T.salEnd+"] tas alkis niekur nedingo[,|"+T.sal+"] nors pradėjau jau kitaip motyvuoti[,|"+T.sal+"] kodėl vis dažniau aptinku save kraunantį lagaminą.",
+
+    "Motyvas[,|"+T.sal+"] kad keliauju trokšdamas įkvėpti laisvės oro[,|"+T.salEnd+"] ilgainiui išbluko.",
+
+    "Tuomet atsirado kitas[–/:|Vietoj praleistos sakinio dalies (motyvas) rašomas brūkšnys (VLKK 10 p.), galimas ir dvitaškis aiškinimui.|dvitaskis] pažinimo[,|"+T.vien+"] akiračio plėtimo.",
+
+    "Kodėl vokietis[,|"+T.vien+"] italas[,|"+T.vien+"] norvegas[,|"+T.vien+"] amerikietis neršia po visą pasaulį[,|Bejungtukio sakinio dėmenys (kodėl …, kodėl …) atskiriami kableliu (VLKK 13.1 p.).|sujung] kodėl atsipūtęs gali gerti sau vyną Barselonos Les Rambloj[,|"+T.vien+"] Paryžiuj[/,|Vieta gali būti patikslinta kableliu (VLKK 4.1 p.).|vienarusis] Lotynų kvartale[,|Vienarūšiai tariniai (gerti, grožėtis) atskiriami kableliu (VLKK 3.1 p.).|vienarusis] grožėtis[,|"+T.sal+"] kaip vakaro saulė meta pustonių gamą ant Notre Dame fasado[,|Prieš jungtuką o rašomas kablelis (VLKK 12.1 p.).|sujung] o tu negali?",
+
+    "„Galiu ir aš“[/–|Vietoj praleistos jungties gali būti rašomas brūkšnys (VLKK 10 p.).|bruksnys] tai toks donkichotiškas atsakas[,|"+T.pazPo+"] panašus į tragikomišką ubago maištą kviestinių puotoje.",
+
+    "Bet kai maištas įgyvendintas[,|"+T.salEnd+"] vėl supranti[,|"+T.sal+"] kad ne tai tave varė.",
+
+    "Tau neįdomūs tie muziejai ir visokios senų laikų relikvijos[,|"+T.vien+"] sarkofagai ir antikinių šventyklų liekanos.",
+
+    "Tau už turistinius maršrutus kur kas įdomiau be žemėlapio ir tikslo iki nukritimo klaidžioti siauromis nežinomų miestų gatvelėmis[,|"+T.vien+"] uosti žuvų dvoką nedidelių uostų krantinėse[,|"+T.vien+"] persimesti žodžiu kitu su kokiu valkata[,|"+T.vien+"] paglostyti svetimos valstybės tarpuvartėje šunį ar katę.",
+
+    "Ypač tą pajunti[,|"+T.sal+"] jei svetur ilgėliau užsibūni. Paskutinės dienos tampa tiesiog kankyne[/,|Padalyvinė aplinkybė (laukiant skrydžio atgal) gali būti išskiriama kableliu (VLKK 5.1 p.).|aplinkybe] laukiant skrydžio atgal.",
+
+    "Niekas tau nebeįdomu[:/–|Po apibendrinamojo žodžio (niekas) prieš aiškinamąsias dalis – dvitaškis arba brūkšnys (VLKK 4.7 p.).|dvitaskis] nei naujai užsimezgusios pažintys[,|"+T.kart+"] nei pamaldos savose svetimų miestų bažnyčiose[,|"+T.kart+"] nei tarpuvarčių šunys ir katės[,|"+T.pazPo+"] gal ir suprantančios lietuviškai[,|Prieš jungtuką o rašomas kablelis (VLKK 3.5 a).|vienarusis] o gal ir nebesuprantančios.",
+
+    "Štai dėl ko labiausiai verta keliauti[–/,|Aiškinamoji dalis atskiriama brūkšniu, norint pabrėžti tapatumą (VLKK 4.5 p.).|dvitaskis] dėl to ilgesio[,|"+T.sal+"] kuriam nereikia sugalvoti kokios nors motyvacijos[:/–|"+T.aisk+"] jis nelauktai užklumpa[,|"+T.vien+"] įsismelkia iki panagių ir maudžia.",
+
+    "Ir štai tu jau leidiesi nuo Aušros Vartų žemyn[,|"+T.vien+"] dardi su lagaminu Didžiąja[,|Vienarūšės sakinio dalys (Didžiąja, Pilies gatve) atskiriamos kableliu (VLKK 3.1 p.).|vienarusis] Pilies gatve.",
+
+    "Viešpatie[,|Jaustukas ar kreipinys išskiriamas kableliu (VLKK 8.4, 9.1 p.).|iterpinys] koks gražus ir jaukus Vilnius[,|Bejungtukio sakinio dėmenys atskiriami kableliu (VLKK 13.1 p.).|sujung] nesvarbu[,/:|Bejungtukio sakinio dėmuo – kablelis (galimas ir dvitaškis aiškinimui) (VLKK 13.1 p.).|sujung] naktis[,|"+T.vien+"] rytas ar vakaras."
+  );
+})();
+
+
 // Parse into words + gap after each word: { words:[], gaps:[{ans:[...], rule, cat}] }
 function skParse(src) {
   const specs = [];
@@ -143,20 +222,20 @@ function skParse(src) {
 // "word, next" / "word – next" / "word: next"
 const skJoin = (a, mark, b) => mark === "–" ? `${a} – ${b}` : `${a}${mark} ${b}`;
 
-// Mistakes, same idea as rašyba: cleared after 2 correct in a row
-const SK_KEY = "skyryba-mistakes";
-function skLoadMistakes() {
-  let m; try { m = JSON.parse(localStorage.getItem(SK_KEY)) || {}; } catch { m = {}; }
+// Mistakes, same idea as rašyba: moved to the fixed list after 2 correct in a row
+const SK_KEY = "skyryba-mistakes", SK_FIXED_KEY = "skyryba-fixed";
+function skLoadMistakes(key = SK_KEY) {
+  let m; try { m = JSON.parse(localStorage.getItem(key)) || {}; } catch { m = {}; }
   for (const id in m) {
     const [si, g] = id.split(":").map(Number);
     if (!SK_SENTENCES[si] || g >= skParse(SK_SENTENCES[si]).gaps.length) delete m[id];
   }
   return m;
 }
-const skSaveMistakes = m => localStorage.setItem(SK_KEY, JSON.stringify(m));
+const skSaveMistakes = (m, key = SK_KEY) => localStorage.setItem(key, JSON.stringify(m));
 function skRecord(si, g, ok, given) {
-  const m = skLoadMistakes(), id = si + ":" + g;
-  if (ok) { if (m[id] && ++m[id].streak >= 2) delete m[id]; }
-  else m[id] = { wrong: (m[id]?.wrong || 0) + 1, streak: 0, last: given };
-  skSaveMistakes(m);
+  const m = skLoadMistakes(), f = skLoadMistakes(SK_FIXED_KEY), id = si + ":" + g;
+  if (ok) { if (m[id] && ++m[id].streak >= 2) { f[id] = { wrong: m[id].wrong, last: m[id].last, fixed: Date.now() }; delete m[id]; } }
+  else { m[id] = { wrong: (m[id]?.wrong || f[id]?.wrong || 0) + 1, streak: 0, last: given }; delete f[id]; }
+  skSaveMistakes(m); skSaveMistakes(f, SK_FIXED_KEY);
 }

@@ -36,6 +36,17 @@
   .mistake .w b, .good .w b { color:var(--ok); }
   .mistake .r, .good .r { color:#444; font-size:14px; margin-top:4px; }
   .allok { color:var(--ok); font-weight:600; }
+  .progress { position:relative; height:26px; margin:-6px 0 14px; font-size:13px; color:var(--muted); }
+  .progress span { position:relative; z-index:1; }
+  .progress i { position:absolute; left:0; bottom:0; height:4px; background:var(--accent); border-radius:999px; transition:width .3s ease; z-index:1; }
+  .progress::after { content:""; position:absolute; left:0; right:0; bottom:0; height:4px; background:var(--line); border-radius:999px; }
+  .rsum { text-align:center; padding:10px 0 6px; }
+  .rsum .big { font-size:48px; font-weight:800; line-height:1; }
+  .rsum .pct { font-size:18px; color:var(--muted); margin-top:6px; }
+  .rsum.good .big { color:var(--ok); } .rsum.mid .big { color:#c77700; } .rsum.low .big { color:var(--bad); }
+  .ractions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:16px; }
+  .ractions button { font:inherit; font-size:16px; padding:12px 20px; border-radius:12px; border:none; cursor:pointer; }
+  .ractions .fixbtn { margin-top:0; padding:12px 20px; }
   .empty { color:var(--muted); line-height:1.6; }
   .fixbtn { display:inline-block; margin-top:6px; padding:10px 16px; border-radius:12px; background:var(--bad); color:#fff; text-decoration:none; font-weight:600; font-size:15px; }
   .rightlist { margin:14px 0 10px; }
@@ -70,6 +81,7 @@
   <h1 id="title">Skyrybos treniruoklis</h1>
   <p class="sub" id="sub">Spausk tarpą tarp žodžių, kad padėtum ženklą. Užvesk pelę ant tarpo – iššoks pasirinkimai (<b>∅ , – :</b>), arba spausk tarpą, kad ženklai keistųsi.</p>
   <div class="card">
+    <div class="progress" id="progress"></div>
     <div class="sentence" id="sentence"></div>
     <div class="actions" id="actions">
       <button class="primary" id="check">Tikrinti</button>
@@ -81,11 +93,12 @@
 
 <script src="data.js"></script>
 <script src="skyryba-data.js"></script>
+<script src="round.js"></script>
 <script>
 const MISTAKE_MODE = new URLSearchParams(location.search).has("klaidos");
 if (MISTAKE_MODE) {
   document.getElementById("title").textContent = "Skyrybos klaidų treniruotė";
-  document.getElementById("sub").textContent = "Tik tie tarpai, kuriuose suklydai. Atsakyk teisingai 2 kartus iš eilės – klaida dingsta.";
+  document.getElementById("sub").textContent = "Sakiniai, kuriuose suklydai. Sudėk visus ženklus – atsakyk teisingai 2 kartus iš eilės ir klaida dingsta.";
   document.getElementById("modeLink").textContent = "← Klaidų sąrašas";
 }
 
@@ -95,14 +108,8 @@ let current = -1, sent = null, checked = false;
 function load(i) {
   current = i; checked = false;
   sent = skParse(SK_SENTENCES[i]);
-  const m = MISTAKE_MODE ? skLoadMistakes() : null;
   document.getElementById("sentence").innerHTML = sent.words.map((w, g) => {
     if (g >= sent.gaps.length) return esc(w);
-    if (m && !m[i + ":" + g]) {
-      // Not a past mistake: show the correct mark, not clickable
-      const a = sent.gaps[g].ans[0];
-      return esc(w) + (a === "–" ? " – " : a ? a + " " : " ");
-    }
     return `${esc(w)}<button class="gap" data-g="${g}" data-m=""></button>`;
   }).join("");
   document.getElementById("result").innerHTML = "";
@@ -167,16 +174,20 @@ function check() {
     const ok = gap.ans.includes(val) && !(gap.pair && pairVals[gap.pair].size > 1);
     b.className = "gap " + (ok ? (val ? "ok" : "") : (val ? "bad" : "miss"));
     // Only remember gaps that matter: a mark was expected, or a wrong mark was added
-    if (first && (!gap.def || !ok)) skRecord(current, g, ok, val);
+    if (first && (!gap.def || !ok || (current + ":" + g) in skLoadMistakes())) skRecord(current, g, ok, val);
     if (!ok) wrong.push({ g, gap, val });
     else if (!gap.def) correct.push({ g, gap, val });
   });
   const a = sent.words;
-  let html = `<div class="score">${wrong.length ? `${wrong.length} ${wrong.length === 1 ? "klaida" : "klaidos"}` : "Viskas teisingai! 🎉"}</div>`;
+  let html = `<div class="score">${wrong.length ? `${wrong.length} ${wrong.length === 1 ? "klaida" : "klaidos"}` : "Viskas teisingai! 🎉"}</div>`, mHtml = "";
   wrong.forEach(({ g, gap, val }) => {
     const right = gap.ans.map(x => skJoin(a[g], x, a[g + 1])).join("  arba  ");
-    html += `<div class="mistake"><div class="w"><s>${esc(skJoin(a[g], val, a[g + 1]))}</s> → <b>${esc(right)}</b></div><div class="r">${esc(gap.rule)}</div>${skFullRule(gap.cat)}</div>`;
+    mHtml += `<div class="mistake"><div class="w"><s>${esc(skJoin(a[g], val, a[g + 1]))}</s> → <b>${esc(right)}</b></div><div class="r">${esc(gap.rule)}</div>${skFullRule(gap.cat)}</div>`;
   });
+  html += mHtml;
+  // Points: marked places right + extra marks count as lost
+  const pts = sent.gaps.filter(x => !x.def).length, extra = wrong.filter(w => w.gap.def).length;
+  if (first) roundAdd(Math.max(0, correct.length - extra), pts, mHtml);
   if (correct.length) html += `<details class="rightlist"><summary>Teisingos vietos (${correct.length})</summary>${correct.map(({ g, gap, val }) =>
     `<div class="good"><div class="w"><b>${esc(skJoin(a[g], val, a[g + 1]))}</b></div><div class="r">${esc(gap.rule)}</div>${skFullRule(gap.cat)}</div>`).join("")}</details>`;
   const n = Object.keys(skLoadMistakes()).length;
@@ -216,13 +227,15 @@ function showNoMistakes() {
 }
 
 document.getElementById("check").onclick = check;
-document.getElementById("next").onclick = nextRandom;
+document.getElementById("next").onclick = roundNext;
 document.addEventListener("keydown", e => {
   if (e.key !== "Enter") return;
   if (e.target.closest(".gap") || !e.target.closest("button")) { e.preventDefault(); check(); }
 });
 updateModeLink();
+roundStart(Math.min(ROUND_SIZE, pool().length), "skyryba.html?klaidos", nextRandom);
 nextRandom();
 </script>
+<script src="demo-report.js"></script><!-- DEMO: remove later -->
 </body>
 </html>

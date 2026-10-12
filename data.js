@@ -13,6 +13,7 @@ const CATS = {
   sudurt:    { name: "Sudurtiniai žodžiai, priešdėliai", hint: "Išskaidyk žodį į dalis: iš kokių žodžių ar priešdėlio jis sudarytas?" },
   ne:        { name: "NE rašymas", hint: "NE rašymas. Su kokia kalbos dalimi eina ne? Veiksmažodžiai, įvardžiai, prieveiksmiai ir dalelytės turi skirtingas taisykles." },
   kartu:     { name: "Dalelytės, kartu ar skyrium", hint: "Kartu ar skyrium. Kokia čia dalelytė ar junginys? Pasitikrink GI, PER, NORS, BET taisykles." },
+  priebalsiai: { name: "Priebalsių rašyba", hint: "Priebalsis prieš kitą priebalsį tariamas kitaip. Rask giminišką žodį, kur po jo eina balsė." },
   prielinks: { name: "Prielinksninės konstrukcijos", hint: "Prielinksninė konstrukcija. Ar antrasis žodis sutrumpėjęs, ar ne?" }
 };
 
@@ -57,7 +58,7 @@ const SENTENCES = [
 
   "Visi mes gyvenimo kelionėje esame priversti ieškoti kelio į gimt{ą|"+R.ivardz+"}j{ą|"+R.ivardz+"} Itakę kaip Odisėjas, r{y|ryžtis – pavojingas žodis BE nosinės: ryžtis, pasiryžti, ryžtingai.|nosines}žtingai ieškotis naujos tėvynės kaip Enėjas, siekti šlovės kaip Achilas ar amžinojo gyvenimo – kaip šumerų pusdievis Gilgamešas.",
 
-  "Mitai kalba ir apie žmogišk{a|"+R.ivardz+"}j{a|"+R.ivardz+"}i puik{y|puikus → puikybė: priesaga -ybė.|priesagos}bei, kuriai taip dažnai pasiduoda šiuolaikinis žmogus, gr{ė|grėsti (grėsė) – pavojingas žodis BE nosinės: kaitaliojasi su ė, o ne su nosine (grasinti, grėsmė).|nosines}siančius pavojus: Sizifo, Tantalo, Belerofonto ar Iksijono l{i|likti → likimas: šaknyje trumpas i.|saknis}kimas gali ištikti {{bet, kurį|bet kurį|Dalelytė bet visada rašoma atskirai: bet kas, bet kuris, bet koks.|kartu}} iš mūsų {{ne, kokioje, nors|ne kokioje nors|Ne su įvardžiais rašoma atskirai, o dalelytė nors – irgi atskirai.|ne}} mitinėje amžinybėje, o r{e|"+R.tarpt+"}aliame laike ir erdvėje.",
+  "Mitai kalba ir apie žmogišk{a|"+R.ivardz+"}j{a|"+R.ivardz+"}i puik{y|puikus → puikybė: priesaga -ybė.|priesagos}bei, kuriai taip dažnai pasiduoda šiuolaikinis žmogus, gr{e|grėsti, grėsė, bet esamasis laikas gresia, todėl dalyvis gresiantis, gresiančius rašomas su e; nosinės nėra (VLKK 2.3.2 1*).|nosines}siančius pavojus: Sizifo, Tantalo, Belerofonto ar Iksijono l{i|likti → likimas: šaknyje trumpas i.|saknis}kimas gali ištikti {{bet, kurį|bet kurį|Dalelytė bet visada rašoma atskirai: bet kas, bet kuris, bet koks.|kartu}} iš mūsų {{ne, kokioje, nors|ne kokioje nors|Ne su įvardžiais rašoma atskirai, o dalelytė nors – irgi atskirai.|ne}} mitinėje amžinybėje, o r{e|"+R.tarpt+"}aliame laike ir erdvėje.",
 
   "Šiuolaikinis žmogus, laikantis save {{kol, kas|kol kas|„kol kas“ rašoma atskirai.|kartu}} mirtingu dievu ar {{net, gi|netgi|Gi rašoma kartu su nekaitomais vienskiemeniais žodžiais: netgi, argi, irgi.|kartu}} praded{ą|Esamojo laiko veikiamasis dalyvis, vyr. g. vns. trumpoji forma: pradedąs (= pradedantis).|dalyviai}s vaidinti patį Dievą, įg{y|"+R.gyti+"}tų daugiau išminties ir naudos įd{ė|įdėmus → įdėmiai (dėmesys): šaknyje ė.|saknis}miai perskait{ę|Būtojo kartinio laiko veikiamasis dalyvis, vyr. g. vns.: -ęs (perskaitęs, išstudijavęs).|dalyviai}s graikiškų mitų rinktinę, nei išstudij{a|studijuoti → studijavo → išstudijavęs: -uoti veiksmažodžių būtajame laike yra -avo, todėl rašoma a.|priesagos}vęs kokį nors genų inžinerijos, klonavimo ar vadinamosios „vis{a|„Visa ko teorija“ – nusistovėjęs terminas (angl. theory of everything), rašoma visa.|galunes} ko teorijos“ vadovėlį.",
 
@@ -65,6 +66,152 @@ const SENTENCES = [
 
   "Iš vaizduotės gelmių iškelti tikroviški mito pasauliai gali suteikti daugiau tikrumo pač{ia|"+R.ia+"}i tikrov{e|tikrovė → tikrovei (naudininkas -ei).|galunes}i, ypač kai ji tampa vis labiau netikra – virtuali, simuliuota ar kitaip falsifikuota."
 ];
+
+// More sentences: Hamletas (2 tekstai), smalsumas, Testas 3 (added 2026-10-12)
+(() => {
+  const N = {
+    dal: "Neveikiamasis dalyvis daromas iš esamojo laiko 3 asmens, kurio baigmenyje rašoma -ia (VLKK 2.2.9): atskleidžia → atskleidžiamas, vengia → neišvengiamas, baudžia → nubaudžiamas, patiria → patiriama.|dalyviai",
+    trump: "Esamojo laiko veikiamojo dalyvio trumposios formos vyr. g. vardininke rašoma ą, į: stengiąs, mokąs, galįs, turįs (VLKK 2.3.10 a).|dalyviai",
+    bus: "Būsimojo laiko 3 asmenyje, kai bendratis baigiasi -yti, -ūti, rašoma i, u: bus (būti), žus (žūti), gis (gyti) (VLKK 2.1.5).|saknis",
+    ija: "-yti veiksmažodžių esamajame ir būtajame laike rašoma trumpas i: liudyti → liudija, skiepyti → skiepijo, nuodyti → nuodija, keršyti → keršija, kūnyti → įsikūnija.|saknis",
+    sar: "Sangrąžinė forma: esamojo laiko -ia + si: elgiasi, liejasi, grumiasi, reiškiasi, remiasi (VLKK 2.2.9).|galunes",
+    vns: "Įvardžiuotinio būdvardžio vienaskaitos naudininke ir vietininke nosinės nerašomos (VLKK 2.3.11*): niekšingajam, trečiajame.|ivardz",
+    gal: "Įvardžiuotinės formos vienaskaitos galininke ir daugiskaitos kilmininke nosinės rašomos abiejuose galūnės skiemenyse (VLKK 2.3.11 a): kilniąją, lemtingąjį, tragiškąjį, prarastąją, naujųjų, šaltųjų, tikrųjų.|ivardz",
+    inag: "Mot. g. vienaskaitos įnagininke ir daugiskaitos galininke ą rašoma priešpaskutiniame skiemenyje, o galūnėje – be nosinės (VLKK 2.3.11 b): garsiąja, šviesiąja, baltąsias, didžiąsias.|ivardz",
+    vard: "Įvardžiuotinės formos vardininke nosinės nėra: skirtasis, antrasis (nosinės tik galininke: skirtąjį).|ivardz",
+    tuk: "Tariamosios nuosakos 3 asmuo baigiasi -tų, ir su -si: užtektų, norėtųsi, išliktų (VLKK 2.3.12).|tariamoji",
+    ymas: R.ymas, imas: R.imas, buti: R.buti,
+    pr: "Priebalsis rašomas taip, kaip giminiškame žodyje prieš balsį (VLKK 3.2):",
+    nos1: "Nosinė rašoma, nes kaitaliojasi su an, en, in, un (VLKK 2.3.1):",
+    nos2: "Nosinė rašoma, nes kaitaliojasi su kitu ilguoju balsiu (VLKK 2.3.2):",
+    sa: "Priešdėlis są- rašomas su nosine (VLKK 2.3.4): sąmonė, sąžinė, sąmokslas, sąjūdis.|sudurt",
+    i: "Priešdėlis į- rašomas su nosine (VLKK 2.3.5): neįmanomas, įsikūnijimas.|sudurt",
+    yb: "Priesaga -ybė (-ybės): galimybė, aplinkybė, didybė.|priesagos",
+    ue: "(i)u linksniuotės būdvardžių vyr. g. daugiskaitos vardininke rašoma ū: ryškūs, niūrūs, teisūs, smalsūs (VLKK 2.1.15).|galunes",
+    kiek: "kiek + vienas: kiekvienas.|sudurt"
+  };
+  const P = (t, c = "priebalsiai") => N.pr + " " + t + "|" + c;
+
+  SENTENCES.push(
+    "„Hamletas“ yra tragedija, paremta ne hero{ji/i|herojus → herojiškas: tarp balsių rašoma j (galima ir heroiškas).|tarpt}ška asmenybe, bet žmogum. Pagrindinis personažas Hamletas – nauj{ų|"+N.gal+"}jų laikų žmogus, smalsus, lankstaus proto, nuolat besisteng{ią|"+N.trump+"}s suvo{k|"+P("suvokia → suvokti.")+"}ti savo situaciją būtyje ir nebūties ak{i|Akivaizdoje = aki- (akis) + vaizdas.|sudurt}vazdoje.",
+
+    "Hamletas {{ne, g_sdinančio|negąsdinančio|Ne su dalyviais rašoma kartu, kai nėra priešpriešos (VLKK 5.2.1 c); gąsdinti – nosinė, nes kaitaliojasi su an (išsigando, VLKK 2.3.1).|ne}} likimo neišveng{ia|"+N.dal+"}mybės auka. Užtekt{ų|"+N.tuk+"} jam a{ts|at- + si: atsižadėti (sandūroje rašomos visos priebalsės).|sudurt}ižadėti atsakomybės sau ir viskas išsispr{ę|"+N.nos1+" spręsti – sprendė.|nosines}stų savaim{e|Prieveiksmis savaime baigiasi -e.|galunes}.",
+
+    "Jis nėra nei ner{y|ryžtas, ryžtingas – pavojingas žodis, rašoma y (VLKK 2.3.2 4*).|nosines}žtingas, nei bevalis, {{tik, tai|tiktai|„Tiktai“ – vienas žodis (dalelytė), rašomas kartu.|kartu}} jo veiksmams tr{ū|trūkti, trūksta, trūko – šaknyje ū.|saknis}ksta barbariškos aistros, jo valią paralyž{iuo|paralyžiuoti → paralyžiuoja (-iuoti veiksmažodis).|priesagos}ja m{ą|"+R.masty+"}stymas.",
+
+    "Tad ir jo mirtis {{ne, tiek|ne tiek|Ne nuo įvardinių prieveiksmių rašoma atskirai: ne tiek, ne taip (VLKK 5.2.5 b).|ne}} r{ū|rūstus, rūsčiai – šaknyje ū.|saknis}staus likimo sm{ū|smūgis – šaknyje ū.|saknis}gis, kiek a{b|"+P("absurdas – tarptautinis žodis, rašoma b kaip kilmės kalboje.")+"}surdiškas incidentas.",
+
+    "Hamletas yra vienas įsp{ū|įspūdis, įspūdingas – šaknyje ū.|saknis}dingiausių personažų visoje Vakarų literatūroje. Tatai li{u|liudyti, liudininkas – šaknyje iu.|saknis}d{i|"+N.ija+"}ja ir tas faktas, kad jis nesiduoda galutinai atskleidž{ia|"+N.dal+"}mas ir padedamas literatūros istorijos lentyno{n|Kryptinis vietininkas (kur?): lentynon = į lentyną.|galunes}.",
+
+    "Laikui bėgant jis, nel{y|lygus → nelyginant: šaknyje y.|saknis}ginant gen{ia|genialus – tarptautinis žodis, rašoma ia.|tarpt}alaus kūrėjo paleistas satelitas, skrieja intelektualinio pasaulio orbitoje, nuolat persik{u|Pusdalyvis daromas iš bendraties kamieno: kurti → kurdamas, todėl trumpas u.|saknis}rdamas ir k{ie|"+N.kiek+"}kvienai epochai atskleisdamas naujus savo prasmės aspektus.",
+
+    "Nuo antrosios XVIII a. pusės kritikai daugiausia dėm{e|dėmesys – šaknyje e.|saknis}sio skyrė Hamleto charakterio analizei, bandydami įminti jo dels{i|delsti → delsimas. "+R.imas+"}mo m{į|"+N.nos2+" mįslė – mąstyti.|nosines}slę, atsakyti į klaus{i|"+R.imas+"}mą, ar jis tikrai pamiš{ė|Priesaga -ėlis: pamišti → pamišėlis (kaip nevykėlis, nusikaltėlis).|priesagos}lis, ar tik apsimeta.",
+
+    "Subjektyvistams Hamleto motyvai gl{ū|glūdėti, glūdi – šaknyje ū.|saknis}di jo charakteryje ir yra grynai vidinio pob{ū|"+R.buti+"}džio. J. V. Gėtė dėl vis{a|Bevardės giminės galūnėje nosinė nerašoma (VLKK 2.3.8 c): visa ko.|galunes} ko kaltina kiln{ią|"+N.gal+"}j{ą|"+N.gal+"} Hamleto prigimtį, {{per, ne, lyg|pernelyg|Pernelyg rašoma kartu (VLKK 5.2.9 a).|kartu}} silpną kerštui, kaip gėlei skirt{a|"+N.vard+"}sis vazonas {ą|ąžuolas – nosinė senuose daiktavardžiuose (VLKK 2.3.3 a).|nosines}žuolo šaknims.",
+
+    "Objektyvistai keršto įvy{k|"+P("įvykti → įvykdyti, įvykdymas.")+"}dymo sta{b|"+P("stabdyti → stabdis, stabdžiu.")+"}džiu laiko išorin{e|Raidė e rašoma, jei vardininke yra -ė (VLKK 2.2.1): išorinė → išorines.|galunes}s kl{iū|kliūtis – šaknyje iū (kliudyti, kliuvo).|saknis}tis: karalius {{vis_, laik|visąlaik|Sąaugos su galininku rašomos kartu ir su nosine: visąlaik, šįryt, kitąkart (VLKK 4.2).|sudurt}} saugomas, tr{ū|trūkti, trūksta – šaknyje ū.|saknis}ksta t{ie|tiesa, tiesioginis – šaknyje ie.|saknis}sioginių kaltės įrod{y|"+N.ymas+"}mų, jei ž{u|"+N.bus+"}s karalius, {{iš, vis|išvis|Prielinksniai rašomi kartu su sutrumpėjusiais žodžiais: išvis, iškart (VLKK 5.1).|prielinks}} b{u|"+N.bus+"}s sunaikinta vienint{e|vienintelis, vienintelė – rašoma e.|saknis}lė galim{y|"+N.yb+"}bė įrodyti kaltę.",
+
+    "K{ie|"+N.kiek+"}kvienas šimtmetis ar žym{e|"+R.esnis+"}snis literatūrinis sąj{ū|sąjūdis – šaknyje ū (judėti, jūdinti).|saknis}dis davė skirtingą Hamleto interpretaciją. XX a. Hamleto portretai pasiž{y|žymė, žymėti → pasižymi: šaknyje y.|saknis}mi {{ne, tik|ne tik|Ne su dalelytėmis rašoma atskirai: ne tik, ne vien (VLKK 5.2.5 b).|ne}} gausa, bet ir įvairove.",
+
+    "Pasak E. Jones, Hamletas nekenčia Klaudijaus {{ne, dėl, to|ne dėl to|Prielinksnis rašomas atskirai (dėl to), o ne – atskirai, kai prieštaraujama (ne dėl to, bet todėl) (VLKK 5.2.2, 5.3.1).|ne}}, kad jis nuž{u|žudyti, žudo – šaknyje trumpas u.|saknis}dė, bet todėl, kad užėmė šio vietą, į kurią pats pretenduoja.",
+
+    "Hamleto pas{ą|"+N.sa+"}monėje Klaudijus yra jo paties užgniau{ž|"+P("gniaužti, gniaužia → užgniaužtų.")+"}tų siekimų įsik{ū|kūnas → įsikūnyti: šaknyje ū.|saknis}n{i|"+N.ija+"}jimas, ir jis negal{į|"+N.trump+"}s atkeršyti niekšing{a|"+N.vns+"}j{a|"+N.vns+"}m dėdei, nenuž{u|žudyti – šaknyje trumpas u.|saknis}dydamas sav{ę|Įvardžių manęs, tavęs, savęs kilmininke rašoma ę (VLKK 2.3.8 a).|galunes}s.",
+
+    "Klaudijus yra antr{a|"+N.vard+"}sis savo reikšme tragedijos personažas. Ilgainiui teatrinė tradicija jam primetė treč{ia|Tarp sudurtinių žodžių dėmenų rašoma (i)a (VLKK 2.2.14): trečiaeilis.|sudurt}eilio niekšo vaidmenį, skirtą Hamleto kilnumui pabrė{ž|"+P("brėžti, brėžia → pabrėžti.")+"}ti.",
+
+    "{{Iš, tiesų|Iš tiesų|Prielinksniai rašomi atskirai nuo nesutrumpėjusių žodžių: iš tiesų, iš tikrųjų (VLKK 5.3.1).|prielinks}} Klaudijus yra didži{u|Priesaga -ulis, -ulė: didžiulis, didžiulė.|priesagos}lės apimties personažas, paties Hamleto vertas antagonistas.",
+
+    "Jis {{taip, pat|taip pat|„Taip pat“ rašoma atskirai.|kartu}} lankstaus proto, kilnios laikys{e|Priesaga -sena: laikysena, eisena.|priesagos}nos, gražb{y|gražbylys – šaknyje y (byla, bylóti).|saknis}lys, mok{ą|"+N.trump+"}s tinkamai prab{i|prabilti, prabilo – šaknyje trumpas i.|saknis}lti.",
+
+    "Jis myli Gertrūdą ir nesulaikomai rieda į pakalnę, suvo{k|"+P("suvokia → suvokdamas.")+"}damas likiminę nusikalt{i|"+R.imas+"}mo logiką. Šekspyrologai ab{e|abejoti – šaknyje e.|saknis}joja Ofelijos nekaltumu. Tatai iš dalies paremia Hamleto elg{e|Priesaga -esys: elgesys.|priesagos}sys, b{e|beje – rašoma e.|saknis}j{e|beje – rašoma e.|saknis}, ji šnipinėja tėvo ir karaliaus naudai.",
+
+    "Kiti personažai – Polonijus, Horacijus, Laertas, Rozenkrancas ir Gildensternas, Gertrūda – visi ryšk{ū|"+N.ue+"}s ir gyvi žmonės.",
+
+    // Hamletas, 2 dalis (pagal R. Tamošaitį)
+    "Pasaulio nuop{uo|pulti, puolė → nuopuolis: šaknyje uo.|saknis}lio, krizės b{ū|"+R.buti+"}sena Šekspyro tragedijoje nusakyta gars{ią|"+N.inag+"}j{a|"+N.inag+"} išnirusio laiko metafora. Tai Hamletas konstatuoja sužinoj{ę|Būtojo kartinio laiko veikiamasis dalyvis vyr. g. vns.: -ęs (VLKK 2.3.10 b).|dalyviai}s tėvo mirties aplink{y|"+N.yb+"}bes.",
+
+    "Veikėjas tiesiog pasmer{k|"+P("smerkti, smerkia → pasmerktas.")+"}tas hero{ji/i|herojus → herojiškas: tarp balsių rašoma j.|tarpt}škam veiksmui, turi tapti lemties vykd{y|vykdyti → vykdytojas: rašoma y.|priesagos}toju.",
+
+    "Hamletui norėt{ų|"+N.tuk+"}si i{šs|iš + si: išsilaisvinti (sandūroje rašomos visos priebalsės).|sudurt}ilaisvinti iš dvejonių, jo netenkina l{i|Ligi – gi rašoma kartu su vienskiemeniais nekaitomais žodžiais (VLKK 5.2.9 b).|kartu}gi galo neįsis{ą|"+N.sa+"}moninti veiksmai.",
+
+    "Treči{a|"+N.vns+"}j{a|"+N.vns+"}m{e|Vietininko galūnė -e.|galunes} veiksme Hamleto surežisuotas vaidinimas atskleidžia Klaudijaus niekšybę: nusikalt{ė|Priesaga -ėlis: nusikaltėlis.|priesagos}lis {{ne, be, gali|nebegali|Dalelytės nebe, be su veiksmažodžiais rašomos kartu (VLKK 5.2.7 a).|ne}} nuslėpti sutrik{i|trikti → sutrikimas: šaknyje trumpas i.|saknis}mo, jis dr{a|draskyti (drėskė) – pavojingas žodis BE nosinės: a kaitaliojasi su ė (VLKK 2.3.2 1*).|nosines}skomas sl{e|slėgti – slegia: esamajame laike trumpas e.|saknis}giančių s{ą|"+N.sa+"}žinės priekaištų.",
+
+    "„Hamleto“ pabaigoje stiprėja ni{ū|niūrus – šaknyje ū.|saknis}r{ū|"+N.ue+"}s akcentai, artimi baroko pasaulėjautai: žmogaus trumpalaikišk{u|Priesaga -umas: trumpalaikiškumas.|priesagos}mo apm{ą|"+R.masty+"}stymai, g{ą|"+N.nos1+" gąsdinti – išsigando.|nosines}sdinant{y|"+R.antys+"}s kapų ir sutr{e|tręšta, bet sutrešęs: dariniuose iš bendraties nosinė nerašoma (VLKK 2.3.3 4*).|nosines}šusių kaukolių vaizdiniai.",
+
+    "Pasirodo duo{b|"+P("duobė → duobkasys.")+"}kasiai, kurie dr{a|drastiškas – tarptautinis žodis (gr. drastikos), nesusijęs su drąsa, todėl be nosinės.|tarpt}stiškai juokauja k{ie|"+N.kiek+"}kvienam gr{e|grėsti, grėsė, bet esamasis laikas gresia, todėl dalyvis gresiantis, gresiančius rašomas su e; nosinės nėra (VLKK 2.3.2 1*).|nosines}siančios mirties tema, atsainiai elg{ia|"+N.sar+"}si su žmogaus palaikais.",
+
+    "Hamletas tartum papra{s|"+P("paprastas → paprasčiausias (st → sč).")+"}čiausią dai{k|"+P("daiktai, daiktas.")+"}tą ranko{j|Sutrumpinta vietininko forma: rankoj = rankoje.|galunes} laiko buvusio juo{k|"+P("juokas → juokdarys.")+"}dario Joriko kaukolę, st{e|stebėti(s) – šaknyje e.|saknis}bėdamasis žmogaus gyvenimo netvarumu.",
+
+    "Svarbiausia idėja – viskas {{kaip, mat|kaipmat|Kaipmat – vienas prieveiksmis, rašomas kartu.|kartu}} praeina, egzistencijos su{i|irti → suirimas: trumpas i.|saknis}rimas neišveng{ia|"+N.dal+"}mas. Viskas d{ū|dūlėti – šaknyje ū.|saknis}lėja – tokia šio pasaulio išmintis.",
+
+    "Tragedijos atomazga – veikėjų likimo išsipild{y|"+N.ymas+"}mas. Laertas ir Hamletas sužeidžia vienas kitą, karalienė netyč{ia|Prieveiksmių tyčia, nejučia, netyčia gale rašoma (i)a (VLKK 2.2.13).|galunes} nusinuod{i|"+N.ija+"}ja, Hamletas pagaliau atkerš{i|"+N.ija+"}ja niekšing{a|"+N.vns+"}j{a|"+N.vns+"}m Klaudijui.",
+
+    "Kaltieji {{vis, gi|visgi|Visgi rašoma kartu (VLKK 5.2.9 b).|kartu}} nubaudž{ia|"+N.dal+"}mi, herojus ž{ū|žūti, žūva – esamajame laike ū (VLKK 2.1.3).|saknis}va, įvy{k|"+P("įvykti → įvykdyti, įvykdęs.")+"}dęs savo misiją, bet įsigali teisingumas.",
+
+    "Hamletas žengia lemting{ą|"+N.gal+"}j{į|"+N.gal+"} žingsnį, nes tai paskutinė pastanga įprasminti gyvenimą. Pasir{y|ryžtis, pasiryžęs – pavojingas žodis, rašoma y (VLKK 2.3.2 4*).|nosines}žęs tokiam žingsniui jis įg{y|gyti, gyja, gijo: esamajame laike y (VLKK 2.1.3).|saknis}ja tragiškos did{y|"+N.yb+"}bės.",
+
+    "Hamleto mirtis parodo, kad už au{k|"+P("aukštas → aukščiausias.")+"}ščiausius id{e|"+R.tarpt+"}alus mokama didžiausia kaina.",
+
+    "Šekspyro tragedijose {{per, ne, lyg|pernelyg|Pernelyg rašoma kartu (VLKK 5.2.9 a).|kartu}} daug kraujo, nes nusiv{y|nusivilti, nusivylė → nusivylimas: šaknyje y.|saknis}l{i|"+R.imas+"}mas pasauliu, žmogumi skatina pesimistinį poži{ū|požiūris – šaknyje ū (žiūrėti).|saknis}rį.",
+
+    "Pavienės blogio apraiškos gali būti atpaž{į|"+N.nos1+" pažįsta – pažinti.|nosines}stamos ir {{iš, vis|išvis|Kartu su sutrumpėjusiais žodžiais: išvis (VLKK 5.1).|prielinks}} išraunamos, tačiau kai jis darosi visuotinis, gyvenimas gri{ū|griūti, griūva – esamajame laike ū (VLKK 2.1.3).|saknis}va.",
+
+    "Tad ir liej{a|"+N.sar+"}si kraujas, įsisiautėj{ę|Būtojo kartinio laiko veikiamasis dalyvis vyr. g. vns.: -ęs (VLKK 2.3.10 b).|dalyviai}s blogis naikina viską, net patį sav{e|Įvardžių mane, tave, save galininke nosinė nerašoma (VLKK 2.3.8 a).|galunes}, {{dėl, to|dėl to|Prielinksnis su įvardžiu rašomas atskirai (VLKK 5.3.1).|prielinks}} vis{a|visa + apimantis → visaapimantis (sandūroje rašomos abi balsės, VLKK 4.4).|sudurt}apimančiuose mirties vaizduose esama išg{i|gyti, gijo → išgijimas: trumpas i.|saknis}jimo, prisik{ė|prisikelti, prisikėlė → prisikėlimas: ė.|saknis}limo nuojautos, išlieka gyvenimo vilties prošvai{s|"+P("prošvaistė → prošvaisčių.")+"}čių.",
+
+    "Hamletui svarbu, kad po mirties išlikt{ų|"+N.tuk+"} jo garbingas vardas, todėl Horacijus turi gyventi ir pali{u|liudyti – šaknyje iu.|saknis}dyti, {{kas, gi|kas gi|Gi nuo kaitomų žodžių rašoma atskirai: kas gi, ko gi (VLKK 5.2.8 d).|kartu}} atsitiko Elsinore, – {{tik, tai|tiktai|„Tiktai“ – vienas žodis, rašomas kartu.|kartu}} taip neliks niekšybių, br{ę|"+N.nos1+" bręsti – brendo.|nosines}stančių s{ą|"+N.sa+"}mokslų, pasaulis atgims, o herojaus auka įg{i|"+N.bus+"}s prasmę.",
+
+    "Hamletas yra Vakarų civilizacijos epochų l{ū|lūžti, lūžis – šaknyje ū.|saknis}žio žmogus: senoji tvarka negalioja, tragišk{ą|"+N.gal+"}j{į|"+N.gal+"} personažą s{u|supti, supa – trumpas u.|saknis}pa chaosas, su{i|irti → suirutė: trumpas i.|saknis}rutė, kuriai jis tur{į|"+N.trump+"}s pasipriešinti savo jėgomis.",
+
+    "Hamletas grum{ia|"+N.sar+"}si {{ne, vien|ne vien|Ne su dalelytėmis rašoma atskirai: ne vien (VLKK 5.2.5 b).|ne}} su pasaulio blogiu, bet ir su savimi – su savo ab{e|abejoti, abejonė – šaknyje e.|saknis}jonėmis. Jis svarsto apie blogio m{a|mastas „dydis, apimtis“ – BE nosinės; nepainiok su mąstyti „galvoti“ (VLKK 2.3.2 5*).|nosines}stą ir jo priež{a|priežastis – rašoma a.|saknis}stis, siekia tikrumo.",
+
+    "Išband{y|"+N.ymas+"}mų situacijoje gimsta naujas žmogus – prieštaringas, sud{ė|sudėti, sudėtis → sudėtingas: ė.|saknis}tingas, nuo pasaulio problemų atsigr{ę|"+N.nos2+" gręžti – grįžti – grąža.|nosines}žiantis į save.",
+
+    // Smalsumas ir naujovės
+    "Iš tikr{ų|"+N.gal+"}j{ų|"+N.gal+"} neteisinga prielaida, jog smalsumas ir naujovių poreikis lydi mus visus lygiai {{taip, pat|taip pat|„Taip pat“ rašoma atskirai.|kartu}} visada, be perstojo. Jei taip būtų, gyvenimas būtų ne{į|"+N.i+"}manomas.",
+
+    "Bet kokiam gyvenimui būdinga, jog veikia ir į esamos tvarkos išlaik{y|"+N.ymas+"}mą besior{ie|orientuotis – tarptautinis žodis (orientas), rašoma ie.|tarpt}ntuojančios jėgos, ir kitos. Žmonių pasaul{y|Sutrumpinta vietininko forma: pasauly = pasaulyje.|galunes} šios jėgos reišk{ia|"+N.sar+"}si kaip saugumo, buvimo paž{į|"+N.nos1+" pažįsta – pažinti.|nosines}stamoje aplinkoje poreikis ir naujovių, permainų poreikis.",
+
+    "Žmonių charakterius iš tiesų galima skirti, be kit{a|Bevardės giminės galūnėje nosinė nerašoma (VLKK 2.3.8 c): be kita ko.|galunes} ko, pagal šių jėgų proporciją: nuo tų, kurie mė{g|"+P("mėgti, mėgo → mėgsta.")+"}sta tik nuob{o|nuobodus – rašoma o.|saknis}džią rutiną ir paž{į|"+N.nos1+" pažinti.|nosines}stamus dalykus, l{i|Ligi – gi kartu su vienskiemeniais žodžiais (VLKK 5.2.9 b).|kartu}gi tų, kuriems rutina atgr{a|atgrasus, atgrasi – BE nosinės: graso, gresia, grėsti (VLKK 2.3.2 1*).|nosines}si ir kurie vertina tik pok{y|pokytis – rašoma y.|saknis}čius.",
+
+    "Žavėjim{a|Vardininke žavėjimasis – be nosinės; nosinė tik galininke: žavėjimąsi (VLKK 2.3.7*).|galunes}sis tuo, kas nepaž{į|"+N.nos1+" pažinti.|nosines}stama, yra gyvenimas, kuris rem{ia|"+N.sar+"}si, nors ir nes{ą|"+N.sa+"}moningai, tam tikru pasaulėvai{z|"+P("vaizdas → pasaulėvaizdis, pasaulėvaizdžiu.")+"}džiu.",
+
+    "Jei tikėtume, kaip tikri budistai, jog pasaulis nieko nevertas, jog tai tik kančių ir skausmo v{i|virtinė – trumpas i.|saknis}rtinė, jog nėra nieko nauja po švies{ią|"+N.inag+"}j{a|"+N.inag+"} saule, mums nereikėtų jokių naujovių, net{u|turėti – trumpas u.|saknis}rėtume jokio smalsumo ir jokio noro keliauti.",
+
+    "Tačiau nesvarstysime, ar budistai teis{ū|"+N.ue+"}s, nes rizikuotume leistis į niūrią metafizikos prarają. Tai neleistina tokia lengvab{ū|"+R.buti+"}diška proga, kaip apm{ą|"+R.masty+"}stymai apie keliones.",
+
+    // Testas 3: kelionės ir smalsumas
+    "Pasak daug{e|daugelis – rašoma e.|saknis}lio kartų pat{y|patirti, patyrė → patyrimas: y.|saknis}rimo, kurį mums neab{e|abejoti – šaknyje e.|saknis}jotinai {{kaži, kaip|kaži kaip|Dalelytės kaži, kažin rašomos atskirai: kaži kaip, kažin kas.|kartu}} įskiep{i|"+N.ija+"}jo evoliucija, pasaulis nedraugiškas mums, tad t{u|turėti – trumpas u.|saknis}rėtume saugotis naujų dalykų, s{ė|sėdėti – ė.|saknis}dėti gerai paž{į|"+N.nos1+" pažinti.|nosines}stamuose kampuose ir vaikščioti išmintais takais.",
+
+    "Bet taip nėra. Kodėl vaikystėje skaitome m{į|"+N.nos2+" mįslė – mąstyti.|nosines}slingas kelionių knygas? Kodėl žmonės, vos panaikinę balt{ą|"+N.inag+"}s{ia|"+N.inag+"}s dėmes žemėlapiuose, dr{ą|"+N.nos2+" drąsa – drįsti.|nosines}siai puolė į dar nesen{ia|Prieveiksmis neseniai: po minkšto priebalsio -iai.|galunes}i neįsivaizduojamas keliones po didž{ia|Aukščiausiojo laipsnio priesaga -(i)ausias (VLKK 2.2.12).|priesagos}usias erdves ir svajoja apie dar did{e|"+R.esnis+"}snes?",
+
+    "Kalbėdami apie keliones, mes turime galvoje {{ne, bet, kokį|ne bet kokį|Ne nuo įvardžių ir junginių su bet rašoma atskirai: ne bet kaip, ne bet koks (VLKK 5.2.5).|ne}} judėjimą erdvėje, bet tokį, kur pati kelionė yra tikslas.",
+
+    "Verslininkai, reng{ia|Esamojo laiko dalyvis iš 3 asm.: rengia → rengiantys (VLKK 2.2.9).|dalyviai}ntys susitikimus oro uostų konferencijų salėse, {{iš, kart|iškart|Kartu su sutrumpėjusiais žodžiais: iškart (VLKK 5.1).|prielinks}} po jų gr{į|"+R.grizti+"}žta į savo įstaigas ir visiškai nekeliauja.",
+
+    "Kažin ar galima keliavimu laikyti tokią m{a|masinis – tarptautinis žodis (masė), rašoma a.|tarpt}sinio turizmo r{ū|rūšis – ū.|saknis}šį, kai, pavy{z|"+P("pavyzdys → pavyzdžiui.")+"}džiui, šalt{ų|"+N.gal+"}j{ų|"+N.gal+"} kraštų gyventojams tiesiog reikia šiltos jūros gabalėlio Ispanijoje, o pati Ispanija jiems {{nė, maž|nėmaž|Nė su sutrumpėjusiais žodžiais rašoma kartu: nėmaž, nėkart (VLKK 5.2.9 a).|kartu}} nerūpi. Mes kalbame apie keliones, kai patir{ia|"+N.dal+"}ma kas nors nauja.",
+
+    "Keliaujant mums {{iš, vis|išvis|Kartu su sutrumpėjusiais žodžiais: išvis (VLKK 5.1).|prielinks}} nėra svarbu ką nors išmokti. Keliaujame ir ne todėl, kad ak{i|akimirka = aki- (akis) + mirka.|sudurt}mirkai atitr{ū|trūkti, trūko – ū.|saknis}ktume nuo ka{s|kasdienis = kas + diena.|sudurt}dienių darbų ir pamirštume sl{e|slėgti – slegia: esamajame laike trumpas e.|saknis}giančius r{ū|rūpėti, rūpestis – ū.|saknis}p{e|Priesaga -estis: rūpestis.|priesagos}sčius.",
+
+    "Mus v{y|vyti → vyte (būdinys iš bendraties): y.|saknis}te v{e|vyti, veja, vijo: esamajame laike e.|saknis}ja {{ne, noras|ne noras|Ne atskirai, kai prieštaraujama: ne noras …, bet smalsumas (VLKK 5.2.2).|ne}} pabėgti, bet smalsumas. Mokslininkai tvirtina, jog smalsumas išlieka visą žmogaus gyvenimą ir jog tai yra s{a|savas → savitas: a.|saknis}vitas žmogaus bruožas.",
+
+    "Esame smals{ū|"+N.ue+"}s ne todėl, kad nežinomi dalykai žada mums nusiraminimą arba gr{e|grėsti, gresia – BE nosinės: e kaitaliojasi su ė (VLKK 2.3.2 1*).|nosines}sia {{kuo, nors|kuo nors|Dalelytė nors visada rašoma atskirai.|kartu}}, ko norėt{ų|"+N.tuk+"}si išven{g|"+P("vengti, vengia → išvengti.")+"}ti.",
+
+    "Žmonės iš smalsumo imasi įvairių r{y|ryžtingas – pavojingas žodis, rašoma y (VLKK 2.3.2 4*).|nosines}žtingų veiksmų, nors žino, jog tai pavojinga, keliauja į mažai ištirtas vietas, ž{ū|žūti, žūva, žūsta – ū.|saknis}sta ko{p|"+P("kopti, kopia → kopdami.")+"}dami į kalnus arba {o|ola – rašoma o.|saknis}lų nasruose.",
+
+    "B{e|beje – rašoma e.|saknis}j{e|beje – rašoma e.|saknis}, tik per smalsumą buvome išvaryti iš rojaus, tad teologai dažnai smer{k|"+P("smerkti, smerkia.")+"}davo smalsumą kaip nuod{ė|nuodėmė – ė.|saknis}mę. Bet be šio impulso {{ne, daug|nedaug|Nedaug „maža, truputį“ rašoma kartu (VLKK 5.2.1 e).|ne}} būtų pažangos.",
+
+    "Net ir šiandien, smalsumo nug{i|ginti, gina → nuginti: trumpas i.|saknis}nti į kokią nepaž{į|"+N.nos1+" pažinti.|nosines}stamą šalį ar miestą, galime sakyti tai patys sau atradę, nes atrad{i|"+R.imas+"}mas – tai nebūtinai žinios, kurių dar niekas neturėjo, bet tik naujas pat{y|patirti, patyrė → patyrimas: y.|saknis}rimas.",
+
+    "Tiesa, žmonės kartais išsiruošia į didž{ią|"+N.inag+"}s{ia|"+N.inag+"}s sentimentų keliones – į prarast{ą|"+N.gal+"}j{ą|"+N.gal+"} vaikystės ar jaunystės šalį. Ar tokias išv{y|išvykti → išvyka: y.|saknis}kas irgi galime vadinti kelionėmis?",
+
+    "Atrodo, neatrandame nieko nauja, bet tarsi esame sugr{ą|"+N.nos2+" grąžinti – grįžti.|nosines}žinami patys prie sav{ę|Įvardžių manęs, tavęs, savęs kilmininke rašoma ę (VLKK 2.3.8 a).|galunes}s, į senuosius laikus, atrodo, jog keliaujame laiku, nes tai, ką kadais{e|Prieveiksmis kadaise – rašoma e.|galunes} pat{y|patirti, patyrė: y.|saknis}rėme, yra vėl nauja.",
+
+    "Mumyse gyvas naujovių poreikis, naujovės mus m{a|masinti „vilioti“ – BE nosinės (nepainiok su mąstyti).|nosines}sina, nes tai sus{i|susieti, susijęs – trumpas i.|saknis}j{ę|Būtojo kartinio laiko veikiamojo dalyvio galūnėje rašoma ę: susijęs, susiję (VLKK 2.3.10 b).|dalyviai} su mūsų specifiškai žmogišku laiko išgyvenimu.",
+
+    "Mes norėtume visuomet būti pradžioje, jausti, jog pasaulis mums atviras, o naujovės išgyvenimas, nors ir a{p|"+P("apgauti → apgaulė, apgaulingai: priešdėlis ap-.")+"}gaulingai, sukelia šį poj{ū|pojūtis – ū (jausti, jutimas).|saknis}tį."
+  );
+})();
+
 
 const norm = s => s.trim().toLowerCase().replace(/\s+/g, " ");
 const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
@@ -102,25 +249,26 @@ function wordAround(parts, k, fill) {
 }
 
 // Mistakes saved in the browser: { "sentence:part": { wrong, streak, last } }
-// A mistake is cleared after 2 correct answers in a row.
-const MISTAKES_KEY = "rasyba-mistakes";
-function loadMistakes() {
-  let m; try { m = JSON.parse(localStorage.getItem(MISTAKES_KEY)) || {}; } catch { m = {}; }
+// After 2 correct answers in a row a mistake moves to the fixed list (FIXED_KEY).
+const MISTAKES_KEY = "rasyba-mistakes", FIXED_KEY = "rasyba-fixed";
+function loadMistakes(key = MISTAKES_KEY) {
+  let m; try { m = JSON.parse(localStorage.getItem(key)) || {}; } catch { m = {}; }
   for (const id in m) {
     const [si, k] = id.split(":").map(Number), p = SENTENCES[si] && parse(SENTENCES[si])[k];
     if (!p || p.t !== undefined) delete m[id];
   }
   return m;
 }
-const saveMistakes = m => localStorage.setItem(MISTAKES_KEY, JSON.stringify(m));
+const saveMistakes = (m, key = MISTAKES_KEY) => localStorage.setItem(key, JSON.stringify(m));
 function recordAnswer(si, k, ok, given) {
-  const m = loadMistakes(), id = si + ":" + k;
+  const m = loadMistakes(), f = loadMistakes(FIXED_KEY), id = si + ":" + k;
   if (ok) {
-    if (m[id] && ++m[id].streak >= 2) delete m[id];
+    if (m[id] && ++m[id].streak >= 2) { f[id] = { wrong: m[id].wrong, last: m[id].last, fixed: Date.now() }; delete m[id]; }
   } else {
-    m[id] = { wrong: (m[id]?.wrong || 0) + 1, streak: 0, last: given };
+    m[id] = { wrong: (m[id]?.wrong || f[id]?.wrong || 0) + 1, streak: 0, last: given };
+    delete f[id];
   }
-  saveMistakes(m);
+  saveMistakes(m); saveMistakes(f, FIXED_KEY);
 }
 
 // Full rule for each rule type, from the official VLKK rules (content/vlkk/rasyba-2022.pdf)
@@ -182,6 +330,9 @@ const FULL = {
 <p><b>5.2.7.</b> Nebe, te, be, tebe – kartu su veiksmažodžiais ir būdvardžiais (nebegalėti, tebetoli, bekalbant), atskirai nuo daiktavardžių, įvardžių ir kai prieštaraujama (nebe tas; Dangus nebe mėlynas, o pilkas).</p>
 <p>Dalelytės <b>nors, bet, kai, kažin</b> rašomos atskirai: kas nors, kada nors, bet kuris, kai kas, kol kas. <b>Galbūt</b> – vienas žodis.</p>`,
 
+  priebalsiai: SRC_R("3.2 p.") + `<p><b>Morfologinė priebalsių rašyba.</b> Prieš kitus priebalsius skardieji ir duslieji priebalsiai (b–p, d–t, g–k, z–s, ž–š) tariami supanašėję, bet rašomi taip, kaip giminiškame žodyje prieš balsį:</p>
+<p>suvokti (suvokia), stabdžiu (stabdyti), įvykdyti (įvykti), duobkasys (duobė), juokdarys (juokas), mėgsta (mėgo), išvengti (vengia), kopdami (kopia), smerkdavo (smerkia), užgniaužtų (gniaužia), pabrėžti (brėžia), pavyzdžiui (pavyzdys), pasaulėvaizdis (vaizdas), aukščiausias (aukštas).</p>
+<p>Tarptautiniai žodžiai – pagal kilmę: absurdas (b).</p>`,
   prielinks: SRC_R("5.1, 5.3 p.") + `<p><b>5.3.1.</b> Prielinksniai visada rašomi <b>atskirai</b>, kai sudaro konstrukcijas su linksniuojamais ar nekaitomais žodžiais: be abejo, be galo, be reikalo, be to, dėl ko, iki galo, iš anksto, iš dalies, iš eilės, iš esmės…</p>
 <p><b>5.1.</b> <b>Kartu</b> rašomi sutrumpėję žodžiai: bemaž, iškart, išsyk, išties, išvis, perdien, perpus, popiet, suvis, užvis, užtat.</p>
 <p><b>5.3.2.</b> Polinksniai dėka, link – visada atskirai.</p>`

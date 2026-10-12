@@ -271,7 +271,7 @@ function grade(it, ans, redo) {
         if (gap.def) out.max++; // an extra mark counts as a lost point
         out.mistakes.push({ key: g, rule: gap.rule, full: skFullRule(gap.cat), right: gap.ans.map(x => skJoin(a[g], x, a[g + 1])).join("  arba  "), yours: skJoin(a[g], v, a[g + 1]) });
       }
-      if ((!gap.def || !ok) && save(ok)) skRecord(it.i, g, ok, v);
+      if ((!gap.def || !ok || (it.i + ":" + g) in skLoadMistakes()) && save(ok)) skRecord(it.i, g, ok, v);
     });
   }
   return out;
@@ -341,5 +341,6 @@ function renderResults(res) {
 
 startScreen();
 </script>
+<script src="demo-report.js"></script><!-- DEMO: remove later -->
 </body>
 </html>
