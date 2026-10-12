@@ -178,8 +178,11 @@ function check() {
 let deck = [];
 function nextRandom() {
   if (!deck.length) {
-    deck = SENTENCES.map((_, i) => i).filter(i => i !== current || SENTENCES.length === 1);
+    deck = SENTENCES.map((_, i) => i);
     for (let i = deck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [deck[i], deck[j]] = [deck[j], deck[i]]; }
+    // Don't repeat the sentence just shown
+    const last = deck.length - 1;
+    if (deck[last] === current) [deck[last], deck[0]] = [deck[0], deck[last]];
   }
   load(deck.pop());
 }
