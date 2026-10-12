@@ -147,7 +147,10 @@ function showItem() {
         ${last ? `<button class="btn primary" id="finish">Baigti ${state.redo ? "taisymą" : "testą"}</button>` : `<button class="btn primary" id="next">Kitas →</button>`}
         ${!last ? `<button class="btn secondary" id="finish">Baigti</button>` : ""}
       </div>
-    </div>`;
+    </div>
+    ${state.redo && state.review ? `<div class="row"><button class="btn secondary" id="review">${state.showReview ? "Slėpti klaidas ▴" : "📋 Peržiūrėti klaidas ▾"}</button></div>
+    ${state.showReview ? `<div style="margin-top:14px">${state.review}</div>` : ""}` : ""}`;
+  document.getElementById("review") && (document.getElementById("review").onclick = () => { state.showReview = !state.showReview; showItem(); });
   app.querySelectorAll(".dot").forEach(d => d.onclick = () => go(+d.dataset.k));
   document.getElementById("prev").onclick = () => state.pos > 0 && go(state.pos - 1);
   document.getElementById("next") && (document.getElementById("next").onclick = () => go(state.pos + 1));
@@ -312,7 +315,12 @@ function finish(timeUp) {
       only: new Set(r.mistakes.map(m => m.key)),
       fixed: { ...r.it.fixed, ...r.ok }
     }));
-    state = { ...state, items, answers: items.map(() => ({})), pos: 0, redo: true };
+    const review = wrongItems.map(r => `
+      <div class="sres">
+        <div class="head">${r.it.type === "r" ? "Rašyba" : "Skyryba"}</div>
+        ${r.mistakes.map(m => `<div class="mistake"><div class="w"><s>${esc(m.yours)}</s> → <b>${esc(m.right)}</b></div><div class="r">${esc(m.rule)}</div>${m.full}</div>`).join("")}
+      </div>`).join("");
+    state = { ...state, items, answers: items.map(() => ({})), pos: 0, redo: true, review, showReview: false };
     showItem();
   };
   scrollTo(0, 0);
