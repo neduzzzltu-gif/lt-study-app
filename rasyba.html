@@ -12,11 +12,6 @@
   .back { display:inline-block; color:var(--muted); text-decoration:none; font-size:14px; margin-bottom:12px; }
   h1 { font-size:22px; margin:0 0 4px; }
   .sub { color:var(--muted); margin:0 0 20px; font-size:14px; }
-  .picker { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
-  .picker button { width:40px; height:40px; border:1px solid var(--line); background:var(--card); border-radius:10px; font-size:15px; cursor:pointer; }
-  .picker button.active { background:var(--ink); color:#fff; border-color:var(--ink); }
-  .picker button.done { border-color:var(--ok); color:var(--ok); }
-  .picker button.random { width:auto; padding:0 14px; }
   .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px; }
   .sentence { font-size:19px; line-height:2.3; }
   .sentence input { font:inherit; font-size:18px; text-align:center; border:none; border-bottom:2px solid var(--accent); background:#eef1ff; border-radius:6px 6px 0 0; padding:0 2px; margin:0 1px; outline:none; }
@@ -44,8 +39,7 @@
 <main>
   <a class="back" href="index.html">← Visos temos</a>
   <h1>Rašybos treniruoklis</h1>
-  <p class="sub">Pasirink sakinį ir įrašyk praleistas raides. Skliaustuose esančius žodžius parašyk kartu arba skyrium.</p>
-  <div class="picker" id="picker"></div>
+  <p class="sub">Įrašyk praleistas raides. Skliaustuose esančius žodžius parašyk kartu arba skyrium.</p>
   <div class="card">
     <div class="sentence" id="sentence"></div>
     <div class="actions">
@@ -125,15 +119,7 @@ function parse(src) {
   return parts;
 }
 
-let current = 0, parts = [], focused = null;
-const done = new Set();
-
-function renderPicker() {
-  const p = document.getElementById("picker");
-  p.innerHTML = SENTENCES.map((_, i) =>
-    `<button class="${i === current ? "active" : ""} ${done.has(i) ? "done" : ""}" data-i="${i}">${i + 1}</button>`).join("")
-    + `<button class="random" data-i="r">🎲 Atsitiktinis</button>`;
-}
+let current = -1, parts = [], focused = null;
 
 function load(i) {
   current = i;
@@ -144,7 +130,6 @@ function load(i) {
     return `<input data-k="${k}" style="width:${Math.max(...p.ans.split("/").map(a => a.length)) + 1.6}ch" autocomplete="off" autocapitalize="off" spellcheck="false">`;
   }).join("");
   document.getElementById("result").innerHTML = "";
-  renderPicker();
   document.querySelector(".sentence input")?.focus();
 }
 
@@ -180,7 +165,7 @@ function check() {
   });
   const total = inputs.length, good = total - wrong.length;
   let html = `<div class="score">${good} / ${total} teisingai</div>`;
-  if (!wrong.length) { html += `<div class="allok">Viskas teisingai! 🎉</div>`; done.add(current); renderPicker(); }
+  if (!wrong.length) { html += `<div class="allok">Viskas teisingai! 🎉</div>`; }
   wrong.forEach(({ k, p, val }) => {
     const right = p.word ? p.ans : wordAround(k, p.ans.split("/")[0]);
     const yours = p.word ? (val || "—") : wordAround(k, val || "_");
@@ -189,15 +174,18 @@ function check() {
   document.getElementById("result").innerHTML = html;
 }
 
-document.getElementById("picker").addEventListener("click", e => {
-  const b = e.target.closest("button"); if (!b) return;
-  if (b.dataset.i === "r") {
-    let i; do { i = Math.floor(Math.random() * SENTENCES.length); } while (i === current && SENTENCES.length > 1);
-    load(i);
-  } else load(+b.dataset.i);
-});
+// Shuffled deck: every sentence comes once before any repeats
+let deck = [];
+function nextRandom() {
+  if (!deck.length) {
+    deck = SENTENCES.map((_, i) => i).filter(i => i !== current || SENTENCES.length === 1);
+    for (let i = deck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [deck[i], deck[j]] = [deck[j], deck[i]]; }
+  }
+  load(deck.pop());
+}
+
 document.getElementById("check").onclick = check;
-document.getElementById("next").onclick = () => load((current + 1) % SENTENCES.length);
+document.getElementById("next").onclick = nextRandom;
 document.getElementById("sentence").addEventListener("focusin", e => { if (e.target.tagName === "INPUT") focused = e.target; });
 document.getElementById("sentence").addEventListener("keydown", e => {
   if (e.key === "Enter") { e.preventDefault(); check(); }
@@ -215,7 +203,7 @@ keys.addEventListener("click", e => {
   focused.focus();
 });
 
-load(0);
+nextRandom();
 </script>
 </body>
 </html>
