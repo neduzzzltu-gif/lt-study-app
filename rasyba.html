@@ -152,7 +152,7 @@ sentenceEl.addEventListener("keydown", e => { if (e.key === "Enter") { e.prevent
 
 // Hold the mouse on a blank for 2 s → "?" appears above it → click shows which rule to use
 let holdTimer = null, qEl = null, tipEl = null, qFor = null;
-function hideHint() { clearTimeout(holdTimer); qEl?.remove(); tipEl?.remove(); qEl = tipEl = qFor = null; }
+function hideHint() { clearTimeout(holdTimer); clearTimeout(leaveTimer); qEl?.remove(); tipEl?.remove(); qEl = tipEl = qFor = null; }
 function placeAbove(el, target, gap) {
   const r = target.getBoundingClientRect();
   const half = Math.min(el.offsetWidth / 2, innerWidth / 2);
@@ -186,6 +186,15 @@ sentenceEl.addEventListener("mouseover", e => {
   holdTimer = setTimeout(() => showQ(inp), 2000);
 });
 sentenceEl.addEventListener("mouseout", e => { if (e.target.tagName === "INPUT") clearTimeout(holdTimer); });
+
+// Hide the "?" / tip shortly after the mouse leaves the blank, the "?" and the tip
+let leaveTimer = null;
+document.addEventListener("mouseover", e => {
+  if (!qFor) return;
+  const inside = e.target === qFor || e.target.closest(".qmark, .tip");
+  clearTimeout(leaveTimer);
+  if (!inside) leaveTimer = setTimeout(hideHint, 400);
+});
 document.addEventListener("click", e => { if (!e.target.closest(".qmark, .tip")) hideHint(); });
 addEventListener("resize", hideHint);
 document.addEventListener("keydown", e => { if (e.key === "Escape") hideHint(); });
