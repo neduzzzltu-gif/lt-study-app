@@ -51,6 +51,12 @@
   .full[open] summary::after { transform:rotate(180deg); }
   .full .body { margin-top:8px; padding:10px 12px; background:#fff; border:1px solid var(--line); border-radius:10px; color:#333; line-height:1.55; animation:slide .25s ease-out; }
   .full .body p { margin:0 0 8px; } .full .body p:last-child { margin:0; }
+  .picker { position:absolute; display:flex; gap:4px; padding:5px; background:var(--ink); border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,.18); transform:translate(-50%, -100%); z-index:10; animation:pop .15s ease-out; }
+  .picker::after { content:""; position:absolute; left:50%; bottom:-5px; width:10px; height:10px; background:var(--ink); transform:translateX(-50%) rotate(45deg); }
+  .picker button { width:36px; height:36px; border:none; border-radius:8px; background:#2c2c30; color:#fff; font:inherit; font-size:20px; font-weight:700; cursor:pointer; position:relative; z-index:1; }
+  .picker button:hover { background:var(--accent); }
+  .picker button.cur { background:#4a4a52; box-shadow:inset 0 0 0 2px #aab8ff; }
+  @keyframes pop { from { opacity:0; transform:translate(-50%, -85%) scale(.92); } }
   @keyframes slide { from { opacity:0; transform:translateY(-8px); } }
 </style>
 </head>
@@ -61,7 +67,7 @@
     <a class="mode" id="modeLink" href="klaidos.html#skyryba">Mano klaidos →</a>
   </div>
   <h1 id="title">Skyrybos treniruoklis</h1>
-  <p class="sub" id="sub">Spausk tarpą tarp žodžių, kad padėtum ženklą. Kiekvienas paspaudimas keičia: <b>nieko → , → – → :</b></p>
+  <p class="sub" id="sub">Spausk tarpą tarp žodžių, kad padėtum ženklą. Užvesk pelę ant tarpo – iššoks pasirinkimai (<b>∅ , – :</b>), arba spausk tarpą, kad ženklai keistųsi.</p>
   <div class="card">
     <div class="sentence" id="sentence"></div>
     <div class="actions" id="actions">
@@ -99,16 +105,51 @@ function load(i) {
     return `${esc(w)}<button class="gap" data-g="${g}" data-m=""></button>`;
   }).join("");
   document.getElementById("result").innerHTML = "";
+  hidePicker();
 }
 
+function setMark(b, mark) {
+  b.dataset.m = mark; b.textContent = mark;
+  b.className = "gap" + (mark ? " set" : "");
+}
 document.getElementById("sentence").addEventListener("click", e => {
-  const b = e.target.closest(".gap"); if (!b || b.classList.contains("locked")) return;
-  const next = MARKS[(MARKS.indexOf(b.dataset.m) + 1) % MARKS.length];
-  b.dataset.m = next; b.textContent = next;
-  b.className = "gap" + (next ? " set" : "");
+  const b = e.target.closest(".gap"); if (!b) return;
+  setMark(b, MARKS[(MARKS.indexOf(b.dataset.m) + 1) % MARKS.length]);
+  if (pickFor === b) showPicker(b);
 });
 
+// Hover a gap → choices pop up above it
+let picker = null, pickFor = null, openTimer = null, closeTimer = null;
+function hidePicker() { clearTimeout(openTimer); clearTimeout(closeTimer); picker?.remove(); picker = pickFor = null; }
+function showPicker(b) {
+  hidePicker();
+  pickFor = b;
+  picker = document.createElement("div");
+  picker.className = "picker";
+  picker.innerHTML = MARKS.map(m => `<button data-mark="${m}" class="${m === b.dataset.m ? "cur" : ""}" title="${m ? m : "Be ženklo"}">${m || "∅"}</button>`).join("");
+  document.body.appendChild(picker);
+  const r = b.getBoundingClientRect(), half = picker.offsetWidth / 2;
+  picker.style.left = (Math.min(Math.max(r.left + r.width / 2, half + 8), innerWidth - half - 8) + scrollX) + "px";
+  picker.style.top = (r.top + scrollY - 10) + "px";
+  picker.addEventListener("click", e => {
+    const c = e.target.closest("button"); if (!c) return;
+    setMark(b, c.dataset.mark);
+    hidePicker();
+  });
+}
+document.addEventListener("mouseover", e => {
+  const gap = e.target.closest(".sentence .gap");
+  if (gap && gap !== pickFor) { clearTimeout(openTimer); openTimer = setTimeout(() => showPicker(gap), 120); }
+  if (!gap) clearTimeout(openTimer);
+  if (!pickFor) return;
+  clearTimeout(closeTimer);
+  if (gap !== pickFor && !e.target.closest(".picker")) closeTimer = setTimeout(hidePicker, 300);
+});
+addEventListener("resize", hidePicker);
+document.addEventListener("keydown", e => { if (e.key === "Escape") hidePicker(); });
+
 function check() {
+  hidePicker();
   const first = !checked; checked = true;
   const wrong = [], correct = [];
   document.querySelectorAll(".sentence .gap").forEach(b => {
@@ -161,6 +202,7 @@ function showNoMistakes() {
   document.getElementById("sentence").innerHTML = `<div class="empty">Klaidų neliko! 🎉<br>Paspręsk daugiau sakinių <a href="skyryba.html">įprastame režime</a>.</div>`;
   document.getElementById("actions").style.display = "none";
   document.getElementById("result").innerHTML = "";
+  hidePicker();
 }
 
 document.getElementById("check").onclick = check;
