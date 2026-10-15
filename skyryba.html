@@ -114,6 +114,7 @@ let current = -1, sent = null, checked = false, fixing = null;
 
 function load(i, fix = null) {
   current = i; checked = false; fixing = fix;
+  document.getElementById("sentence").classList.toggle("fixing", !!fix);
   sent = skParse(SK_SENTENCES[i]);
   document.getElementById("sentence").innerHTML = sent.words.map((w, g) => {
     if (g >= sent.gaps.length) return esc(w);
@@ -247,7 +248,7 @@ document.addEventListener("keydown", e => {
   if (e.target.closest(".gap") || !e.target.closest("button, a, summary")) { e.preventDefault(); check(); }
 });
 updateModeLink();
-roundStart(() => Math.min(ROUND_SIZE, pool().length), "skyryba.html?klaidos", nextRandom, fix => load(fix.i, fix));
+roundStart(() => Math.min(ROUND_SIZE, pool().length), "skyryba.html?klaidos", nextRandom, fix => load(fix.i, fix.keys ? fix : null));
 nextRandom();
 </script>
 <script src="demo-report.js"></script><!-- DEMO: remove later -->

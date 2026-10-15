@@ -139,6 +139,7 @@ let current = -1, parts = [], focused = null, checked = false, fixing = null;
 
 function load(i, fix = null) {
   current = i; checked = false; fixing = fix;
+  document.getElementById("sentence").classList.toggle("fixing", !!fix);
   parts = parse(SENTENCES[i]);
   document.getElementById("sentence").innerHTML = parts.map((p, k) => {
     if (p.t !== undefined) return esc(p.t);
@@ -278,7 +279,7 @@ document.addEventListener("click", e => { if (!e.target.closest(".qmark, .tip"))
 addEventListener("resize", () => hideHint());
 document.addEventListener("keydown", e => { if (e.key === "Escape") hideHint(); });
 
-roundStart(() => Math.min(ROUND_SIZE, pool().length), "rasyba.html?klaidos", nextRandom, fix => load(fix.i, fix));
+roundStart(() => Math.min(ROUND_SIZE, pool().length), "rasyba.html?klaidos", nextRandom, fix => load(fix.i, fix.keys ? fix : null));
 nextRandom();
 </script>
 <script src="demo-report.js"></script><!-- DEMO: remove later -->
