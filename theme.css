@@ -108,9 +108,10 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline:3px solid
 @media (hover:hover) and (pointer:fine) { .step.bad:hover { transform:translateY(-2px); box-shadow:inset 0 0 0 1.5px var(--bad); } }
 .step.bad:active, button.step:active { transform:scale(.94); }
 button.step { cursor:pointer; }
-@media (hover:hover) and (pointer:fine) { button.step.ok:hover, button.step.fixed:hover, .step.back:hover { transform:translateY(-2px); box-shadow:inset 0 0 0 1.5px var(--ok); } .step.back:hover { box-shadow:inset 0 0 0 1.5px var(--indigo); } }
-.step.on { box-shadow:inset 0 0 0 2px var(--indigo); color:var(--indigo); }
-.step.bad.on { box-shadow:inset 0 0 0 2px var(--bad); color:var(--bad); }
+@media (hover:hover) and (pointer:fine) { button.step:hover { transform:translateY(-2px); box-shadow:inset 0 0 0 1.5px var(--blue); } button.step.ok:hover, button.step.fixed:hover { box-shadow:inset 0 0 0 1.5px var(--ok); } }
+/* where you are: always the blue ring, whatever the box's colour */
+.step.on { color:var(--indigo); }
+.step.on, .step.ok.on, .step.bad.on, .step.fixed.on, button.step.on:hover { box-shadow:inset 0 0 0 2px var(--indigo), 0 0 0 3px rgba(58,51,153,.15); transform:none; cursor:default; }
 /* going back to fix: the empty spots are where the mistakes were */
 .sentence.fixing input { border-color:#ecb3b9; background:var(--bad-soft); }
 .sentence.fixing input:focus { border-color:var(--bad); box-shadow:0 0 0 4px rgba(179,52,63,.15); background:#fff; }

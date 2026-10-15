@@ -223,16 +223,17 @@ function pool() {
   if (!MISTAKE_MODE) return SK_SENTENCES.map((_, i) => i);
   return [...new Set(Object.keys(skLoadMistakes()).map(id => +id.split(":")[0]))];
 }
-function nextRandom() {
+// Next sentence for the round (null when there are none)
+function pickNext() {
   if (MISTAKE_MODE) deck = deck.filter(i => pool().includes(i));
   if (!deck.length) {
     deck = pool();
-    if (!deck.length) return showNoMistakes();
+    if (!deck.length) return null;
     for (let i = deck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [deck[i], deck[j]] = [deck[j], deck[i]]; }
     const last = deck.length - 1;
     if (deck.length > 1 && deck[last] === current) [deck[last], deck[0]] = [deck[0], deck[last]];
   }
-  load(deck.pop());
+  return deck.pop();
 }
 function showNoMistakes() {
   document.getElementById("sentence").innerHTML = `<div class="empty">Klaidų neliko! 🎉<br>Paspręsk daugiau sakinių <a href="skyryba.html">įprastame režime</a>.</div>`;
@@ -248,8 +249,8 @@ document.addEventListener("keydown", e => {
   if (e.target.closest(".gap") || !e.target.closest("button, a, summary")) { e.preventDefault(); check(); }
 });
 updateModeLink();
-roundStart(() => Math.min(ROUND_SIZE, pool().length), "skyryba.html?klaidos", nextRandom, fix => load(fix.i, fix.keys ? fix : null));
-nextRandom();
+roundStart(() => Math.min(ROUND_SIZE, pool().length), "skyryba.html?klaidos", pickNext, fix => load(fix.i, fix.keys ? fix : null), showNoMistakes);
+roundGo(0);
 </script>
 <script src="demo-report.js"></script><!-- DEMO: remove later -->
 <script src="hyphen.js"></script>
