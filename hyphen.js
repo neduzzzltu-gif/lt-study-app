@@ -51,6 +51,46 @@ hyphenateNode(document.body);
 new MutationObserver(list => list.forEach(m => m.addedNodes.forEach(hyphenateNode)))
   .observe(document.body, { childList: true, subtree: true });
 
+// Words with a blank inside (besisteng▢s) can wrap right at the blank. The browser adds no "-"
+// there, so check where the lines actually broke and draw the "-" ourselves.
+const isLetter = ch => /\p{L}/u.test(ch || "");
+function markBlankCuts() {
+  document.querySelectorAll(".sentence input").forEach(inp => {
+    // wrap once: <span class="bw">[mark]<input></span>
+    if (!inp.parentNode.classList.contains("bw")) {
+      const w = document.createElement("span"); w.className = "bw";
+      // moving a focused input drops its focus – put it back
+      const had = document.activeElement === inp, s = inp.selectionStart, e = inp.selectionEnd;
+      inp.before(w); w.append(inp);
+      if (had) { inp.focus({ preventScroll: true }); inp.setSelectionRange(s, e); }
+      const prev = w.previousSibling;
+      if (prev?.nodeType === 3 && isLetter(prev.data.replaceAll(SHY, "").slice(-1))) {
+        const m = document.createElement("span"); m.className = "bw-mark"; w.before(m);
+      }
+    }
+  });
+  document.querySelectorAll(".sentence .bw").forEach(w => {
+    const inp = w.querySelector("input"); if (!inp) return;
+    const r = inp.getBoundingClientRect(), mid = rc => (rc.top + rc.bottom) / 2, far = rc => Math.abs(mid(rc) - mid(r)) > r.height * .8;
+    const m = w.previousSibling?.classList?.contains("bw-mark") ? w.previousSibling : null;
+    if (m) { const mr = m.getBoundingClientRect(); m.classList.toggle("cut", far(mr)); }
+    const next = w.nextSibling;
+    let cutAfter = false;
+    if (next?.nodeType === 3 && isLetter(next.data.replaceAll(SHY, "")[0])) {
+      const rg = document.createRange(); rg.setStart(next, 0); rg.setEnd(next, 1);
+      cutAfter = far(rg.getBoundingClientRect());
+    }
+    w.classList.toggle("cut", cutAfter);
+  });
+}
+let cutRaf = 0;
+const scheduleCuts = () => { cancelAnimationFrame(cutRaf); cutRaf = requestAnimationFrame(markBlankCuts); };
+new MutationObserver(list => { if (list.some(m => [...m.addedNodes].some(n => n.nodeType === 1 && (n.matches?.("input") || n.querySelector?.("input"))))) scheduleCuts(); })
+  .observe(document.body, { childList: true, subtree: true });
+addEventListener("resize", scheduleCuts);
+document.fonts?.ready.then(scheduleCuts);
+scheduleCuts();
+
 // Copying text: drop the hidden split marks
 document.addEventListener("copy", e => {
   const t = String(getSelection());

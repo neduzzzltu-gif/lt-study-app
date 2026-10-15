@@ -174,7 +174,7 @@ arrowKeys(document.getElementById("sentence"), (b, dir) => {
 
 function check() {
   hidePicker();
-  if (document.getElementById("actions").style.display === "none") return;
+  if (document.getElementById("actions").style.display === "none" || document.getElementById("check").style.display === "none") return;
   const first = !checked; checked = true;
   const wrong = [], correct = [];
   // Paired gaps (e.g. both sides of a priedėlis) must use the same mark
@@ -202,7 +202,7 @@ function check() {
   // Points: marked places right + extra marks count as lost
   // In fix mode every redone gap is one point (also removing an extra mark)
   const pts = fixing ? fixing.keys.length : sent.gaps.filter(x => !x.def).length, extra = wrong.filter(w => w.gap.def).length;
-  if (first) roundAdd(fixing ? pts - wrong.length : Math.max(0, correct.length - extra), pts, mHtml, wrong.length ? { i: current, keys: wrong.map(w => w.g), given } : null);
+  if (first) roundAdd(fixing ? pts - wrong.length : Math.max(0, correct.length - extra), pts, mHtml, wrong.length ? { i: current, keys: wrong.map(w => w.g), given } : null, { i: current, keys: [], given });
   if (correct.length) html += `<details class="rightlist"><summary>Teisingos vietos (${correct.length})</summary>${correct.map(({ g, gap, val }) =>
     `<div class="good"><div class="w"><b>${esc(skJoin(a[g], val, a[g + 1]))}</b></div><div class="r">${esc(gap.rule)}</div>${skFullRule(gap.cat)}</div>`).join("")}</details>`;
   const n = Object.keys(skLoadMistakes()).length;

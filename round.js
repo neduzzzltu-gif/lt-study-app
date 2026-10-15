@@ -15,12 +15,15 @@ function roundStart(size, fixHref, onNext, onFix) {
   document.getElementById("actions").style.display = "";
   roundUpdate();
 }
-function roundAdd(good, total, mistakesHtml, redo = null) {
-  const x = { good, total, mistakesHtml, redo };
+// view = { i, keys: [], given } – the sentence with your answers, for looking back at it from its box
+function roundAdd(good, total, mistakesHtml, redo = null, view = null) {
+  const x = { good, total, mistakesHtml, redo, view };
   if (round.jump) {
     // Went back from a box: the round's score stays, only what's left to fix changes
+    if (round.jump.view) return roundUpdate();
     const it = round.items[round.jump.n];
     it.redo = redo; if (!redo) it.fixed = true;
+    if (view) it.view = view;
   } else if (round.fix) round.fix.done[round.fix.pos] = x; else round.items.push(x);
   roundUpdate();
 }
@@ -34,34 +37,37 @@ function roundSteps() {
   el.innerHTML = Array.from({ length: round.size }, (_, n) => {
     const it = round.items[n], on = n === cur && (round.jump || !roundDone()) ? " on" : "";
     if (it && it.redo) return `<button class="step bad${on}" data-n="${n}" title="Grįžti ir pataisyti">${n + 1}</button>`;
-    if (it) return `<span class="step ${it.fixed ? "fixed" : "ok"}${on}">${n + 1}</span>`;
+    if (it) return it.view ? `<button class="step ${it.fixed ? "fixed" : "ok"}${on}" data-n="${n}" title="Peržiūrėti">${n + 1}</button>` : `<span class="step ${it.fixed ? "fixed" : "ok"}${on}">${n + 1}</span>`;
+    // while looking back, the next box takes you back to where you were
+    if (round.jump && n === round.items.length && !roundDone()) return `<button class="step back" data-back title="Grįžti">${n + 1}</button>`;
     return `<span class="step${on}">${n + 1}</span>`;
   }).join("");
 }
 document.addEventListener("click", e => {
-  const b = e.target.closest(".step.bad"); if (!b) return;
-  roundJump(+b.dataset.n);
+  const b = e.target.closest("button.step"); if (!b) return;
+  if (b.hasAttribute("data-back")) roundNext(); else if (!b.classList.contains("on")) roundJump(+b.dataset.n);
 });
 
 // Go back to a sentence of this round; "Kitas" then returns to where you were
 function roundJump(n) {
-  const it = round.items[n]; if (!it || !it.redo) return;
+  const it = round.items[n], target = it && (it.redo || it.view); if (!target) return;
   if (round.fix) return;
   if (!round.jump) {
     // Resume only a sentence that is actually on screen (not the summary / "no mistakes" view)
     const live = document.getElementById("actions").style.display !== "none";
     round.jump = { back: live && typeof current !== "undefined" && !checked ? current : null };
   }
-  round.jump.n = n;
+  round.jump.n = n; round.jump.view = !it.redo;
   document.getElementById("actions").style.display = "";
-  round.onFix(it.redo);
+  document.getElementById("check").style.display = round.jump.view ? "none" : "";
+  round.onFix(target);
   roundUpdate();
 }
 
 function roundUpdate() {
   roundSteps();
   if (round.jump) {
-    document.getElementById("progress").innerHTML = `<span>Grįžai į ${round.jump.n + 1} sakinį</span><i style="width:${round.items.length / round.size * 100}%"></i>`;
+    document.getElementById("progress").innerHTML = `<span>Sakinys ${round.jump.n + 1} – ${round.jump.view ? "peržiūra" : "taisymas"}</span><i style="width:${round.items.length / round.size * 100}%"></i>`;
     document.getElementById("next").textContent = "Grįžti →";
     return;
   }
@@ -82,6 +88,7 @@ function roundUpdate() {
 function roundNext() {
   if (round.jump) {
     const back = round.jump.back; round.jump = null;
+    document.getElementById("check").style.display = "";
     if (back !== null) round.onFix({ i: back, keys: null });
     else if (roundDone()) return roundSummary();
     else round.onNext();

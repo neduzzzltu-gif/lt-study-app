@@ -40,6 +40,12 @@ h2, h3 { font-family:var(--head); font-weight:800; letter-spacing:-.01em; }
 .sentence input.ok { background:var(--ok-soft); border-color:#a9d9bf; color:var(--ok); }
 .sentence input.bad { background:var(--bad-soft); border-color:#f0bcc1; color:var(--bad); }
 .hint { font-family:var(--sans); font-size:15px; }
+/* "-" where a word with a blank wraps to the next line (hyphen.js marks .cut) */
+.sentence .bw { position:relative; }
+.sentence .bw-mark { position:relative; }
+.sentence .bw-mark.cut::after, .sentence .bw.cut::after { content:"-"; position:absolute; bottom:0; line-height:1; }
+.sentence .bw-mark.cut::after { left:0; }
+.sentence .bw.cut::after { left:100%; margin-left:1px; }
 .kept { color:var(--ok); }
 
 /* surfaces: everything rounded, no hard left bars */
@@ -100,7 +106,9 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline:3px solid
 .step.fixed { background:var(--ok-soft); color:var(--ok); box-shadow:inset 0 0 0 1.5px #a9d9bf; }
 .step.bad { background:var(--bad-soft); color:var(--bad); box-shadow:inset 0 0 0 1.5px #ecb3b9; cursor:pointer; }
 @media (hover:hover) and (pointer:fine) { .step.bad:hover { transform:translateY(-2px); box-shadow:inset 0 0 0 1.5px var(--bad); } }
-.step.bad:active { transform:scale(.94); }
+.step.bad:active, button.step:active { transform:scale(.94); }
+button.step { cursor:pointer; }
+@media (hover:hover) and (pointer:fine) { button.step.ok:hover, button.step.fixed:hover, .step.back:hover { transform:translateY(-2px); box-shadow:inset 0 0 0 1.5px var(--ok); } .step.back:hover { box-shadow:inset 0 0 0 1.5px var(--indigo); } }
 .step.on { box-shadow:inset 0 0 0 2px var(--indigo); color:var(--indigo); }
 .step.bad.on { box-shadow:inset 0 0 0 2px var(--bad); color:var(--bad); }
 /* going back to fix: the empty spots are where the mistakes were */

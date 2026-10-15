@@ -153,7 +153,7 @@ function load(i, fix = null) {
 }
 
 function check() {
-  if (document.getElementById("actions").style.display === "none") return;
+  if (document.getElementById("actions").style.display === "none" || document.getElementById("check").style.display === "none") return;
   const inputs = [...document.querySelectorAll(".sentence input")];
   const first = !checked; checked = true;
   let wrong = [], correct = [];
@@ -185,7 +185,7 @@ function check() {
   const n =Object.keys(loadMistakes()).length;
   if (n && !MISTAKE_MODE) html += `<a class="fixbtn" href="rasyba.html?klaidos">🎯 Taisyti klaidas (${n}) →</a>`;
   document.getElementById("result").innerHTML = html;
-  if (first) roundAdd(good, total, mHtml, wrong.length ? { i: current, keys: wrong.map(w => w.k), given } : null);
+  if (first) roundAdd(good, total, mHtml, wrong.length ? { i: current, keys: wrong.map(w => w.k), given } : null, { i: current, keys: [], given });
   updateModeLink();
 }
 
