@@ -34,10 +34,10 @@
   // Grab selected text before the click clears it
   let picked = "";
   let viaMouse = false;
-  btn.addEventListener("mousedown", () => { picked = String(getSelection()).trim(); viaMouse = true; });
+  btn.addEventListener("mousedown", () => { picked = String(getSelection()).replace(/\u00AD/g, "").trim(); viaMouse = true; });
 
-  const page = (document.querySelector("h1")?.textContent || document.title).trim();
-  const context = () => (document.getElementById("sentence")?.innerText || "").replace(/\s+/g, " ").trim();
+  const page = (document.querySelector("h1")?.textContent || document.title).replace(/\u00AD/g, "").trim();
+  const context = () => (document.getElementById("sentence")?.innerText || "").replace(/\u00AD/g, "").replace(/\s+/g, " ").trim();
 
   function close() { document.querySelector(".dr-back")?.remove(); }
   function modal(html) {
@@ -96,6 +96,6 @@
     if (clear) clear.onclick = () => { if (confirm("Ištrinti visus pranešimus?")) { save([]); label(); list(); } };
   }
 
-  btn.addEventListener("click", () => { if (!viaMouse) picked = String(getSelection()).trim(); viaMouse = false; form(); });
+  btn.addEventListener("click", () => { if (!viaMouse) picked = String(getSelection()).replace(/\u00AD/g, "").trim(); viaMouse = false; form(); });
   document.addEventListener("keydown", ev => { if (ev.key === "Escape") close(); });
 })();

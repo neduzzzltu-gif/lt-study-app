@@ -248,6 +248,47 @@ function wordAround(parts, k, fill) {
   return left + fill + right;
 }
 
+// Correction line "yours → right" with only the differing letters/marks underlined.
+// right may hold several answers joined with "  arba  ".
+function fixLine(yours, right) {
+  const same = (x, y) => x.toLowerCase() === y.toLowerCase(); // checking ignores case too
+  const span = (a, b) => {
+    let p = 0; while (p < a.length && p < b.length && same(a[p], b[p])) p++;
+    let q = 0; while (q < a.length - p && q < b.length - p && same(a[a.length - 1 - q], b[b.length - 1 - q])) q++;
+    return [p, a.length - q];
+  };
+  const mark = (a, b) => {
+    if (same(a, b)) return esc(a);
+    let [s, e] = span(a, b);
+    while (s < e && a[s] === " ") s++;
+    while (e > s && a[e - 1] === " ") e--;
+    if (s === e) { // nothing typed here (e.g. a missing comma) → underline the nearest letter, left first
+      let i = s - 1; while (i >= 0 && a[i] === " ") i--;
+      if (i < 0) { i = s; while (i < a.length && a[i] === " ") i++; }
+      if (i >= 0 && i < a.length) { s = i; e = i + 1; }
+    }
+    // nothing written ("_" or "—") is already a line – don't underline it again
+    const mid = a.slice(s, e), blank = /^[_—]+$/.test(mid);
+    return esc(a.slice(0, s)) + (s < e ? (blank ? esc(mid) : `<u>${esc(mid)}</u>`) : "") + esc(a.slice(e));
+  };
+  // Compare your answer with the closest of the right answers
+  const alts = right.split("  arba  ");
+  const cost = r => { const [s, e] = span(yours, r), [s2, e2] = span(r, yours); return e - s + e2 - s2; };
+  const best = alts.reduce((x, y) => cost(y) < cost(x) ? y : x);
+  return `<s>${mark(yours, best)}</s> → <b>${alts.map(r => mark(r, yours)).join("  arba  ")}</b>`;
+}
+
+// One mistake in the results: only the word shows; the arrow at the bottom opens the rule
+const mistakeRow = (line, rule, full) => `<div class="mistake"><div class="w">${line}</div>` +
+  `<div class="more"><div><div class="r">${esc(rule)}</div>${full}</div></div>` +
+  `<button class="exp" type="button" aria-expanded="false" aria-label="Rodyti taisyklę"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5.5 7 9.5 11 5.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>`;
+document.addEventListener("click", e => {
+  const b = e.target.closest(".mistake .exp"); if (!b) return;
+  const open = b.parentElement.classList.toggle("open");
+  b.setAttribute("aria-expanded", open);
+  b.setAttribute("aria-label", open ? "Slėpti taisyklę" : "Rodyti taisyklę");
+});
+
 // Arrow keys inside a sentence:
 //   blanks (inputs): ← → jump to the prev/next blank at the word's edge, ↑ ↓ always jump
 //   gaps (skyryba):  ← → move between gaps, ↑ ↓ change the mark via cycle(button, ±1)

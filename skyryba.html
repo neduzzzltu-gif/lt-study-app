@@ -33,7 +33,7 @@
   .score { font-weight:600; margin-bottom:12px; }
   .mistake { border-left:4px solid var(--bad); background:#fff7f7; padding:10px 14px; border-radius:0 10px 10px 0; margin-bottom:10px; }
   .mistake .w, .good .w { font-size:17px; }
-  .mistake .w s { color:var(--bad); }
+  .mistake .w s { color:var(--bad); } .w s { text-decoration:none; } .w u { text-decoration-thickness:2px; text-underline-offset:3px; }
   .mistake .w b, .good .w b { color:var(--ok); }
   .mistake .r, .good .r { color:#444; font-size:14px; margin-top:4px; }
   .allok { color:var(--ok); font-weight:600; }
@@ -41,6 +41,7 @@
   .progress span { position:relative; z-index:1; }
   .progress i { position:absolute; left:0; bottom:0; height:4px; background:var(--accent); border-radius:999px; transition:width .3s ease; z-index:1; }
   .progress::after { content:""; position:absolute; left:0; right:0; bottom:0; height:4px; background:var(--line); border-radius:999px; }
+  .kept { color:var(--ok); font-weight:700; }
   .rsum { text-align:center; padding:10px 0 6px; }
   .rsum .big { font-size:48px; font-weight:800; line-height:1; }
   .rsum .pct { font-size:18px; color:var(--muted); margin-top:6px; }
@@ -72,6 +73,10 @@
   .full .body .src { font-size:12px; color:var(--muted); margin-bottom:8px; }
   @keyframes slide { from { opacity:0; transform:translateY(-8px); } }
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%233a3399%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial%27 font-weight=%27bold%27 font-size=%2738%27 fill=%27%23fffdf9%27 text-anchor=%27middle%27%3E%C4%84%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="theme.css">
 </head>
 <body>
 <main>
@@ -104,13 +109,15 @@ if (MISTAKE_MODE) {
 }
 
 const MARKS = ["", ",", "–", ":"];
-let current = -1, sent = null, checked = false;
+// fixing = { i, keys, given } while redoing a round's mistakes (see round.js): only keys are gaps
+let current = -1, sent = null, checked = false, fixing = null;
 
-function load(i) {
-  current = i; checked = false;
+function load(i, fix = null) {
+  current = i; checked = false; fixing = fix;
   sent = skParse(SK_SENTENCES[i]);
   document.getElementById("sentence").innerHTML = sent.words.map((w, g) => {
     if (g >= sent.gaps.length) return esc(w);
+    if (fix && !fix.keys.includes(g)) { const m = fix.given[g] ?? ""; return esc(w) + (m === "–" ? ` <span class="kept">–</span> ` : m ? `<span class="kept">${esc(m)}</span> ` : " "); }
     return `${esc(w)}<button class="gap" data-g="${g}" data-m=""></button>`;
   }).join("");
   document.getElementById("result").innerHTML = "";
@@ -170,17 +177,17 @@ function check() {
   const first = !checked; checked = true;
   const wrong = [], correct = [];
   // Paired gaps (e.g. both sides of a priedėlis) must use the same mark
-  const pairVals = {};
-  document.querySelectorAll(".sentence .gap").forEach(b => {
-    const p = sent.gaps[+b.dataset.g].pair;
-    if (p) (pairVals[p] = pairVals[p] || new Set()).add(b.dataset.m);
-  });
+  const pairVals = {}, given = { ...fixing?.given };
+  const addPair = (g, m) => { const p = sent.gaps[g].pair; if (p) (pairVals[p] = pairVals[p] || new Set()).add(m); };
+  document.querySelectorAll(".sentence .gap").forEach(b => addPair(+b.dataset.g, b.dataset.m));
+  if (fixing) sent.gaps.forEach((_, g) => { if (!fixing.keys.includes(g)) addPair(g, fixing.given[g] ?? ""); });
   document.querySelectorAll(".sentence .gap").forEach(b => {
     const g = +b.dataset.g, gap = sent.gaps[g], val = b.dataset.m;
     const ok = gap.ans.includes(val) && !(gap.pair && pairVals[gap.pair].size > 1);
     b.className = "gap " + (ok ? (val ? "ok" : "") : (val ? "bad" : "miss"));
     // Only remember gaps that matter: a mark was expected, or a wrong mark was added
     if (first && (!gap.def || !ok || (current + ":" + g) in skLoadMistakes())) skRecord(current, g, ok, val);
+    if (ok) given[g] = val;
     if (!ok) wrong.push({ g, gap, val });
     else if (!gap.def) correct.push({ g, gap, val });
   });
@@ -188,12 +195,13 @@ function check() {
   let html = `<div class="score">${wrong.length ? `${wrong.length} ${wrong.length === 1 ? "klaida" : "klaidos"}` : "Viskas teisingai! 🎉"}</div>`, mHtml = "";
   wrong.forEach(({ g, gap, val }) => {
     const right = gap.ans.map(x => skJoin(a[g], x, a[g + 1])).join("  arba  ");
-    mHtml += `<div class="mistake"><div class="w"><s>${esc(skJoin(a[g], val, a[g + 1]))}</s> → <b>${esc(right)}</b></div><div class="r">${esc(gap.rule)}</div>${skFullRule(gap.cat)}</div>`;
+    mHtml += mistakeRow(fixLine(skJoin(a[g], val, a[g + 1]), right), gap.rule, skFullRule(gap.cat));
   });
   html += mHtml;
   // Points: marked places right + extra marks count as lost
-  const pts = sent.gaps.filter(x => !x.def).length, extra = wrong.filter(w => w.gap.def).length;
-  if (first) roundAdd(Math.max(0, correct.length - extra), pts, mHtml);
+  // In fix mode every redone gap is one point (also removing an extra mark)
+  const pts = fixing ? fixing.keys.length : sent.gaps.filter(x => !x.def).length, extra = wrong.filter(w => w.gap.def).length;
+  if (first) roundAdd(fixing ? pts - wrong.length : Math.max(0, correct.length - extra), pts, mHtml, wrong.length ? { i: current, keys: wrong.map(w => w.g), given } : null);
   if (correct.length) html += `<details class="rightlist"><summary>Teisingos vietos (${correct.length})</summary>${correct.map(({ g, gap, val }) =>
     `<div class="good"><div class="w"><b>${esc(skJoin(a[g], val, a[g + 1]))}</b></div><div class="r">${esc(gap.rule)}</div>${skFullRule(gap.cat)}</div>`).join("")}</details>`;
   const n = Object.keys(skLoadMistakes()).length;
@@ -236,12 +244,13 @@ document.getElementById("check").onclick = check;
 document.getElementById("next").onclick = roundNext;
 document.addEventListener("keydown", e => {
   if (e.key !== "Enter") return;
-  if (e.target.closest(".gap") || !e.target.closest("button")) { e.preventDefault(); check(); }
+  if (e.target.closest(".gap") || !e.target.closest("button, a, summary")) { e.preventDefault(); check(); }
 });
 updateModeLink();
-roundStart(() => Math.min(ROUND_SIZE, pool().length), "skyryba.html?klaidos", nextRandom);
+roundStart(() => Math.min(ROUND_SIZE, pool().length), "skyryba.html?klaidos", nextRandom, fix => load(fix.i, fix));
 nextRandom();
 </script>
 <script src="demo-report.js"></script><!-- DEMO: remove later -->
+<script src="hyphen.js"></script>
 </body>
 </html>

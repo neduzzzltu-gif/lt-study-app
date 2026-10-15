@@ -26,7 +26,7 @@
   .cat p { margin:6px 0 0; font-size:13px; color:var(--muted); line-height:1.4; }
   .word { border-left:4px solid var(--bad); background:var(--card); padding:10px 14px; border-radius:0 10px 10px 0; margin-bottom:10px; }
   .word .w { font-size:17px; }
-  .word .w s { color:var(--bad); }
+  .word .w s { color:var(--bad); } .w s { text-decoration:none; } .w u { text-decoration-thickness:2px; text-underline-offset:3px; }
   .word .w b { color:var(--ok); }
   .word .w small { color:var(--muted); font-size:13px; margin-left:6px; }
   .word .r { color:#444; font-size:14px; margin-top:4px; }
@@ -46,6 +46,10 @@
   .full .body .src { font-size:12px; color:var(--muted); margin-bottom:8px; }
   @keyframes slide { from { opacity:0; transform:translateY(-8px); } }
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%233a3399%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial%27 font-weight=%27bold%27 font-size=%2738%27 fill=%27%23fffdf9%27 text-anchor=%27middle%27%3E%C4%84%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="theme.css">
 </head>
 <body>
 <main>
@@ -71,7 +75,7 @@ const SECTIONS = {
         out.push({
           wrong: m[id].wrong, fixed: m[id].fixed, cat: p.cat, catName: CATS[p.cat]?.name, catHint: CATS[p.cat]?.hint, rule: p.rule, full: fullRule(p.cat),
           right: p.word ? p.ans : wordAround(parts, k, p.ans.split("/")[0]),
-          yours: p.word ? (m[id].last || "—") : wordAround(parts, k, m[id].last || "_")
+          yours: p.word ? (m[id].last || "—") : wordAround(parts, k, m[id].last && m[id].last !== "—" ? m[id].last : "_")
         });
       }
       return out;
@@ -104,7 +108,7 @@ function render() {
   const sec = SECTIONS[tab], items = sec.items(), fixed = sec.items(true).sort((a, b) => b.fixed - a.fixed);
   const fixedHtml = !fixed.length ? "" : `
     <h2>Pataisytos klaidos (${fixed.length})</h2>
-    ${fixed.map(it => `<div class="word fixed"><div class="w"><s>${esc(it.yours)}</s> → <b>${esc(it.right)}</b><small>✓ buvo ×${it.wrong}</small></div><div class="r">${esc(it.rule)}</div>${it.full}</div>`).join("")}
+    ${fixed.map(it => `<div class="word fixed"><div class="w">${fixLine(it.yours, it.right)}<small>✓ buvo ×${it.wrong}</small></div><div class="r">${esc(it.rule)}</div>${it.full}</div>`).join("")}
     <button class="btn ghost" id="clearFixed">Išvalyti pataisytų klaidų sąrašą</button>`;
   const counts = Object.fromEntries(Object.entries(SECTIONS).map(([k, s]) => [k, s.items().length]));
   const tabs = `<div class="tabs">${Object.entries(SECTIONS).map(([k, s]) =>
@@ -133,7 +137,7 @@ function render() {
       </div>`).join("")}
     </div>
     <h2>Vietos, kuriose klydai</h2>
-    ${items.map(it => `<div class="word"><div class="w"><s>${esc(it.yours)}</s> → <b>${esc(it.right)}</b><small>×${it.wrong}</small></div><div class="r">${esc(it.rule)}</div>${it.full}</div>`).join("")}
+    ${items.map(it => `<div class="word"><div class="w">${fixLine(it.yours, it.right)}<small>×${it.wrong}</small></div><div class="r">${esc(it.rule)}</div>${it.full}</div>`).join("")}
     <button class="btn ghost" id="clear">Išvalyti visas ${sec.gen} klaidas</button>` + fixedHtml;
   bindClearFixed(sec);
 
@@ -151,5 +155,6 @@ document.getElementById("content").addEventListener("click", e => {
 });
 render();
 </script>
+<script src="hyphen.js"></script>
 </body>
 </html>
