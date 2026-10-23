@@ -45,19 +45,61 @@
   .full .body p { margin:0 0 8px; } .full .body p:last-child { margin:0; }
   .full .body .src { font-size:12px; color:var(--muted); margin-bottom:8px; }
   @keyframes slide { from { opacity:0; transform:translateY(-8px); } }
+  /* two lists side by side: weak spots | most repeated mistakes */
+  main { max-width:1160px; }
+  /* both columns as tall as the taller one; arrows sit at the bottom of the mistakes list */
+  .cols { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:28px; align-items:stretch; }
+  .cols > div { display:flex; flex-direction:column; min-width:0; }
+  .cols h2 { margin-top:28px; }
+  .cols .card, .cols .list { flex:1; }
+  /* all pages sit in the same spot, so the box is as tall as the tallest page and the arrows never jump */
+  .pages { display:grid; grid-template-columns:minmax(0,1fr); }
+  .pages > .pg { grid-area:1 / 1; }
+  .pages > .pg:not(.on) { visibility:hidden; }
+  /* weak spot = one line: name | bar | count */
+  .cat-line { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) 88px; align-items:center; gap:14px; padding:9px 0; font-size:15px; overflow-wrap:break-word; }
+  .cat-line + .cat-line { border-top:1px solid var(--line); }
+  /* weak spots: all in one list, rows spread evenly to fill the card */
+  .cols .card { display:grid; grid-auto-rows:1fr; }
+  .cols .card .bar { height:10px; }
+  .cat-line .bar { margin:0; background:var(--accent-soft); }
+  .cat-line .bar i { background:linear-gradient(90deg, #e58a92, var(--bad)); }
+  .cat-line span { text-align:right; color:var(--muted); white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .pager { display:flex; align-items:center; justify-content:center; gap:14px; margin-top:12px; }
+  .pager span { min-width:52px; text-align:center; font-size:14px; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .pager button { width:40px; height:40px; display:grid; place-items:center; padding:0; border:none; border-radius:50%; background:var(--accent-soft); color:var(--indigo); font:inherit; font-size:20px; line-height:1; cursor:pointer; transition:background .15s, transform .1s; }
+  .pager button:hover:not(:disabled) { background:#d4ebf5; }
+  .pager button:active:not(:disabled) { transform:scale(.92); }
+  .pager button:disabled { opacity:.35; cursor:default; }
+  /* compact so the whole mistakes area fits on one screen */
+  #content > .tabs { display:inline-flex; vertical-align:middle; margin:0 12px 0 0; }
+  #content > .btn.primary { vertical-align:middle; padding:10px 20px; font-size:15px; }
+  .cols h2 { margin:22px 0 10px; }
+  #content > .tabs + .card { margin-top:18px; }
+  .cols .word { position:relative; padding:13px 18px; margin-bottom:8px; border-radius:16px; }
+  .cols .word .w { font-size:15.5px; padding-right:150px; }
+  .cols .word .r { font-size:13px; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .cols .word .full { margin-top:0; }
+  .cols .word .full summary { position:absolute; top:14px; right:18px; font-size:12.5px; }
+  .cols .word .full[open] .body { margin-top:8px; }
+  .cols .cat-line { padding:6px 0; }
+  .cols .card { padding:16px 24px; }
+  @media (max-width:1110px) { .cols { grid-template-columns:1fr; gap:0; } .cat-line { grid-template-columns:minmax(0,1fr) 56px 80px; gap:10px; font-size:14px; } .cols .card { grid-auto-rows:auto; } .cols .word .w { padding-right:0; } .cols .word .full summary { position:static; margin-top:4px; } }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%233a3399%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial%27 font-weight=%27bold%27 font-size=%2738%27 fill=%27%23fffdf9%27 text-anchor=%27middle%27%3E%C4%84%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="theme.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%23147fae%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial%27 font-weight=%27bold%27 font-size=%2738%27 fill=%27%23fffdf9%27 text-anchor=%27middle%27%3E%C4%84%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="theme.css?v=8">
 </head>
 <body>
 <main>
   <a class="back" href="index.html">← Visos temos</a>
+  <span class="badge">Pažanga</span>
   <h1>Mano klaidos</h1>
   <p class="sub">Čia kaupiasi vietos, kuriose suklydai. Atsakyk teisingai 2 kartus iš eilės – klaida keliauja į pataisytas.</p>
   <div id="content"></div>
 </main>
+<script src="shell.js?v=8"></script>
 
 <script src="data.js"></script>
 <script src="skyryba-data.js"></script>
@@ -103,6 +145,33 @@ const SECTIONS = {
 };
 
 let tab = location.hash === "#skyryba" ? "skyryba" : "rasyba";
+// Mistakes list shows 8 per page, arrows move between pages
+const STEP = 8;
+let page = { items: 0 };
+// Every page is rendered, only the current one is visible
+function pages(list, arr, one) {
+  const n = Math.max(Math.ceil(arr.length / STEP), 1);
+  page[list] = Math.min(page[list], n - 1);
+  return `<div class="pages" data-list="${list}">` + Array.from({ length: n }, (_, i) =>
+    `<div class="pg${i === page[list] ? " on" : ""}">${arr.slice(i * STEP, (i + 1) * STEP).map(one).join("")}</div>`).join("") + `</div>`;
+}
+function pager(list, total) {
+  const n = Math.ceil(total / STEP);
+  if (n < 2) return "";
+  return `<div class="pager" data-list="${list}"><button data-pg="${list}" data-d="-1" aria-label="Ankstesnis puslapis">‹</button>` +
+    `<span></span><button data-pg="${list}" data-d="1" aria-label="Kitas puslapis">›</button></div>`;
+}
+// Show the current page and update "1 / 3" and the arrows, without re-rendering
+function showPage(list) {
+  const box = document.querySelector(`.pages[data-list="${list}"]`), pg = document.querySelector(`.pager[data-list="${list}"]`);
+  if (!box) return;
+  const all = box.children, p = page[list];
+  [...all].forEach((d, i) => d.classList.toggle("on", i === p));
+  if (!pg) return;
+  pg.querySelector("span").textContent = `${p + 1} / ${all.length}`;
+  pg.querySelector('[data-d="-1"]').disabled = p === 0;
+  pg.querySelector('[data-d="1"]').disabled = p === all.length - 1;
+}
 
 function render() {
   const sec = SECTIONS[tab], items = sec.items(), fixed = sec.items(true).sort((a, b) => b.fixed - a.fixed);
@@ -122,27 +191,28 @@ function render() {
 
   // Weak spots: total wrong answers per rule type
   const byCat = {};
-  items.forEach(it => { byCat[it.cat] = byCat[it.cat] || { n: 0, name: it.catName, hint: it.catHint }; byCat[it.cat].n += it.wrong; });
+  items.forEach(it => { byCat[it.cat] = byCat[it.cat] || { n: 0, name: it.catName }; byCat[it.cat].n += it.wrong; });
   const cats = Object.values(byCat).sort((a, b) => b.n - a.n), max = cats[0].n;
   items.sort((a, b) => b.wrong - a.wrong);
 
   el.innerHTML = tabs + `
     <a class="btn primary" href="${sec.page}?klaidos">Treniruoti klaidas (${items.length}) →</a>
+    <div class="cols"><div>
     <h2>Silpniausios vietos</h2>
     <div class="card">${cats.map(c => `
-      <div class="cat">
-        <div class="row">${esc(c.name || "Kita")} <span>${c.n} ${plural(c.n)}</span></div>
-        <div class="bar"><i style="width:${Math.round(c.n / max * 100)}%"></i></div>
-        ${c.hint ? `<p>${esc(c.hint)}</p>` : ""}
-      </div>`).join("")}
+      <div class="cat-line">${esc(c.name || "Kita")}<div class="bar"><i style="width:${Math.round(c.n / max * 100)}%"></i></div><span>${c.n} ${plural(c.n)}</span></div>`).join("")}
     </div>
-    <h2>Vietos, kuriose klydai</h2>
-    ${items.map(it => `<div class="word"><div class="w">${fixLine(it.yours, it.right)}<small>×${it.wrong}</small></div><div class="r">${esc(it.rule)}</div>${it.full}</div>`).join("")}
+    </div><div>
+    <h2>Dažniausiai pasikartojančios klaidos</h2>
+    <div class="list">${pages("items", items, it => `<div class="word"><div class="w">${fixLine(it.yours, it.right)}<small>×${it.wrong}</small></div><div class="r" title="${esc(it.rule)}">${esc(it.rule)}</div>${it.full}</div>`)}</div>
+    ${pager("items", items.length)}
+    </div></div>
     <button class="btn ghost" id="clear">Išvalyti visas ${sec.gen} klaidas</button>` + fixedHtml;
   bindClearFixed(sec);
+  showPage("items");
 
   document.getElementById("clear").onclick = () => {
-    if (confirm("Tikrai išvalyti visas klaidas?")) { sec.clear(); render(); }
+    if (confirm("Tikrai išvalyti visas klaidas?")) { sec.clear(); page = { items: 0 }; render(); }
   };
 }
 function bindClearFixed(sec) {
@@ -150,11 +220,22 @@ function bindClearFixed(sec) {
   if (b) b.onclick = () => { if (confirm("Išvalyti pataisytų klaidų sąrašą?")) { sec.clearFixed(); render(); } };
 }
 document.getElementById("content").addEventListener("click", e => {
+  const pg = e.target.closest("[data-pg]");
+  if (pg) {
+    const list = pg.dataset.pg, d = pg.dataset.d;
+    page[list] += +d; showPage(list);
+    // keep focus on the same arrow (or the other one if this end is reached)
+    const again = document.querySelector(`[data-pg="${list}"][data-d="${d}"]`);
+    (again?.disabled ? document.querySelector(`[data-pg="${list}"][data-d="${-d}"]`) : again)?.focus();
+    return;
+  }
   const b = e.target.closest(".tab"); if (!b) return;
-  tab = b.dataset.t; history.replaceState(null, "", "#" + tab); render();
+  tab = b.dataset.t; page = { items: 0 }; history.replaceState(null, "", "#" + tab); render();
 });
 render();
 </script>
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script defer src="auth-config.js"></script><script defer src="auth.js"></script>
 <script src="hyphen.js"></script>
+<script src="motion.js?v=8"></script>
 </body>
 </html>

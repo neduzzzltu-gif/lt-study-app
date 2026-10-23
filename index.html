@@ -5,234 +5,319 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lietuvių kalbos treniruoklis</title>
 <meta name="description" content="Rašybos ir skyrybos treniruoklis brandos egzaminui – sakiniai, VLKK taisyklės ir klaidų kartojimas.">
+<script>document.documentElement.classList.add("js"); setTimeout(() => { if (!window.__motion) document.documentElement.classList.remove("js"); }, 2500);</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%233a3399%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial%27 font-weight=%27bold%27 font-size=%2738%27 fill=%27%23fffdf9%27 text-anchor=%27middle%27%3E%C4%84%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="theme.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%23147fae%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial%27 font-weight=%27bold%27 font-size=%2738%27 fill=%27%23fffdf9%27 text-anchor=%27middle%27%3E%C4%84%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="theme.css?v=8">
 <style>
-  body { margin:0; background:#f6f7fa; }
+  body { margin:0; background:#f2f4f8; }
   body::before { display:none; }
   * { box-sizing:border-box; }
-  .wrap { max-width:1160px; margin:0 auto; padding:0 20px; }
+  .wrap { max-width:1440px; margin:0 auto; padding:16px 28px 0; hyphens:manual; }
   h1, h2, h3 { font-family:var(--sans); font-weight:400; letter-spacing:-.035em; margin:0; }
   .muted { color:var(--muted); }
-  .pill { display:inline-flex; align-items:center; gap:8px; padding:13px 24px; border-radius:999px; font-weight:500; font-size:15px; text-decoration:none; transition:background .18s, transform .12s, box-shadow .18s; }
-  .pill.dark { background:var(--ink); color:#fff; box-shadow:0 10px 24px -12px rgba(30,29,69,.8); }
-  .pill.dark:hover { background:var(--indigo); }
+  .pill { display:inline-flex; align-items:center; gap:8px; padding:13px 24px; border-radius:999px; font-weight:500; font-size:15px; text-decoration:none; transition:background .18s, transform .12s var(--ease-out), box-shadow .18s; }
+  .pill.dark { background:var(--ink); color:#fff; box-shadow:0 10px 24px -12px rgba(17,24,39,.8); }
   .pill.light { color:var(--ink); }
-  .pill.light:hover { background:rgba(30,29,69,.06); }
+  .pill.teal { background:linear-gradient(135deg, var(--teal-ink), var(--blue)); color:#fff; box-shadow:0 12px 26px -12px rgba(42,135,168,.9); }
+  .pill .arr { transition:transform 160ms ease; }
+  @media (hover:hover) and (pointer:fine) {
+    .pill.dark:hover { background:var(--indigo); }
+    .pill.light:hover { background:rgba(17,24,39,.06); }
+    .pill.teal:hover { box-shadow:0 16px 30px -12px rgba(42,135,168,1); }
+    .pill:hover .arr { transform:translateX(3px); }
+  }
   .pill:active { transform:scale(.97); }
 
-  /* nav */
-  .nav { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:22px 0; }
-  .logo { display:flex; align-items:center; gap:10px; font-weight:600; font-size:18px; color:var(--ink); text-decoration:none; letter-spacing:-.02em; }
-  .logo span { width:34px; height:34px; display:grid; place-items:center; border-radius:11px; color:#fff; background:linear-gradient(135deg, var(--blue), var(--indigo)); font-weight:700; }
-  .links { display:flex; gap:28px; }
-  .links a { color:var(--muted); text-decoration:none; font-size:15px; transition:color .15s; }
-  .links a:hover { color:var(--ink); }
+  /* ---------- hero panel (nav + title + dashboard) ---------- */
+  .hero { position:relative; border-radius:36px; padding:0 56px; overflow:clip;
+    background:radial-gradient(900px 480px at 50% -8%, #d9eef6, transparent 70%), radial-gradient(600px 400px at 100% 40%, rgba(46,155,201,.12), transparent 70%), linear-gradient(180deg, #f8fafd, #eef3f9);
+    box-shadow:0 1px 2px rgba(17,24,39,.04), 0 30px 60px -40px rgba(20,110,150,.35); }
 
-  /* hero */
-  .hero { position:relative; overflow:hidden; display:grid; grid-template-columns:1.05fr .95fr; align-items:center; gap:24px; min-height:580px; padding:56px 64px 0; border-radius:40px; background:#fff; box-shadow:0 1px 2px rgba(30,29,69,.04), 0 30px 60px -40px rgba(58,51,153,.35); }
-  .hero::before { content:""; position:absolute; width:620px; height:620px; right:-120px; top:-120px; border-radius:50%; background:radial-gradient(circle, rgba(173,225,236,.9), rgba(90,122,198,.25) 45%, transparent 70%); filter:blur(10px); }
-  .hero::after { content:""; position:absolute; width:380px; height:380px; right:220px; bottom:-200px; border-radius:50%; background:radial-gradient(circle, rgba(58,51,153,.18), transparent 70%); }
-  .hero > * { position:relative; z-index:1; }
-  .hero-text { padding-bottom:56px; }
-  .hero h1 { font-size:clamp(40px, 5.4vw, 66px); line-height:1.04; margin-bottom:22px; }
-  .hero h1 b { font-weight:500; color:var(--indigo); }
-  .hero p { font-size:17px; line-height:1.6; max-width:42ch; margin:0 0 30px; }
-  .cta { display:flex; gap:8px; flex-wrap:wrap; }
-  .proof { display:flex; align-items:center; gap:14px; margin-top:44px; }
+  /* nav */
+  .nav { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:20px; padding:22px 0; }
+  .logo { display:flex; align-items:center; gap:10px; font-weight:600; font-size:18px; color:var(--ink); text-decoration:none; letter-spacing:-.02em; }
+  .logo span { width:32px; height:32px; display:grid; place-items:center; border-radius:10px; color:#fff; background:linear-gradient(135deg, var(--teal), var(--indigo)); font-weight:700; }
+  .links { position:relative; display:flex; gap:2px; padding:5px; border-radius:999px; background:rgba(255,255,255,.55); box-shadow:inset 0 0 0 1px var(--line); backdrop-filter:blur(8px); }
+  .links a { position:relative; z-index:1; padding:8px 16px; border-radius:999px; color:var(--muted); text-decoration:none; font-size:14px; transition:color .15s ease; }
+  .links a.on { color:var(--ink); font-weight:500; }
+  @media (hover:hover) and (pointer:fine) { .links a:hover { color:var(--ink); } }
+  /* the white bubble behind the current link (motion.js moves it) */
+  .links .ind { position:absolute; left:0; top:5px; bottom:5px; width:0; border-radius:999px; background:#fff; box-shadow:0 1px 2px rgba(17,24,39,.08), 0 0 0 1px var(--line); }
+  .links .ind.ready { transition:transform 220ms var(--ease-out), width 220ms var(--ease-out); }
+  .nav-l { display:flex; align-items:center; gap:12px; }
+  .shell .menu { display:none !important; }
+  .nav-r { display:flex; align-items:center; justify-content:flex-end; gap:6px; }
+  .nav-r .pill { padding:11px 20px; font-size:14px; }
+  .menu { display:none; position:relative; }
+  .menu summary { list-style:none; width:42px; height:42px; display:grid; place-items:center; border-radius:999px; cursor:pointer; box-shadow:inset 0 0 0 1px var(--line); background:#fff; }
+  .menu summary::-webkit-details-marker { display:none; }
+  .menu > div { position:absolute; right:0; top:calc(100% + 8px); z-index:20; display:flex; flex-direction:column; min-width:190px; padding:8px; border-radius:18px; background:#fff; box-shadow:0 20px 40px -16px rgba(17,24,39,.35), inset 0 0 0 1px var(--line); transform-origin:top right; }
+  .menu[open] > div { animation:menuIn 180ms var(--ease-out); }
+  @keyframes menuIn { from { opacity:0; transform:scale(.96) translateY(-4px); } }
+  .menu a { padding:10px 14px; border-radius:12px; color:var(--ink); text-decoration:none; font-size:15px; }
+  .menu a:hover { background:var(--accent-softer); }
+
+  /* title */
+  .hero-c { position:relative; max-width:860px; margin:0 auto; padding:44px 0 96px; text-align:center; }
+  .hero h1 { font-size:clamp(40px, 6.6vw, 76px); line-height:1.04; letter-spacing:-.045em; margin:22px 0 22px; }
+  .hero h1 .w { display:inline-block; animation:wordIn 700ms var(--ease-out) both; animation-delay:calc(120ms + var(--i) * 60ms); }
+  @keyframes wordIn { from { opacity:0; transform:translateY(14px); filter:blur(6px); } }
+  /* the boxed word, like Taskora's "Faster": the box draws itself, then the word lands */
+  .hl { position:relative; isolation:isolate; display:inline-block; padding:0 .14em; color:var(--teal-ink); }
+  .hl::before { content:""; position:absolute; inset:.06em -.02em -.02em; z-index:-1; border-radius:.2em; background:var(--sky-soft); box-shadow:inset 0 0 0 2px var(--teal), 0 8px 24px -12px rgba(42,135,168,.6);
+    animation:boxIn 600ms var(--ease-out) 380ms both; }
+  @keyframes boxIn { from { clip-path:inset(0 100% 0 0 round .2em); } to { clip-path:inset(0 0 0 0 round .2em); } }
+  .hb { animation:fadeUp 500ms var(--ease-out) 60ms both; }
+  .hero p.lead { font-size:17px; line-height:1.6; max-width:52ch; margin:0 auto 30px; animation:fadeUp 600ms var(--ease-out) 560ms both; }
+  .cta { display:flex; justify-content:center; align-items:center; gap:22px; flex-wrap:wrap; animation:fadeUp 600ms var(--ease-out) 660ms both; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } }
+  .proof { display:flex; align-items:center; gap:12px; text-align:left; }
   .letters { display:flex; }
-  .letters i { width:36px; height:36px; display:grid; place-items:center; margin-left:-8px; border-radius:50%; border:3px solid #fff; font-style:normal; font-weight:600; font-size:15px; color:#fff; }
-  .letters i:first-child { margin-left:0; background:var(--teal); } .letters i:nth-child(2) { background:var(--blue); } .letters i:nth-child(3) { background:var(--indigo); }
-  .proof b { display:block; font-size:24px; font-weight:400; letter-spacing:-.03em; }
+  .letters i { width:34px; height:34px; display:grid; place-items:center; margin-left:-8px; border-radius:50%; border:3px solid #fff; font-style:normal; font-weight:600; font-size:14px; color:#fff; }
+  .letters i:first-child { margin-left:0; background:var(--teal); } .letters i:nth-child(2) { background:var(--blue); } .letters i:nth-child(3) { background:var(--indigo); } .letters i:nth-child(4) { background:var(--ink); }
+  .proof b { display:block; font-size:15px; font-weight:500; }
   .proof small { color:var(--muted); font-size:13px; }
 
-  /* phone */
-  .phone-area { align-self:end; display:flex; justify-content:center; }
-  .phone { width:290px; height:560px; padding:11px; margin-bottom:-90px; border-radius:48px; background:#16152f; box-shadow:0 40px 80px -30px rgba(30,29,69,.6), inset 0 0 0 2px #2c2a55; transform:rotate(-8deg); animation:float 7s ease-in-out infinite; }
-  .screen { position:relative; height:100%; border-radius:38px; background:#f6f7fa; padding:44px 18px 18px; overflow:hidden; }
-  .screen::before { content:""; position:absolute; top:12px; left:50%; width:86px; height:24px; transform:translateX(-50%); border-radius:999px; background:#16152f; }
-  .s-top { display:flex; justify-content:space-between; font-size:12px; color:var(--muted); margin-bottom:8px; }
-  .s-bar { height:6px; border-radius:999px; background:linear-gradient(90deg, var(--teal) 40%, #e3e7f2 40%); margin-bottom:16px; }
-  .s-card { background:#fff; border-radius:22px; padding:16px; font-size:15.5px; line-height:2; box-shadow:0 8px 20px -14px rgba(58,51,153,.4); }
-  .s-card b { font-weight:600; padding:1px 3px; border-radius:7px; }
-  .s-card .ok { background:var(--ok-soft); color:var(--ok); }
-  .s-card .gp { display:inline-block; width:26px; height:22px; vertical-align:middle; border-radius:8px; background:var(--sky-soft); border:2px solid var(--teal); }
-  .s-btns { display:flex; gap:6px; margin-top:14px; }
-  .s-btns span { flex:1; text-align:center; padding:10px 0; border-radius:999px; font-size:13px; font-weight:500; background:#e9ecf8; color:var(--indigo); }
-  .s-btns span:first-child { background:var(--indigo); color:#fff; }
-  .s-rule { margin-top:12px; padding:12px 14px; border-radius:18px; background:#fff; font-size:12px; line-height:1.45; color:var(--muted); }
-  .s-rule strong { display:block; color:var(--indigo); font-weight:600; margin-bottom:2px; }
-  .chip { position:absolute; z-index:2; display:flex; align-items:center; gap:10px; padding:10px 16px 10px 10px; border-radius:18px; background:rgba(255,255,255,.92); backdrop-filter:blur(8px); box-shadow:0 16px 36px -16px rgba(30,29,69,.4); font-size:13px; }
-  .chip i { width:30px; height:30px; display:grid; place-items:center; border-radius:10px; font-style:normal; font-weight:700; }
-  .chip.c1 { right:36px; top:120px; } .chip.c1 i { background:var(--ok-soft); color:var(--ok); }
-  .chip.c2 { left:46%; bottom:70px; } .chip.c2 i { background:var(--sky-soft); color:var(--indigo); }
-  .chip b { display:block; font-weight:600; }
-  @keyframes float { 50% { transform:rotate(-8deg) translateY(-10px); } }
-  @media (prefers-reduced-motion: reduce) { .phone { animation:none; } html { scroll-behavior:auto; } }
+  /* cursor tags: outer = fly in, middle = follows the mouse (motion.js), inner = floats */
+  .ctag { position:absolute; z-index:2; pointer-events:none; animation:tagIn 800ms var(--ease-out) 900ms both; }
+  .ctag.t1 { left:-3%; top:52%; --fx:-36px; }
+  .ctag.t2 { right:-4%; top:66%; --fx:36px; }
+  @keyframes tagIn { from { opacity:0; transform:translateX(var(--fx)) translateY(16px) scale(.92); } }
+  .ctag .fl { display:flex; align-items:flex-start; animation:float 6s ease-in-out infinite alternate; }
+  .ctag.t2 .fl { animation-duration:7s; animation-delay:-2s; }
+  @keyframes float { to { transform:translateY(-8px); } }
+  .ctag span { margin-top:16px; padding:9px 18px; border-radius:999px; color:#fff; font-size:13px; font-weight:500; white-space:nowrap; }
+  .ctag.t1 span { background:var(--orange); box-shadow:0 12px 24px -10px rgba(224,108,18,.7); }
+  .ctag.t2 span { background:var(--purple); box-shadow:0 12px 24px -10px rgba(122,47,224,.7); }
+  .ctag svg { width:22px; height:22px; flex:none; }
+  .ctag.t1 svg { order:2; margin-left:-4px; transform:scaleX(-1); color:var(--orange); }
+  .ctag.t2 svg { margin-right:-4px; color:var(--purple); }
+
+  /* ---------- sections ---------- */
+  .sec { padding:104px 0 0; scroll-margin-top:16px; }
+  .shead { display:flex; justify-content:space-between; align-items:flex-end; gap:40px; margin-bottom:40px; }
+  .shead h2, .sec-title { font-size:clamp(30px, 4vw, 46px); line-height:1.08; max-width:16ch; }
+  .shead p { margin:0; max-width:40ch; line-height:1.6; font-size:15px; }
+  .shead .badge { margin-bottom:16px; }
+
+  /* stats row */
+  .stats { display:grid; grid-template-columns:repeat(3, 1fr); padding:72px 0 8px; text-align:center; }
+  .stat { padding:4px 24px; }
+  .stat + .stat { border-left:1px solid var(--line); }
+  .stat b { display:block; font-weight:300; font-size:clamp(48px, 6.4vw, 72px); letter-spacing:-.05em; line-height:1.05; font-variant-numeric:tabular-nums; }
+  .stat p { margin:10px auto 0; color:var(--muted); font-size:15px; line-height:1.5; max-width:22ch; }
 
   /* topic strip */
-  .strip { margin:28px 0 0; padding:26px 0; text-align:center; }
+  .strip { margin:64px 0 0; text-align:center; }
   .strip p { font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:0 0 16px; }
   .strip ul { list-style:none; display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin:0; padding:0; }
   .strip li { padding:9px 16px; border-radius:999px; background:#fff; color:var(--ink); font-size:14px; box-shadow:inset 0 0 0 1px var(--line); }
 
-  /* section titles */
-  .sec { padding:96px 0 0; scroll-margin-top:16px; }
-  .sec-title { text-align:center; font-size:clamp(30px, 4vw, 46px); line-height:1.1; margin-bottom:12px; }
-  .sec-sub { text-align:center; margin:0 auto 44px; max-width:50ch; line-height:1.6; }
+  /* about */
+  .about { display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center; }
+  .about h2 { font-size:clamp(30px, 4vw, 46px); line-height:1.08; margin:16px 0 34px; }
+  .row-i { display:flex; gap:16px; padding:18px 0; }
+  .row-i + .row-i { border-top:1px solid var(--line); }
+  .row-i .ic { width:42px; height:42px; flex:none; display:grid; place-items:center; border-radius:50%; background:#fff; box-shadow:inset 0 0 0 1px var(--line); color:var(--ink); }
+  .row-i b { display:block; font-weight:500; font-size:17px; letter-spacing:-.02em; margin:2px 0 6px; }
+  .row-i p { margin:0; color:var(--muted); line-height:1.55; font-size:15px; max-width:44ch; }
+  .demo { padding:22px; border-radius:30px; background:#fff; box-shadow:0 1px 2px rgba(17,24,39,.04), 0 30px 60px -36px rgba(20,110,150,.45); }
+  .demo .dtop { display:flex; justify-content:space-between; font-size:13px; color:var(--muted); margin-bottom:12px; }
+  .demo .steps { margin:0 0 16px; }
+  .demo .step { cursor:default; }
+  .demo .s-card { padding:18px; border-radius:20px; background:var(--accent-softer); font-size:17px; line-height:2; }
+  .demo .s-card b { font-weight:600; padding:1px 4px; border-radius:7px; }
+  .demo .ok { background:var(--ok-soft); color:var(--ok); } .demo .no { background:var(--bad-soft); color:var(--bad); text-decoration:line-through; text-decoration-thickness:1.5px; }
+  .demo .s-rule { margin-top:12px; padding:14px 16px; border-radius:18px; box-shadow:inset 0 0 0 1px var(--line); font-size:13px; line-height:1.5; color:var(--muted); }
+  .demo .s-rule strong { display:block; color:var(--indigo); font-weight:600; margin-bottom:2px; }
 
   /* bento = the play area */
   .bento { display:grid; grid-template-columns:1.15fr 1fr 1fr; grid-template-rows:auto auto; gap:18px; }
-  .tile { position:relative; display:flex; flex-direction:column; padding:28px; border-radius:32px; background:#fff; color:var(--ink); text-decoration:none; overflow:hidden; box-shadow:0 1px 2px rgba(30,29,69,.04), 0 20px 40px -32px rgba(58,51,153,.5); transition:transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s; }
-  a.tile:hover { transform:translateY(-4px); box-shadow:0 2px 4px rgba(30,29,69,.05), 0 30px 50px -28px rgba(58,51,153,.55); }
+  .tile { position:relative; display:flex; flex-direction:column; padding:28px; border-radius:30px; background:#fff; color:var(--ink); text-decoration:none; overflow:hidden; box-shadow:0 1px 2px rgba(17,24,39,.04), 0 20px 40px -32px rgba(20,110,150,.5); transition:transform 250ms var(--ease-out), box-shadow 250ms ease; }
+  @media (hover:hover) and (pointer:fine) {
+    a.tile:hover { transform:translateY(-3px); box-shadow:0 2px 4px rgba(17,24,39,.05), 0 30px 50px -28px rgba(20,110,150,.55); }
+    a.tile:hover .go::after { transform:translateX(4px); }
+  }
   a.tile:active { transform:translateY(-1px) scale(.99); }
-  .tile h3 { font-size:28px; margin-bottom:8px; }
+  .tile h3 { font-size:26px; margin-bottom:8px; }
   .tile p { margin:0; color:var(--muted); line-height:1.55; font-size:15px; max-width:34ch; }
-  .tile .go { margin-top:auto; padding-top:22px; display:flex; align-items:center; gap:8px; font-weight:500; font-size:15px; color:var(--indigo); }
-  .tile .go::after { content:"→"; transition:transform .2s; }
-  a.tile:hover .go::after { transform:translateX(4px); }
+  .tile .go { margin-top:auto; padding-top:22px; display:flex; align-items:center; gap:8px; font-weight:500; font-size:15px; color:var(--teal-ink); }
+  .tile .go::after { content:"→"; transition:transform 200ms var(--ease-out); }
   .tile.big { grid-row:span 2; background:linear-gradient(160deg, #fff 40%, var(--sky-soft)); }
-  .tile.wide { grid-column:span 2; flex-direction:row; align-items:center; gap:28px; }
+  .tile.wide { grid-column:span 2; flex-direction:row; align-items:stretch; gap:28px; }
+  .tile.full { grid-column:1 / -1; }
   .tile.wide > div:first-child { flex:1; display:flex; flex-direction:column; align-self:stretch; }
   .tile.alert p { color:var(--bad); font-weight:500; }
   /* mini UIs inside tiles */
   .mini { margin:26px 0 4px; padding:18px; border-radius:22px; background:#fff; box-shadow:inset 0 0 0 1px var(--line); font-size:17px; line-height:2.2; }
   .mini .in { display:inline-block; min-width:44px; height:28px; padding:0 8px; vertical-align:middle; line-height:24px; text-align:center; border-radius:10px; border:2px solid var(--sky); background:var(--sky-soft); color:var(--indigo); font-weight:600; font-size:15px; }
   .mini .in.ok { border-color:#a9d9bf; background:var(--ok-soft); color:var(--ok); }
-  .marks { display:flex; gap:6px; margin-top:22px; }
+  .marks { display:flex; flex-wrap:wrap; gap:6px; margin-top:22px; }
   .marks span { width:44px; height:44px; display:grid; place-items:center; border-radius:14px; background:var(--ink); color:#fff; font-size:20px; font-weight:600; }
-  .marks span:nth-child(2) { background:var(--blue); }
+  .marks span:nth-child(2) { background:var(--teal-ink); }
   .timer-mini { display:inline-flex; margin-top:22px; padding:10px 18px; border-radius:999px; background:var(--accent-soft); color:var(--indigo); font-size:22px; font-variant-numeric:tabular-nums; letter-spacing:-.02em; }
-  .tile.wide { align-items:stretch; }
   .bars { flex:1.2; min-width:220px; display:flex; flex-direction:column; gap:14px; padding:20px 22px; border-radius:24px; background:var(--accent-softer); }
   .bars .lbl { display:flex; justify-content:space-between; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
-  .bars .row { opacity:0; transform:translateY(10px); transition:opacity .5s ease, transform .6s cubic-bezier(.2,.8,.2,1); transition-delay:calc(var(--i) * 110ms); }
+  .js .bars .row { opacity:0; transform:translateY(10px); transition:opacity 500ms ease, transform 600ms var(--ease-out); transition-delay:calc(var(--i) * 110ms); }
   .bars .top { display:flex; justify-content:space-between; gap:12px; font-size:14px; color:var(--ink); }
   .bars .n { font-variant-numeric:tabular-nums; font-weight:600; color:var(--bad); }
   .bars .track { height:10px; margin-top:7px; border-radius:999px; background:#e6e9f4; overflow:hidden; }
-  .bars .track i { display:block; height:100%; width:var(--w); border-radius:999px; background:linear-gradient(90deg, #e58a92, var(--bad)); transform:scaleX(0); transform-origin:left; transition:transform 1.1s cubic-bezier(.2,.8,.2,1); transition-delay:calc(var(--i) * 110ms + 180ms); }
+  .bars .track i { display:block; height:100%; width:var(--w); border-radius:999px; background:linear-gradient(90deg, #e58a92, var(--bad)); transform-origin:left; transition:transform 1.1s var(--ease-out); transition-delay:calc(var(--i) * 110ms + 180ms); }
+  .js .bars .track i { transform:scaleX(0); }
   .bars .lbl + .row .track i { box-shadow:0 0 14px rgba(179,52,63,.45); }
-  .bars.in .row { opacity:1; transform:none; }
-  .bars.in .track i { transform:scaleX(1); }
+  .js .bars.in .row { opacity:1; transform:none; }
+  .js .bars.in .track i { transform:scaleX(1); }
   .bars.empty .track i { background:linear-gradient(90deg, var(--sky), var(--blue)); }
   .bars.empty .n { color:var(--muted); font-weight:400; }
-  @media (prefers-reduced-motion: reduce) { .bars .row, .bars .track i { transition:none; } }
   .bars .note { font-size:13px; color:var(--muted); line-height:1.5; margin:2px 0 0; }
 
-  /* stats */
-  .stats { display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; }
-  .stat { padding:8px 4px; border-top:1px solid var(--line); padding-top:22px; }
-  .stat small { font-size:14px; color:var(--ink); font-weight:500; }
-  .stat b { display:block; font-weight:300; font-size:clamp(48px, 7vw, 76px); letter-spacing:-.05em; line-height:1.1; margin:14px 0 8px; }
-  .stat p { margin:0; color:var(--muted); font-size:14px; line-height:1.5; max-width:30ch; }
-
-  /* VLKK feature */
-  .feature { display:grid; grid-template-columns:1fr 1fr; gap:36px; align-items:center; padding:44px; border-radius:36px; background:linear-gradient(135deg, rgba(173,225,236,.55), rgba(90,122,198,.14)); }
-  .feature .ico { width:44px; height:44px; display:grid; place-items:center; border-radius:14px; background:var(--indigo); color:#fff; font-size:20px; margin-bottom:22px; }
-  .feature h2 { font-size:clamp(28px, 3.4vw, 38px); line-height:1.12; margin-bottom:14px; }
-  .feature p { margin:0; line-height:1.6; max-width:44ch; }
-  .rulecard { padding:22px; border-radius:26px; background:#fff; box-shadow:0 24px 50px -30px rgba(58,51,153,.5); font-size:14px; line-height:1.6; color:var(--muted); }
-  .rulecard .src { display:inline-block; padding:5px 12px; border-radius:999px; background:var(--sky-soft); color:#2f7f99; font-size:12px; font-weight:500; margin-bottom:12px; }
+  /* how it works */
+  .how { display:grid; grid-template-columns:1fr 1fr; gap:36px; align-items:start; }
+  .how h2 { font-size:clamp(30px, 4vw, 46px); line-height:1.08; margin:16px 0 30px; }
+  .hcard { display:flex; gap:16px; padding:22px; border-radius:24px; background:#fff; box-shadow:inset 0 0 0 1px var(--line); }
+  .hcard + .hcard { margin-top:12px; }
+  .hcard .ic { width:42px; height:42px; flex:none; display:grid; place-items:center; border-radius:12px; box-shadow:inset 0 0 0 1px var(--line); font-weight:600; color:var(--teal-ink); font-variant-numeric:tabular-nums; }
+  .hcard b { display:block; font-weight:500; font-size:17px; letter-spacing:-.02em; margin:2px 0 6px; }
+  .hcard p { margin:0; color:var(--muted); line-height:1.55; font-size:14.5px; }
+  .rulecard { padding:26px; border-radius:30px; background:linear-gradient(135deg, rgba(173,225,236,.55), rgba(46,155,201,.14)); }
+  .rulecard .in-card { padding:22px; border-radius:22px; background:#fff; box-shadow:0 24px 50px -30px rgba(20,110,150,.5); font-size:14px; line-height:1.6; color:var(--muted); }
+  .rulecard .in-card + .in-card { margin-top:12px; }
+  .rulecard .src { display:inline-block; padding:5px 12px; border-radius:999px; background:var(--sky-soft); color:var(--teal-ink); font-size:12px; font-weight:500; margin-bottom:12px; }
   .rulecard strong { display:block; color:var(--ink); font-size:16px; font-weight:500; margin-bottom:6px; }
 
   /* FAQ */
   .faq { display:grid; grid-template-columns:.8fr 1.2fr; gap:48px; }
-  .faq h2 { font-size:clamp(30px, 4vw, 44px); line-height:1.1; margin-bottom:16px; }
+  .faq h2 { font-size:clamp(30px, 4vw, 44px); line-height:1.1; margin:16px 0 16px; }
   .faq details { border-bottom:1px solid var(--line); padding:20px 0; }
   .faq summary { display:flex; gap:18px; cursor:pointer; list-style:none; font-weight:500; font-size:16px; }
   .faq summary::-webkit-details-marker { display:none; }
   .faq summary span { color:var(--muted); font-variant-numeric:tabular-nums; font-weight:400; }
-  .faq summary::after { content:"+"; margin-left:auto; color:var(--muted); font-size:20px; line-height:1; transition:transform .2s; }
+  .faq summary::after { content:"+"; margin-left:auto; color:var(--muted); font-size:20px; line-height:1; transition:transform 200ms var(--ease-out); }
   .faq details[open] summary::after { transform:rotate(45deg); }
   .faq details p { margin:10px 0 0 38px; color:var(--muted); line-height:1.6; font-size:15px; }
+  .faq details[open] p { animation:fadeUp 260ms var(--ease-out); }
 
   footer { margin-top:96px; padding:28px 0 40px; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; color:var(--muted); font-size:13px; }
 
+  @media (prefers-reduced-motion: reduce) {
+    .hero h1 .w, .ctag, .hb, .hero p.lead, .cta { animation-name:fadeOnly; }
+    .hl::before, .ctag .fl { animation:none; }
+    .bars .row, .bars .track i, .links .ind.ready { transition:none; }
+    .menu[open] > div, .faq details[open] p { animation-name:fadeOnly; }
+  }
+  @keyframes fadeOnly { from { opacity:0; } }
+
   @media (max-width:960px) {
-    .hero { grid-template-columns:1fr; padding:44px 28px 0; }
-    .hero-text { padding-bottom:0; }
-    .chip { display:none; }
+    .hero { padding:0 24px; }
     .bento { grid-template-columns:1fr 1fr; }
     .tile.big { grid-row:auto; grid-column:span 2; }
-    .feature, .faq { grid-template-columns:1fr; }
+    .about, .how, .faq { grid-template-columns:1fr; }
+    .shead { flex-direction:column; align-items:flex-start; gap:16px; }
+  }
+  @media (max-width:760px) {
+    .nav { grid-template-columns:1fr auto; }
+    .links { display:none; }
+    .menu { display:block; }
+    .nav-r.has-auth > .pill, .auth-me summary span { display:none; }
+    .auth-btn { padding:11px 14px; font-size:14px; }
+    .auth-btn span { display:none; }
+    .ctag.t1 { left:-2%; top:auto; bottom:-30px; }
+    .ctag.t2 { right:-2%; top:auto; bottom:-30px; }
+    .ctag span { padding:7px 13px; font-size:12px; }
   }
   @media (max-width:640px) {
-    .links { display:none; }
-    .hero { border-radius:30px; padding:36px 22px 0; }
-    .phone { width:250px; height:480px; }
+    .wrap { padding:10px 12px 0; }
+    .hero { border-radius:28px; padding:0 16px; }
+    .hero-c { padding-top:24px; }
+    .cta { flex-direction:column; gap:18px; }
+    .stats { grid-template-columns:1fr; gap:28px; padding-top:56px; }
+    .stat + .stat { border-left:none; border-top:1px solid var(--line); padding-top:28px; }
     .bento { grid-template-columns:1fr; }
     .tile.big, .tile.wide { grid-column:auto; }
     .tile.wide { flex-direction:column; align-items:stretch; }
-    .stats { grid-template-columns:1fr; }
-    .feature { padding:26px; border-radius:30px; }
-    .sec { padding-top:72px; }
+    .sec { padding-top:76px; }
   }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <nav class="nav">
-    <a class="logo" href="index.html"><span>Ą</span>Treniruoklis</a>
-    <div class="links"><a href="#temos">Temos</a><a href="#taisykles">Taisyklės</a><a href="#duk">DUK</a></div>
-    <a class="pill dark" href="#temos">Pradėti</a>
-  </nav>
+  <header class="hero" id="top">
+    <nav class="nav">
+      <a class="logo" href="index.html"><span>Ą</span>Treniruoklis</a>
+      <div class="links"><i class="ind" aria-hidden="true"></i><a href="#top">Pradžia</a><a href="#apie">Apie</a><a href="#temos">Temos</a><a href="#kaip">Kaip veikia</a></div>
+      <div class="nav-r">
+        <div id="authSlot"></div>
+        <a class="pill dark" href="app.html">Pradėti</a>
+        <details class="menu"><summary aria-label="Meniu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary>
+          <div><a href="#apie">Apie</a><a href="#temos">Temos</a><a href="#kaip">Kaip veikia</a><a href="klaidos.html">Mano klaidos</a></div>
+        </details>
+      </div>
+    </nav>
 
-  <header class="hero">
-    <div class="hero-text">
-      <h1>Rašyba ir skyryba – <b>be kalimo</b></h1>
-      <p class="muted">Taisyk tikrus sakinius, gauk paaiškinimą pagal VLKK taisykles ir kartok tik tas vietas, kur suklydai. Brandos egzaminui.</p>
+    <div class="hero-c">
+      <span class="badge hb">Brandos egzaminui</span>
+      <h1>
+        <span class="w" style="--i:0">Rašyba</span> <span class="w" style="--i:1">ir</span> <span class="w" style="--i:2">skyryba</span><br>
+        <span class="w" style="--i:3">išmokta</span> <span class="hl"><span class="w" style="--i:5">be</span> <span class="w" style="--i:6">kalimo</span></span>
+      </h1>
+      <p class="lead muted">Taisyk tikrus sakinius, gauk paaiškinimą pagal VLKK taisykles ir kartok tik tas vietas, kur suklydai.</p>
       <div class="cta">
-        <a class="pill dark" href="#temos">Pradėti mokytis</a>
-        <a class="pill light" href="test.html">Laikyti testą →</a>
+        <a class="pill teal" href="app.html">Pradėti mokytis <span class="arr">›</span></a>
+        <div class="proof">
+          <div class="letters" aria-hidden="true"><i>ą</i><i>ė</i><i>,</i><i>–</i></div>
+          <div><b id="nSent">130+ sakinių</b><small>rašybai ir skyrybai</small></div>
+        </div>
       </div>
-      <div class="proof">
-        <div class="letters"><i>ą</i><i>ė</i><i>,</i></div>
-        <div><b id="nSent">130+ sakinių</b><small>rašybai ir skyrybai</small></div>
-      </div>
+      <div class="ctag t1" aria-hidden="true"><div data-depth="18"><div class="fl"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M3 2.5 21 10l-7.6 2.4L10 20z"/></svg><span>Rašyba</span></div></div></div>
+      <div class="ctag t2" aria-hidden="true"><div data-depth="-14"><div class="fl"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M3 2.5 21 10l-7.6 2.4L10 20z"/></svg><span>Skyryba</span></div></div></div>
     </div>
-    <div class="phone-area" aria-hidden="true">
-      <div class="phone"><div class="screen">
-        <div class="s-top"><span>Rašyba</span><span>3 / 10</span></div>
-        <div class="s-bar"></div>
-        <div class="s-card">Jis buvo <b class="ok">taip pat</b> lankstaus proto, kilnios laiky<b class="ok">se</b>nos, gražb<span class="gp"></span>lys.</div>
-        <div class="s-btns"><span>Tikrinti</span><span>Kitas →</span></div>
-        <div class="s-rule"><strong>Visa taisyklė (VLKK)</strong>„Taip pat“ rašoma atskirai.</div>
-      </div></div>
-    </div>
-    <div class="chip c1" aria-hidden="true"><i>✓</i><div><b>9 / 10</b>teisingai</div></div>
-    <div class="chip c2" aria-hidden="true"><i>,</i><div><b>Kablelis</b>prieš „kad“</div></div>
+
   </header>
 
-  <section class="strip">
-    <p>Ką treniruosi</p>
-    <ul id="topics"></ul>
+  <section class="sec" id="apie">
+    <div class="about">
+      <div data-reveal>
+        <span class="badge">Apie treniruoklį</span>
+        <h2>Mokymasis, kuris prisimena tavo klaidas</h2>
+        <div class="row-i"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><div><b>Klaidos išsaugomos pačios</b><p>Kiekviena vieta, kur suklydai, keliauja į „Mano klaidos“. Pataisyta laikoma tik po 2 teisingų atsakymų iš eilės.</p></div></div>
+        <div class="row-i"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg></span><div><b>Taisyklė prie kiekvienos klaidos</b><p>Trumpas paaiškinimas iškart, o visas VLKK punktas – vienu paspaudimu. Be spėliojimo, kodėl buvo neteisingai.</p></div></div>
+      </div>
+      <div class="demo" data-reveal style="--i:1" aria-hidden="true">
+        <div class="dtop"><span>Rašyba · raundas</span><span>4 / 10</span></div>
+        <div class="steps"><span class="step ok">1</span><span class="step ok">2</span><span class="step bad">3</span><span class="step on">4</span><span class="step">5</span><span class="step">6</span><span class="step">7</span><span class="step">8</span><span class="step">9</span><span class="step">10</span></div>
+        <div class="s-card">Jis buvo <b class="ok">taip pat</b> lankstaus proto, kilnios laiky<b class="ok">se</b>nos, <b class="no">gražbilys</b> <b class="ok">gražbylys</b>.</div>
+        <div class="s-rule"><strong>Visa taisyklė (VLKK)</strong>„Taip pat“ rašoma atskirai, kai reiškia „lygiai taip“.</div>
+      </div>
+    </div>
   </section>
 
   <section class="sec" id="temos">
-    <h2 class="sec-title">Pradėk nuo pirmo sakinio</h2>
-    <p class="sec-sub muted">Pasirink temą. Kiekvienas raundas – 10 sakinių, klaidos išsaugomos automatiškai.</p>
+    <div class="shead" data-reveal>
+      <div><span class="badge">Temos</span><h2>Viskas egzaminui – vienoje vietoje</h2></div>
+      <p class="muted">Pasirink temą. Kiekvienas raundas – 10 sakinių, o klaidos išsaugomos automatiškai, kad galėtum jas pataisyti vėliau.</p>
+    </div>
     <div class="bento">
-      <a class="tile big" href="rasyba.html">
+      <a class="tile big" href="rasyba.html" data-reveal style="--i:0">
         <h3>Rašyba</h3>
         <p>Įrašyk praleistas raides ir parašyk žodžius kartu arba skyrium.</p>
         <div class="mini">Šiandien <span class="in ok">ne</span>buvo taip šalta, kaip vakar, bet gr<span class="in">?</span>žome vėlai.</div>
         <span class="go">Pradėti</span>
       </a>
-      <a class="tile" href="skyryba.html">
+      <a class="tile" href="skyryba.html" data-reveal style="--i:1">
         <h3>Skyryba</h3>
         <p>Padėk trūkstamus kablelius, brūkšnius ir dvitaškius.</p>
         <div class="marks"><span>∅</span><span>,</span><span>–</span><span>:</span></div>
         <span class="go">Pradėti</span>
       </a>
-      <a class="tile" href="test.html">
+      <a class="tile" href="test.html" data-reveal style="--i:2">
         <h3>Testas</h3>
         <p>10 sakinių per 15 minučių. Klaidos – pabaigoje.</p>
         <div><span class="timer-mini">14:59</span></div>
         <span class="go">Laikyti</span>
       </a>
-      <a class="tile wide" href="klaidos.html" id="klTile">
+      <a class="tile wide" href="klaidos.html" id="klTile" data-reveal style="--i:3">
         <div>
           <h3>Mano klaidos</h3>
           <p id="klDesc">Silpniausios vietos ir treniruotė tik su klaidomis.</p>
@@ -240,43 +325,36 @@
         </div>
         <div class="bars" id="bars"></div>
       </a>
+      <a class="tile wide full" href="pratimai.html" data-reveal style="--i:4">
+        <div>
+          <h3>Greiti pratimai</h3>
+          <p>Spausk teisingą atsakymą: kartu ar atskirai, sakinio rūšis, kuris skyrybos ženklas.</p>
+          <span class="go">Pradėti</span>
+        </div>
+        <div class="marks"><span>V</span><span>SP</span><span>SS</span><span>SB</span><span>SM</span></div>
+      </a>
     </div>
   </section>
 
-  <section class="sec">
-    <div class="stats" id="stats">
-      <div class="stat"><small>Rašybos sakiniai</small><b id="sR">–</b><p>Sakiniai iš tikrų tekstų ir egzaminų užduočių.</p></div>
-      <div class="stat"><small>Skyrybos sakiniai</small><b id="sS">–</b><p>Kableliai, brūkšniai ir dvitaškiai realiuose sakiniuose.</p></div>
-      <div class="stat"><small>VLKK taisyklės</small><b id="sV">–</b><p>Kiekviena klaida turi trumpą ir visą taisyklės tekstą.</p></div>
-    </div>
-  </section>
-
-  <section class="sec" id="taisykles">
-    <div class="feature">
+  <section class="sec" id="kaip">
+    <div class="how">
       <div>
-        <div class="ico">§</div>
-        <h2>Taisyklės iš pirmo šaltinio</h2>
-        <p class="muted">Atsakymai patikrinti pagal oficialias VLKK „Lietuvių kalbos rašybos“ (2022) ir skyrybos (2019) taisykles. Kai suklysti, matai, kodėl – ir kurį punktą pasikartoti.</p>
+        <div data-reveal><span class="badge">Kaip veikia</span><h2>Trys žingsniai iki sakinių be klaidų</h2></div>
+        <div class="hcard" data-reveal style="--i:1"><span class="ic">01</span><div><b>Pasirink temą</b><p>Rašyba, skyryba, testas ar greiti pratimai – pradėk ten, kur jautiesi silpniausiai.</p></div></div>
+        <div class="hcard" data-reveal style="--i:2"><span class="ic">02</span><div><b>Spręsk tikrus sakinius</b><p>Įrašyk raides, padėk ženklus ir spausk „Tikrinti“. Užuomina nurodo taisyklę, bet ne atsakymą.</p></div></div>
+        <div class="hcard" data-reveal style="--i:3"><span class="ic">03</span><div><b>Taisyk tik klaidas</b><p>Raundo pabaigoje grįžk prie raudonų langelių. Klaida dingsta, kai ją 2 kartus pataisai teisingai.</p></div></div>
       </div>
-      <div class="rulecard">
-        <span class="src">📘 VLKK rašyba 2022</span>
-        <strong>Nosinės šaknyje</strong>
-        Rašoma ą, ę, į, ų, jei jos giminiškuose žodžiuose kaitaliojasi su an, en, in, un. Jei balsis kaitaliojasi su ė ar y – nosinės nėra.
-      </div>
-    </div>
-  </section>
-
-  <section class="sec" id="duk">
-    <div class="faq">
-      <div>
-        <h2>Dažni klausimai</h2>
-        <p class="muted">Viskas veikia naršyklėje – nereikia nei paskyros, nei interneto ryšio po atidarymo.</p>
-      </div>
-      <div>
-        <details open><summary><span>01.</span>Kur saugomos mano klaidos?</summary><p>Tavo naršyklėje. Jos lieka, kol neišvalai naršyklės duomenų arba pats jų neištrini skiltyje „Mano klaidos“.</p></details>
-        <details><summary><span>02.</span>Kada klaida laikoma pataisyta?</summary><p>Kai toje vietoje atsakai teisingai 2 kartus iš eilės.</p></details>
-        <details><summary><span>03.</span>Kaip veikia užuominos?</summary><p>Rašyboje palaikyk pelės žymeklį ant langelio sekundę – atsiras „?“. Paspaudęs jį matysi užuominą, kuri nurodo taisyklę, bet neatskleidžia atsakymo.</p></details>
-        <details><summary><span>04.</span>Ar tinka brandos egzaminui?</summary><p>Taip. Sakiniai apima nosines, kartu ir skyrium rašomus žodžius, priesagas, galūnes ir sakinio skyrybą.</p></details>
+      <div class="rulecard" id="taisykles" data-reveal style="--i:2">
+        <div class="in-card">
+          <span class="src">📘 VLKK rašyba 2022</span>
+          <strong>Nosinės šaknyje</strong>
+          Rašoma ą, ę, į, ų, jei jos giminiškuose žodžiuose kaitaliojasi su an, en, in, un. Jei balsis kaitaliojasi su ė ar y – nosinės nėra.
+        </div>
+        <div class="in-card">
+          <span class="src">📗 VLKK skyryba 2019</span>
+          <strong>Taisyklės iš pirmo šaltinio</strong>
+          Atsakymai patikrinti pagal oficialias VLKK „Lietuvių kalbos rašybos“ (2022) ir skyrybos (2019) taisykles. Kai suklysti, matai, kodėl – ir kurį punktą pasikartoti.
+        </div>
       </div>
     </div>
   </section>
@@ -291,64 +369,45 @@
 <script src="skyryba-data.js"></script>
 <script>
 const lt = (n, one, few, many) => n % 10 === 1 && n % 100 !== 11 ? one : (n % 10 === 0 || (n % 100 > 10 && n % 100 < 20)) ? many : few;
+const $ = id => document.getElementById(id);
 try {
-  document.getElementById("sR").textContent = SENTENCES.length;
-  document.getElementById("sS").textContent = SK_SENTENCES.length;
-  document.getElementById("sV").textContent = Object.keys(FULL).length + Object.keys(SK_FULL).length;
-  document.getElementById("nSent").textContent = (n => `${n} ${lt(n, "sakinys", "sakiniai", "sakinių")}`)(SENTENCES.length + SK_SENTENCES.length);
-  document.getElementById("topics").innerHTML = [...Object.values(CATS).slice(0, 7), ...Object.values(SK_CATS).slice(0, 5)]
-    .map(c => `<li>${esc(c.name)}</li>`).join("");
-} catch {}
-
-// Show how many mistakes are waiting
-try {
-  const n = Object.keys(loadMistakes()).length + Object.keys(skLoadMistakes()).length;
-  if (n) {
-    document.getElementById("klTile").classList.add("alert");
-    document.getElementById("klDesc").textContent = `${n} ${lt(n, "klaida laukia", "klaidos laukia", "klaidų laukia")} pataisymo.`;
-  }
+  $("nSent").textContent = (n => `${n} ${lt(n, "sakinys", "sakiniai", "sakinių")}`)(SENTENCES.length + SK_SENTENCES.length);
 } catch {}
 
 // Coming back from klaidos.html: reload so counts are fresh, not from the page cache
 addEventListener("pageshow", e => { if (e.persisted) location.reload(); });
 
-// Most common mistake types: wrong answers summed per rule type, both topics together
+// Wrong answers summed per rule type (both topics), for the "Mano klaidos" tile
 try {
-  const byCat = {};
-  const add = (name, n) => { if (name) byCat[name] = (byCat[name] || 0) + n; };
+  const byKey = {};
+  const add = (key, n) => { if (key) byKey[key] = (byKey[key] || 0) + n; };
   const m = loadMistakes(), sm = skLoadMistakes();
-  for (const id in m) { const [si, k] = id.split(":").map(Number); add(CATS[parse(SENTENCES[si])[k].cat]?.name, m[id].wrong); }
-  for (const id in sm) { const [si, g] = id.split(":").map(Number); add(SK_CATS[skParse(SK_SENTENCES[si]).gaps[g]?.cat]?.name, sm[id].wrong); }
-  let top = Object.entries(byCat).sort((a, b) => b[1] - a[1]).slice(0, 5);
-  const el = document.getElementById("bars"), empty = !top.length;
+  for (const id in m) { const [si, k] = id.split(":").map(Number); if (!SENTENCES[si]) continue; const c = parse(SENTENCES[si])[k]?.cat; add(c && CATS[c] ? "r:" + c : "", m[id].wrong); }
+  for (const id in sm) { const [si, g] = id.split(":").map(Number); if (!SK_SENTENCES[si]) continue; const c = skParse(SK_SENTENCES[si]).gaps[g]?.cat; add(c && SK_CATS[c] ? "s:" + c : "", sm[id].wrong); }
+  const nameOf = k => k[0] === "r" ? CATS[k.slice(2)].name : SK_CATS[k.slice(2)].name;
+
+  const active = Object.keys(m).length + Object.keys(sm).length;
+  if (active) {
+    $("klTile").classList.add("alert");
+    $("klDesc").textContent = `${active} ${lt(active, "klaida laukia", "klaidos laukia", "klaidų laukia")} pataisymo.`;
+  }
+
+  // "Mano klaidos" tile: top 5 mistake types
+  let top = Object.entries(byKey).map(([k, n]) => [nameOf(k), n]).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  const el = $("bars"), empty = !top.length;
   if (empty) top = [["Nosinės šaknyje", 0], ["Sudurtiniai žodžiai", 0], ["Įterpiniai", 0]];
-  const max = Math.max(...top.map(t => t[1]), 1);
+  const tmax = Math.max(...top.map(t => t[1]), 1);
   el.classList.toggle("empty", empty);
   el.innerHTML = `<div class="lbl"><span>Dažniausios klaidos</span><span>${empty ? "" : "kartai"}</span></div>` +
-    top.map(([name, n], i) => `<div class="row" style="--i:${i}"><div class="top"><span>${esc(name)}</span><span class="n" data-n="${n}">${empty ? "–" : 0}</span></div>` +
-      `<div class="track"><i style="--w:${empty ? [70, 45, 25][i] : Math.max(n / max * 100, 6)}%"></i></div></div>`).join("") +
+    top.map(([name, n], i) => `<div class="row" style="--i:${i}"><div class="top"><span>${esc(name)}</span><span class="n"${empty ? "" : ` data-count="${n}"`}>${empty ? "–" : n}</span></div>` +
+      `<div class="track"><i style="--w:${empty ? [70, 45, 25][i] : Math.max(n / tmax * 100, 6)}%"></i></div></div>`).join("") +
     (empty ? `<p class="note">Kai suklysi, čia atsiras tavo dažniausios klaidos.</p>` : "");
-
-  // Play once when the tile scrolls into view: rows slide in, bars grow, numbers count up
-  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const play = () => {
-    el.classList.add("in");
-    el.querySelectorAll(".n[data-n]").forEach((c, i) => {
-      const to = +c.dataset.n; if (empty) return;
-      if (reduce) return c.textContent = to;
-      const start = performance.now() + i * 110 + 180, dur = 1100;
-      const tick = t => {
-        const p = Math.min(Math.max((t - start) / dur, 0), 1);
-        c.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
-        if (p < 1) requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
-    });
-  };
-  if (!("IntersectionObserver" in window)) play();
-  else new IntersectionObserver((es, o) => { if (es.some(e => e.isIntersecting)) { play(); o.disconnect(); } }, { threshold: .35 }).observe(el);
+  el.setAttribute("data-reveal", "");
 } catch {}
 </script>
+<script src="shell.js?v=8"></script>
+<script src="motion.js?v=8"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script defer src="auth-config.js"></script><script defer src="auth.js"></script>
 <script src="hyphen.js"></script>
 </body>
 </html>

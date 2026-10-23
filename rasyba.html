@@ -82,7 +82,8 @@
   .tip b, .tip span { transition:opacity 220ms var(--ease-out), transform 220ms var(--ease-out); }
   .tip span { display:block; transition-delay:50ms; }
   @starting-style { .tip b, .tip span { opacity:0; transform:translateY(4px); } }
-  .tip.out { opacity:0; transform:translate(-50%, -100%) translateY(14px) scale(.3); transition:transform 260ms var(--ease-in-out), opacity 160ms var(--ease-out) 100ms; }
+  /* tip leaves the way it came: a quick fade + small drop back toward the blank */
+  .tip.out { opacity:0; transform:translate(-50%, -100%) translateY(6px) scale(.96); transition:transform 180ms var(--ease-out), opacity 150ms var(--ease-out); }
   @media (prefers-reduced-motion: reduce) {
     .qmark, .tip, .tip b, .tip span { transition:opacity 150ms ease; }
     @starting-style { .qmark, .tip { transform:translate(-50%, -100%); } .tip b, .tip span { transform:none; } }
@@ -101,8 +102,8 @@
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%233a3399%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial%27 font-weight=%27bold%27 font-size=%2738%27 fill=%27%23fffdf9%27 text-anchor=%27middle%27%3E%C4%84%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="theme.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%23147fae%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial%27 font-weight=%27bold%27 font-size=%2738%27 fill=%27%23fffdf9%27 text-anchor=%27middle%27%3E%C4%84%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="theme.css?v=8">
 </head>
 <body>
 <main>
@@ -110,6 +111,7 @@
     <a class="back" href="index.html">← Visos temos</a>
     <a class="mode" id="modeLink" href="klaidos.html">Mano klaidos →</a>
   </div>
+  <span class="badge">Rašyba</span>
   <h1 id="title">Rašybos treniruoklis</h1>
   <p class="sub" id="sub">Įrašyk praleistas raides. Skliaustuose esančius žodžius parašyk kartu arba skyrium. Užlaikyk pelę ant langelio 1 sek. – atsiras užuomina.</p>
   <div class="card">
@@ -122,6 +124,7 @@
     <div class="result" id="result"></div>
   </div>
 </main>
+<script src="shell.js?v=8"></script>
 
 <script src="data.js"></script>
 <script src="round.js"></script>
@@ -274,7 +277,7 @@ document.addEventListener("mouseover", e => {
   if (!qFor) return;
   const inside = e.target === qFor || e.target.closest(".qmark, .tip");
   clearTimeout(leaveTimer);
-  if (!inside) leaveTimer = setTimeout(() => hideHint(true), 500);
+  if (!inside) leaveTimer = setTimeout(() => hideHint(true), 150);
 });
 document.addEventListener("click", e => { if (!e.target.closest(".qmark, .tip")) hideHint(); });
 addEventListener("resize", () => hideHint());
@@ -284,6 +287,8 @@ roundStart(() => Math.min(ROUND_SIZE, pool().length), "rasyba.html?klaidos", pic
 roundGo(0);
 </script>
 <script src="demo-report.js"></script><!-- DEMO: remove later -->
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script defer src="auth-config.js"></script><script defer src="auth.js"></script>
 <script src="hyphen.js"></script>
+<script src="motion.js?v=8"></script>
 </body>
 </html>

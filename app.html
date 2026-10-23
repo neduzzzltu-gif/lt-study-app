@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apžvalga – Lietuvių kalbos treniruoklis</title>
+<script>document.documentElement.classList.add("js"); setTimeout(() => { if (!window.__motion) document.documentElement.classList.remove("js"); }, 2500);</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%23147fae%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial%27 font-weight=%27bold%27 font-size=%2738%27 fill=%27%23fffdf9%27 text-anchor=%27middle%27%3E%C4%84%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="theme.css?v=8">
+<style>
+  body { margin:0; }
+  * { box-sizing:border-box; }
+  main { max-width:1180px; margin:0 auto; padding:32px 28px 72px; }
+  h1, h2, h3 { margin:0; }
+
+  /* greeting row */
+  .greet { display:flex; align-items:flex-end; justify-content:space-between; gap:20px; margin-bottom:28px; }
+  .greet h1 { font-size:clamp(30px, 4vw, 40px); margin:0 0 6px; }
+  .greet p { margin:0; color:var(--muted); font-size:15px; }
+  .greet .btns { display:flex; gap:8px; flex-wrap:wrap; }
+  .mbtn { display:inline-flex; align-items:center; gap:6px; padding:11px 18px; border-radius:12px; font-size:14px; font-weight:500; text-decoration:none; white-space:nowrap; transition:transform .12s var(--ease-out), background .15s ease; }
+  .mbtn.ghost { background:#fff; color:var(--ink); box-shadow:inset 0 0 0 1px var(--line); }
+  .mbtn.solid { background:var(--indigo); color:#fff; box-shadow:0 8px 18px -10px rgba(16,106,146,.8); }
+  @media (hover:hover) and (pointer:fine) { .mbtn.ghost:hover { background:var(--accent-softer); } .mbtn.solid:hover { background:#0c5878; } }
+  .mbtn:active { transform:scale(.97); }
+
+  .lbl { display:flex; justify-content:space-between; align-items:baseline; margin:0 0 14px; }
+  .lbl h2 { font-size:20px; }
+  .lbl span { color:var(--muted); font-size:14px; }
+
+  /* pick what to learn */
+  .pick { display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; margin-bottom:36px; }
+  .pc { position:relative; display:flex; flex-direction:column; gap:10px; min-height:190px; padding:20px; border-radius:20px; background:#fff; color:var(--ink); text-decoration:none; box-shadow:inset 0 0 0 1px var(--line), 0 1px 2px rgba(17,24,39,.04); transition:transform 220ms var(--ease-out), box-shadow 220ms ease; }
+  .pc .ic { width:42px; height:42px; display:grid; place-items:center; border-radius:12px; background:var(--accent-softer); color:var(--indigo); box-shadow:inset 0 0 0 1px var(--line); }
+  .pc .ic svg { width:20px; height:20px; }
+  .pc h3 { font-size:19px; font-weight:500; letter-spacing:-.02em; margin-top:4px; }
+  .pc p { margin:0; color:var(--muted); font-size:13.5px; line-height:1.5; }
+  .pc .go { margin-top:auto; display:flex; align-items:center; justify-content:space-between; padding-top:12px; border-top:1px solid var(--line); font-size:13px; font-weight:500; color:var(--indigo); }
+  .pc .go::after { content:"→"; transition:transform 180ms var(--ease-out); }
+  .pc.main-pick { background:linear-gradient(160deg, #fff 45%, var(--sky-soft)); }
+  .pc .cnt { position:absolute; top:18px; right:18px; padding:3px 9px; border-radius:999px; background:var(--bad-soft); color:var(--bad); font-size:12px; font-weight:600; font-variant-numeric:tabular-nums; }
+  .pc .cnt:empty { display:none; }
+  @media (hover:hover) and (pointer:fine) {
+    .pc:hover { transform:translateY(-3px); box-shadow:inset 0 0 0 1px var(--sky), 0 22px 40px -26px rgba(16,106,146,.5); }
+    .pc:hover .go::after { transform:translateX(4px); }
+  }
+  .pc:active { transform:translateY(-1px) scale(.99); }
+
+  /* progress dashboard */
+  .dash { display:grid; grid-template-columns:1fr 1.6fr; gap:14px; }
+  .sc { display:flex; flex-direction:column; padding:18px; border-radius:20px; background:#fff; box-shadow:inset 0 0 0 1px var(--line); }
+  .sc .h { display:flex; align-items:center; gap:10px; font-size:14px; color:var(--muted); }
+  .sc .h i { width:32px; height:32px; display:grid; place-items:center; border-radius:10px; box-shadow:inset 0 0 0 1px var(--line); font-style:normal; color:var(--ink); }
+  .sc .v { display:flex; align-items:center; gap:10px; margin:14px 0 16px 42px; }
+  .sc .v b { font-size:36px; font-weight:400; letter-spacing:-.04em; font-variant-numeric:tabular-nums; }
+  .chipx { padding:3px 9px; border-radius:999px; font-size:11.5px; font-weight:500; background:var(--ok-soft); color:var(--ok); white-space:nowrap; }
+  .chipx.bad { background:var(--bad-soft); color:var(--bad); } .chipx.n { background:var(--accent-soft); color:var(--indigo); }
+  .sc a { margin-top:auto; display:flex; justify-content:space-between; gap:8px; padding-top:12px; border-top:1px solid var(--line); color:var(--muted); font-size:13px; text-decoration:none; }
+  .sc a b { color:var(--ink); font-weight:600; }
+  .sc a::after { content:"→"; transition:transform 160ms ease; }
+  @media (hover:hover) and (pointer:fine) { .sc a:hover { color:var(--ink); } .sc a:hover::after { transform:translateX(3px); } }
+  .top { grid-row:1 / span 2; grid-column:2; display:flex; flex-direction:column; padding:18px; border-radius:20px; background:#fff; box-shadow:inset 0 0 0 1px var(--line); }
+  .top h3 { font-size:17px; font-weight:500; letter-spacing:-.02em; }
+  .top > p { margin:4px 0 12px; font-size:13px; color:var(--muted); }
+  .top ol { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:4px; }
+  .top li a { display:grid; grid-template-columns:28px 1fr auto; align-items:center; gap:4px 12px; padding:10px 10px; border-radius:14px; color:var(--ink); text-decoration:none; transition:background 150ms ease; }
+  @media (hover:hover) and (pointer:fine) { .top li a:hover { background:var(--accent-softer); } }
+  .top .rk { grid-row:span 2; width:28px; height:28px; display:grid; place-items:center; border-radius:9px; box-shadow:inset 0 0 0 1px var(--line); font-size:13px; font-weight:600; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .top li:first-child .rk { background:var(--bad-soft); color:var(--bad); box-shadow:none; }
+  .top .nm { font-size:15px; font-weight:500; min-width:0; }
+  .top .nm small { margin-left:8px; padding:2px 8px; border-radius:999px; background:var(--accent-soft); color:var(--indigo); font-size:11px; font-weight:500; }
+  .top .ct { font-size:14px; font-weight:600; color:var(--bad); font-variant-numeric:tabular-nums; }
+  .top .bar { grid-column:2 / -1; height:6px; border-radius:999px; background:var(--accent-soft); overflow:hidden; }
+  .top .bar i { display:block; height:100%; width:var(--w); border-radius:999px; background:linear-gradient(90deg, #e58a92, var(--bad)); transform-origin:left; }
+  /* bars grow in one after another when the block shows up */
+  .js .top .bar i { transform:scaleX(0); }
+  .js .in .top .bar i { transform:none; transition:transform 900ms var(--ease-out); transition-delay:calc(250ms + var(--i) * 90ms); }
+  .top .empty { margin:auto 0; padding:28px 12px; text-align:center; color:var(--muted); font-size:14px; line-height:1.55; }
+  .top .empty b { display:block; color:var(--ink); font-size:16px; font-weight:500; margin-bottom:4px; }
+  .top .all { margin-top:auto; padding-top:12px; border-top:1px solid var(--line); display:flex; justify-content:space-between; color:var(--muted); font-size:13px; text-decoration:none; }
+  .top .all::after { content:"→"; transition:transform 160ms ease; }
+  @media (hover:hover) and (pointer:fine) { .top .all:hover { color:var(--ink); } .top .all:hover::after { transform:translateX(3px); } }
+
+  @media (prefers-reduced-motion: reduce) { .js .top .bar i, .js .in .top .bar i { transform:none; transition:none; } }
+  @media (max-width:1180px) { .pick { grid-template-columns:repeat(3, 1fr); } }
+  @media (max-width:760px) {
+    main { padding:22px 16px 56px; }
+    .greet { flex-direction:column; align-items:flex-start; }
+    .pick { grid-template-columns:1fr 1fr; }
+    .pc { min-height:0; }
+    .dash { grid-template-columns:1fr 1fr; }
+    .top { grid-column:1 / -1; grid-row:auto; }
+    .sc .v { margin-left:0; } .sc .v b { font-size:28px; }
+  }
+  @media (max-width:420px) { .pick { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="greet" data-reveal>
+    <div>
+      <span class="badge">Apžvalga</span>
+      <h1>Labas! 👋</h1>
+    </div>
+  </div>
+
+  <div class="lbl" data-reveal><h2>Ką nori mokytis?</h2></div>
+  <div class="pick">
+    <a class="pc main-pick" href="rasyba.html" data-reveal style="--i:0"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg></span><h3>Rašyba</h3><p>Praleistos raidės, kartu ar skyrium.</p><span class="go">Pradėti</span></a>
+    <a class="pc" href="skyryba.html" data-reveal style="--i:1"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 15a2 2 0 1 1 0 4m0 0-2 3"/><path d="M15 5v8"/></svg></span><h3>Skyryba</h3><p>Kableliai, brūkšniai ir dvitaškiai.</p><span class="go">Pradėti</span></a>
+    <a class="pc" href="test.html" data-reveal style="--i:2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M10 2h4"/></svg></span><h3>Testas</h3><p>10 sakinių per 15 minučių, kaip egzamine.</p><span class="go">Laikyti</span></a>
+    <a class="pc" href="pratimai.html#kartu" data-reveal style="--i:4"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="8" height="10" rx="2"/><rect x="13" y="7" width="8" height="10" rx="2"/></svg></span><h3>Kartu ar atskirai</h3><p>Kaip rašyti žodį – kartu ar atskirai?</p><span class="go">Pradėti</span></a>
+    <a class="pc" href="pratimai.html#rusis" data-reveal style="--i:5"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span><h3>Sakinio rūšis</h3><p>Vientisinis ar sudėtinis – ir koks?</p><span class="go">Pradėti</span></a>
+    <a class="pc" href="pratimai.html#zenklas" data-reveal style="--i:6"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6M12 17h.01"/></svg></span><h3>Ženklai</h3><p>Kablelis, brūkšnys ar dvitaškis?</p><span class="go">Pradėti</span></a>
+  </div>
+
+  <div class="lbl" data-reveal><h2>Tavo pažanga</h2><span>Saugoma šioje naršyklėje</span></div>
+  <div class="dash" data-reveal>
+    <div class="sc"><div class="h"><i>!</i>Laukia pataisymo</div><div class="v"><b id="dAct">–</b><span class="chipx" id="dActC">✓ švaru</span></div><a href="klaidos.html"><span><b>Taisyti</b> klaidas</span></a></div>
+    <div class="sc"><div class="h"><i>✓</i>Ištaisyta</div><div class="v"><b id="dFix">–</b><span class="chipx" id="dFixC">–</span></div><a href="klaidos.html"><span>2 kartus iš eilės <b>teisingai</b></span></a></div>
+    <div class="top">
+      <h3>Dažniausios klaidos</h3>
+      <p>Taisyklės, kuriose suklydai daugiausia kartų</p>
+      <ol id="topList"></ol>
+      <a class="all" href="klaidos.html"><span><b>Visos</b> mano klaidos</span></a>
+    </div>
+  </div>
+</main>
+<script src="shell.js?v=8"></script>
+
+<script src="data.js"></script>
+<script src="skyryba-data.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+// set a number that motion.js counts up when it scrolls into view
+const num = (id, n) => { const el = $(id); el.dataset.count = n; el.textContent = n; };
+
+// Coming back from a practice page: reload so counts are fresh, not from the page cache
+addEventListener("pageshow", e => { if (e.persisted) location.reload(); });
+
+try {
+  // wrong answers summed per rule type (both topics)
+  const byKey = {};
+  const add = (key, n) => { if (key) byKey[key] = (byKey[key] || 0) + n; };
+  const m = loadMistakes(), sm = skLoadMistakes();
+  for (const id in m) { const [si, k] = id.split(":").map(Number); if (!SENTENCES[si]) continue; const c = parse(SENTENCES[si])[k]?.cat; add(c && CATS[c] ? "r:" + c : "", m[id].wrong); }
+  for (const id in sm) { const [si, g] = id.split(":").map(Number); if (!SK_SENTENCES[si]) continue; const c = skParse(SK_SENTENCES[si]).gaps[g]?.cat; add(c && SK_CATS[c] ? "s:" + c : "", sm[id].wrong); }
+  const nameOf = k => k[0] === "r" ? CATS[k.slice(2)].name : SK_CATS[k.slice(2)].name;
+
+  const active = Object.keys(m).length + Object.keys(sm).length;
+  const fixed = Object.keys(loadMistakes(FIXED_KEY)).length + Object.keys(skLoadMistakes(SK_FIXED_KEY)).length;
+  num("dAct", active);
+  num("dFix", fixed);
+  if (active) { $("dActC").className = "chipx bad"; $("dActC").textContent = "↓ taisyk"; }
+  if (active + fixed) $("dFixC").textContent = `↑ ${Math.round(fixed / (active + fixed) * 100)}%`;
+
+  // most common mistakes: top 5 rule types by wrong answers
+  const top = Object.entries(byKey).sort((a, b) => b[1] - a[1]).slice(0, 5), most = top[0]?.[1] || 1;
+  $("topList").innerHTML = !top.length
+    ? `<li class="empty"><b>Klaidų dar nėra 🎉</b>Kai suklysi, čia atsiras taisyklės, kurias verta pakartoti.</li>`
+    : top.map(([k, n], i) => `<li><a href="klaidos.html${k[0] === "s" ? "#skyryba" : ""}">
+        <span class="rk">${i + 1}</span>
+        <span class="nm">${esc(nameOf(k))}<small>${k[0] === "r" ? "Rašyba" : "Skyryba"}</small></span>
+        <span class="ct">${n}×</span>
+        <span class="bar"><i style="--w:${Math.max(n / most * 100, 6)}%; --i:${i}"></i></span></a></li>`).join("");
+} catch {}
+</script>
+<script src="motion.js?v=8"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script defer src="auth-config.js"></script><script defer src="auth.js"></script>
+<script src="hyphen.js"></script>
+</body>
+</html>

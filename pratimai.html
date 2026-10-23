@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Greiti pratimai</title>
+<style>
+  :root { --bg:#f6f4ef; --card:#fff; --ink:#1d1d1f; --muted:#6b6b70; --line:#e3e0d8; --ok:#1f8a4c; --bad:#c62828; --accent:#2b4cff; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; background:var(--bg); color:var(--ink); }
+  main { max-width:760px; margin:0 auto; padding:24px 16px 60px; }
+  .back { display:inline-block; color:var(--muted); text-decoration:none; font-size:14px; margin-bottom:12px; }
+  h1 { font-size:22px; margin:0 0 4px; }
+  .sub { color:var(--muted); margin:0 0 18px; font-size:14px; line-height:1.5; }
+  .tabs { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+  .tab { font:inherit; font-size:15px; padding:8px 16px; border-radius:999px; border:1px solid var(--line); background:var(--card); cursor:pointer; }
+  .tab.on { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px; }
+  .progress { position:relative; height:26px; margin:-6px 0 14px; font-size:13px; color:var(--muted); }
+  .progress span { position:relative; z-index:1; }
+  .progress i { position:absolute; left:0; bottom:0; height:4px; background:var(--accent); border-radius:999px; transition:width .3s ease; z-index:1; }
+  .progress::after { content:""; position:absolute; left:0; right:0; bottom:0; height:4px; background:var(--line); border-radius:999px; }
+  .q { font-size:20px; line-height:1.7; min-height:3.4em; }
+  .slot { display:inline-block; min-width:4ch; padding:0 6px; border-bottom:2px solid var(--accent); background:var(--sky-soft); border-radius:6px 6px 0 0; text-align:center; }
+  .slot.ok { border-color:var(--ok); background:#e6f5ec; color:var(--ok); }
+  .slot.bad { border-color:var(--bad); background:#fdecec; color:var(--bad); }
+  .opts { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
+  .opt { font:inherit; font-size:17px; min-width:64px; padding:12px 18px; border-radius:12px; border:1.5px solid var(--line); background:#fff; cursor:pointer; transition:background .15s, border-color .15s, transform .1s; }
+  .opt:hover:not(:disabled) { border-color:var(--accent); }
+  .opt:active:not(:disabled) { transform:scale(.97); }
+  .opt:disabled { cursor:default; }
+  .opt.ok { background:#e6f5ec; border-color:var(--ok); color:var(--ok); font-weight:600; }
+  .opt.bad { background:#fdecec; border-color:var(--bad); color:var(--bad); text-decoration:line-through; }
+  .opt kbd { font:inherit; font-size:12px; color:var(--muted); margin-right:6px; }
+  .legend { margin-top:10px; font-size:13px; color:var(--muted); }
+  .rule { margin-top:16px; padding:10px 14px; border-left:4px solid var(--ok); background:#f3faf6; border-radius:0 10px 10px 0; font-size:15px; line-height:1.5; }
+  .rule.bad { border-left-color:var(--bad); background:#fff7f7; }
+  .actions { display:flex; gap:10px; margin-top:18px; }
+  .actions button, .ractions button { font:inherit; font-size:16px; padding:12px 20px; border-radius:12px; border:none; cursor:pointer; }
+  .primary { background:var(--ink); color:#fff; }
+  .secondary { background:var(--line); color:var(--ink); }
+  .rsum { text-align:center; padding:10px 0 6px; }
+  .rsum .big { font-size:48px; font-weight:800; line-height:1; }
+  .rsum .pct { font-size:18px; color:var(--muted); margin-top:6px; }
+  .rsum.good .big { color:var(--ok); } .rsum.mid .big { color:#c77700; } .rsum.low .big { color:var(--bad); }
+  .ractions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:16px; }
+  .mistake { border-left:4px solid var(--bad); background:#fff7f7; padding:10px 14px; border-radius:0 10px 10px 0; margin-top:10px; }
+  .mistake .w { font-size:16px; line-height:1.5; }
+  .mistake .w s { color:var(--bad); } .mistake .w b { color:var(--ok); }
+  .mistake .r { color:#444; font-size:14px; margin-top:4px; }
+  .empty { color:var(--muted); line-height:1.6; }
+  /* theme.css styles .mistake for the expandable rows elsewhere – keep the simple red row here */
+  .card .mistake { border-left:4px solid var(--bad); background:#fff7f7; padding:10px 14px; margin:10px 0 0; width:auto; border-radius:0 10px 10px 0; box-shadow:none; }
+  /* no soft hyphens inside answers – "nebe-jauku" would look like a written hyphen */
+  .opt, .slot { white-space:nowrap; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%23147fae%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial%27 font-weight=%27bold%27 font-size=%2738%27 fill=%27%23fffdf9%27 text-anchor=%27middle%27%3E%C4%84%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="theme.css?v=8">
+</head>
+<body>
+<main>
+  <a class="back" href="index.html">← Visos temos</a>
+  <span class="badge">Pratimai</span>
+  <h1 id="title">Greiti pratimai</h1>
+  <p class="sub" id="sub"></p>
+  <div class="tabs" id="tabs"></div>
+  <div class="card" id="card"></div>
+</main>
+<script src="shell.js?v=8"></script>
+
+<script src="data.js"></script>
+<script src="pratimai-data.js"></script>
+<script>
+// One round = 10 questions of one mode; "klaidos" = only questions you got wrong before
+const ROUND = 10;
+const RUSIS_NAMES = { V: "vientisinis", SP: "sudėtinis prijungiamasis", SS: "sudėtinis sujungiamasis", SB: "sudėtinis bejungtukis", SM: "sudėtinis mišrusis" };
+let mode = Object.keys(PR_MODES).includes(location.hash.slice(1)) ? location.hash.slice(1) : "kartu";
+let onlyMistakes = false, queue = [], pos = 0, answered = false, results = [];
+
+const opts = (m, it) => it.o || PR_MODES[m].opts;
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const mistakeIds = m => Object.keys(prLoad()).filter(id => id.startsWith(m + ":")).map(id => +id.split(":")[1]);
+
+// Each exercise type is its own section (sidebar link = #kartu / #rusis / #zenklas).
+// Tabs only appear when there are mistakes: all questions vs. only the ones you got wrong.
+function renderTabs() {
+  const n = mistakeIds(mode).length;
+  document.getElementById("tabs").innerHTML = !n ? "" :
+    `<button class="tab ${onlyMistakes ? "" : "on"}" data-m="${mode}">Visi klausimai</button><button class="tab ${onlyMistakes ? "on" : ""}" data-only="1">🎯 Klaidos (${n})</button>`;
+  document.getElementById("title").textContent = PR_MODES[mode].name;
+  document.title = PR_MODES[mode].name + " – Lietuvių kalbos treniruoklis";
+  document.getElementById("sub").textContent = PR_MODES[mode].sub;
+}
+
+function newRound() {
+  const pool = onlyMistakes ? mistakeIds(mode) : PR_MODES[mode].items.map((_, i) => i);
+  if (!pool.length) { onlyMistakes = false; return newRound(); }
+  queue = shuffle(pool).slice(0, ROUND); pos = 0; results = [];
+  renderTabs(); show();
+}
+
+// The sentence with the gap; after answering the gap shows the right answer
+function sentenceHtml(it, filled, ok) {
+  const parts = it.s.split("___").map(esc);
+  if (parts.length < 2) return parts[0];
+  const slot = filled == null ? `<span class="slot">&nbsp;</span>` : `<span class="slot ${ok ? "ok" : "bad"}">${esc(filled)}</span>`;
+  return parts[0] + slot + parts[1];
+}
+
+function show() {
+  answered = false;
+  const it = PR_MODES[mode].items[queue[pos]], o = opts(mode, it);
+  document.getElementById("card").innerHTML = `
+    <div class="progress"><span>Klausimas ${pos + 1} / ${queue.length}</span><i style="width:${pos / queue.length * 100}%"></i></div>
+    <div class="q">${sentenceHtml(it)}</div>
+    <div class="opts">${o.map((x, i) => `<button class="opt" data-i="${i}"><kbd>${i + 1}</kbd>${esc(x)}</button>`).join("")}</div>
+    ${mode === "rusis" ? `<div class="legend">${o.map(x => `${x} – ${RUSIS_NAMES[x]}`).join(" · ")}</div>` : ""}
+    <div id="after"></div>`;
+}
+
+function answer(i) {
+  if (answered) return;
+  answered = true;
+  const it = PR_MODES[mode].items[queue[pos]], o = opts(mode, it), ok = i === it.a;
+  prRecord(mode, queue[pos], ok, o[i]);
+  results.push({ idx: queue[pos], ok, given: o[i] });
+  document.querySelectorAll(".opt").forEach(b => {
+    b.disabled = true;
+    if (+b.dataset.i === it.a) b.classList.add("ok");
+    else if (+b.dataset.i === i) b.classList.add("bad");
+  });
+  if (it.s.includes("___")) document.querySelector(".q").innerHTML = sentenceHtml(it, o[it.a], true);
+  const last = pos === queue.length - 1;
+  document.getElementById("after").innerHTML = `
+    <div class="rule ${ok ? "" : "bad"}">${ok ? "✓ Teisingai. " : `✗ Teisingai būtų: <b>${esc(o[it.a])}</b>. `}${esc(it.r)}</div>
+    <div class="actions"><button class="primary" id="next">${last ? "Rezultatai →" : "Kitas →"}</button></div>`;
+  document.getElementById("next").focus();
+  renderTabs();
+}
+
+function next() { if (++pos < queue.length) show(); else summary(); }
+
+function summary() {
+  const good = results.filter(r => r.ok).length, total = results.length, pct = Math.round(good / total * 100);
+  const wrong = results.filter(r => !r.ok), n = mistakeIds(mode).length;
+  document.getElementById("card").innerHTML = `
+    <div class="progress"><span>Raundas baigtas</span><i style="width:100%"></i></div>
+    <div class="rsum ${pct >= 85 ? "good" : pct >= 60 ? "mid" : "low"}"><div class="big">${good} / ${total}</div><div class="pct">${pct}% teisingai</div></div>
+    <div class="ractions">
+      ${n ? `<button class="primary" id="fixAll">🎯 Treniruoti klaidas (${n})</button>` : ""}
+      <button class="${n ? "secondary" : "primary"}" id="again">Naujas raundas</button>
+    </div>
+    ${wrong.map(r => { const it = PR_MODES[mode].items[r.idx], o = opts(mode, it);
+      return `<div class="mistake"><div class="w">${sentenceHtml(it, o[it.a], true)}<br><s>${esc(r.given)}</s> → <b>${esc(o[it.a])}</b></div><div class="r">${esc(it.r)}</div></div>`; }).join("")}`;
+  document.getElementById("again").onclick = () => { onlyMistakes = false; newRound(); };
+  document.getElementById("fixAll") && (document.getElementById("fixAll").onclick = () => { onlyMistakes = true; newRound(); });
+  renderTabs();
+}
+
+document.getElementById("tabs").addEventListener("click", e => {
+  const b = e.target.closest(".tab"); if (!b) return;
+  if (b.dataset.only) onlyMistakes = true;
+  else { mode = b.dataset.m; onlyMistakes = false; history.replaceState(null, "", "#" + mode); }
+  newRound();
+});
+// sidebar switched section on this same page
+addEventListener("hashchange", () => {
+  const m = location.hash.slice(1);
+  if (!PR_MODES[m] || m === mode) return;
+  mode = m; onlyMistakes = false; newRound();
+});
+document.getElementById("card").addEventListener("click", e => {
+  const o = e.target.closest(".opt"); if (o) return answer(+o.dataset.i);
+  if (e.target.id === "next") next();
+});
+// Keys: 1–5 pick an answer, Enter = next
+document.addEventListener("keydown", e => {
+  if (e.altKey || e.ctrlKey || e.metaKey) return;
+  const n = +e.key;
+  if (!answered && n >= 1 && n <= document.querySelectorAll(".opt").length) { e.preventDefault(); answer(n - 1); }
+  else if (answered && e.key === "Enter" && document.getElementById("next") && !e.target.closest?.(".tab")) { e.preventDefault(); next(); }
+});
+newRound();
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script defer src="auth-config.js"></script><script defer src="auth.js"></script>
+<script src="hyphen.js"></script>
+<script src="motion.js?v=8"></script>
+</body>
+</html>

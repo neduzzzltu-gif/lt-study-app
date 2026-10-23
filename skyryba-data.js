@@ -203,6 +203,38 @@ const SK_SENTENCES = [
   );
 })();
 
+// More sentences: vienarūšės dalys, apibendrinamasis žodis, sujungiamieji ir bejungtukiai sakiniai, priedėliai
+// (pagal PUPP pratybų temas, sakiniai savi; added 2026-10-17)
+(() => {
+  const U = {
+    apibPo: "Po vienarūšių dalių prieš apibendrinamąjį žodį rašomas brūkšnys (VLKK 4.9 p.).|vienarusis",
+    apibGal: "Aiškinamųjų dalių pabaigoje, kai sakinys tęsiasi, rašomas kablelis (po dvitaškio) arba brūkšnys (VLKK 4.7 p.).|vienarusis",
+    kart: "Su kartojamu jungtuku (ir … ir, nei … nei) kablelis rašomas prieš antrąjį jungtuką (VLKK 3.5 c).|vienarusis",
+    pried: "Išplėstas priedėlis po pažymimojo žodžio išskiriamas kableliais, rečiau – brūkšniais (VLKK 6.3 p.).|pazyminys",
+    priedN: "Neišplėstas priedėlis po pažymimojo žodžio gali būti išskiriamas, jei norima pabrėžti (VLKK 6.4 p.).|pazyminys"
+  };
+  SK_SENTENCES.push(
+    "Muzikantas turėjo tik tris brangius daiktus[:/–|"+S.apib+"] seną pianiną[,|"+S.vienNo+"] smuiką ir natų sąsiuvinį.",
+
+    "Pianiną[,|"+S.vienNo+"] smuiką[,|"+S.vienNo+"] natas[–|"+U.apibPo+"] viską jis paveldėjo iš tėvo.",
+
+    "Lauke siautė pūga[,|"+S.suj+"] o kambaryje tyliai skambėjo smuikas.",
+
+    "Kaimynai nesiskundė[:/–|"+S.dvit+"] muzika jiems priminė vaikystę.",
+
+    "Senolis grojo ir liūdnas[,|"+U.kart+"] ir linksmas melodijas.",
+
+    "Muzika jam buvo ne tik darbas[,|"+S.netik+"] bet ir paguoda.",
+
+    "Jo mokinė[/,|"+U.priedN+"#p1] Rūta[/,|"+U.priedN+"#p1] ateidavo kiekvieną šeštadienį.",
+
+    "Kartą užsuko senas draugas Jonas[,/–|"+U.pried+"#p2] buvęs orkestro dirigentas[,/–|"+U.pried+"#p2] ir atnešė naujų natų.",
+
+    "Visi svečiai[:|"+S.apib+"] kaimynai[,|"+S.vienNo+"] draugai ir mokiniai[,/–|"+U.apibGal+"] tylėjo ir klausėsi.",
+
+    "Koncertas baigėsi vėlai[,|"+S.suj+"] tačiau niekas neskubėjo namo."
+  );
+})();
 
 // Parse into words + gap after each word: { words:[], gaps:[{ans:[...], rule, cat}] }
 function skParse(src) {
@@ -236,7 +268,7 @@ function skLoadMistakes(key = SK_KEY) {
   }
   return m;
 }
-const skSaveMistakes = (m, key = SK_KEY) => localStorage.setItem(key, JSON.stringify(m));
+const skSaveMistakes = (m, key = SK_KEY) => { localStorage.setItem(key, JSON.stringify(m)); window.onProgressSaved?.(); };
 function skRecord(si, g, ok, given) {
   const m = skLoadMistakes(), f = skLoadMistakes(SK_FIXED_KEY), id = si + ":" + g;
   if (ok) { if (m[id] && ++m[id].streak >= 2) { f[id] = { wrong: m[id].wrong, last: m[id].last, fixed: Date.now() }; delete m[id]; } }

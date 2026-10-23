@@ -212,6 +212,42 @@ const SENTENCES = [
   );
 })();
 
+// More sentences: nosinės, NE / NEBE, GI (pagal PUPP pratybų temas, sakiniai savi; added 2026-10-17)
+(() => {
+  const K = {
+    esam: "Nosinė rašoma tik esamojo laiko šaknyje ir jo išvestinėse formose (VLKK 2.3.3 b, 3*): šąla, gęsta, bąla → bąlantis.|nosines",
+    besam: "Kai nosinė yra tik esamajame laike (šąla, gęsta, bąla), bendraties, kitų laikų ir iš jų padarytų žodžių šaknyje ji nerašoma (VLKK 2.3.3 4*): šalti → įšalęs, gesti → užgesęs, balti → pabalęs.|nosines",
+    kait: "Nosinė rašoma, nes giminiškuose žodžiuose kaitaliojasi su kitu ilguoju balsiu (VLKK 2.3.2):",
+    an: "Nosinė rašoma, nes kaitaliojasi su an, en, in, un (VLKK 2.3.1):",
+    ryz: "Ryžtas, ryžtis, pasiryžęs – rašoma ilgoji y, nosinės nėra (VLKK 2.3.2 4*).|nosines",
+    azuol: "Senuose daiktavardžiuose ir jų dariniuose nosinė išlieka (VLKK 2.3.3 a): ąžuolas, ąžuolynas, ąsotis, žąsis.|nosines",
+    neV: "Ne su veiksmažodžiais rašoma kartu, kai nėra priešpriešos (VLKK 5.2.1 c).|ne",
+    nebe: "Dalelytės nebe, be su veiksmažodžiais ir jų formomis rašomos kartu (VLKK 5.2.7 a).|ne",
+    giK: "Gi kartu rašoma su vienskiemeniais nekaitomais žodžiais (VLKK 5.2.9 b): argi, kurgi, ogi, negi.|kartu",
+    giA: "Gi nuo kaitomų žodžių rašoma atskirai (VLKK 5.2.8 d): kas gi, ko gi, kam gi.|kartu",
+    perd: "Per daug, per mažai rašoma atskirai (VLKK 5.2.8 c; kartu tik pernelyg – 5.2.9 a).|kartu",
+    kazi: "Kaži, kažin rašomi atskirai (VLKK 5.1.3): kaži kodėl, kažin kas.|kartu"
+  };
+  SENTENCES.push(
+    "Kai lauke š{ą|"+K.esam+"}la, senas muzikantas užsikuria krosnį ir, pasir{y|"+K.ryz+"}žęs baigti kūrinį, iki vėlumos m{ą|"+K.kait+" mąstyti – mįslė.|nosines}sto prie pianino.",
+
+    "Jis {{ne, mėgsta|nemėgsta|"+K.neV+"}} triukšmo, todėl, kai kaimynai ima {{per, daug|per daug|"+K.perd+"}} triukšmauti, išsig{ą|"+K.an+" išsigąsta – išsigando.|nosines}sta ir užsidaro kambaryje.",
+
+    "Ugnis krosnyje pamažu g{ę|"+K.esam+"}sta, o užg{e|"+K.besam+"}susios žarijos dar ilgai rusena.",
+
+    "Jis vis bando t{ę|"+K.kait+" tęsti – tąsa – tįsti.|nosines}sti seną melodiją: jos t{ą|"+K.kait+" tąsa – tęsti.|nosines}sa jam atrodo svarbesnė už naują kūrinį.",
+
+    "Kaimynai stebisi, kad senolis {{kaži, kodėl|kaži kodėl|"+K.kazi+"}} {{ne, švenčia|nešvenčia|"+K.neV+"}} savo gimtadienio, nors mėgsta šv{ę|"+K.an+" švęsti – šventė.|nosines}sti kitų šventes.",
+
+    "Jaunystėje jis gr{į|"+K.kait+" grįžti – grąža – gręžti.|nosines}ždavo namo pėsčiomis per {ą|"+K.azuol+"}žuolyną ir mintyse dėliodavo naujas melodijas.",
+
+    "{{Nebe, galėdamas|Nebegalėdamas|"+K.nebe+"}} ilgiau laukti, jis užsimetė paltą, pasiėmė įš{a|"+K.besam+"}lusį smuiką ir išėjo į gatvę.",
+
+    "Virš stogų švietė b{ą|"+K.esam+"}lantis rytų dangus, o kaimynas, nuo šalčio visas pab{a|"+K.besam+"}lęs, skubėjo į parduotuvę.",
+
+    "„{{Kur, gi|Kurgi|"+K.giK+"}} taip anksti?“ – nustebo kaimynas. „{{O, gi|Ogi|"+K.giK+"}} į repeticiją, {{kas, gi|kas gi|"+K.giA+"}} kitas groja tame koncerte?“ – nusijuokė muzikantas."
+  );
+})();
 
 const norm = s => s.trim().toLowerCase().replace(/\s+/g, " ");
 const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
@@ -325,7 +361,7 @@ function loadMistakes(key = MISTAKES_KEY) {
   }
   return m;
 }
-const saveMistakes = (m, key = MISTAKES_KEY) => localStorage.setItem(key, JSON.stringify(m));
+const saveMistakes = (m, key = MISTAKES_KEY) => { localStorage.setItem(key, JSON.stringify(m)); window.onProgressSaved?.(); };
 function recordAnswer(si, k, ok, given) {
   const m = loadMistakes(), f = loadMistakes(FIXED_KEY), id = si + ":" + k;
   if (ok) {
