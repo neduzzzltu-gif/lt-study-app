@@ -24,7 +24,7 @@
   .choices { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:12px; }
   .choice { text-align:left; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; cursor:pointer; font:inherit; transition:transform .15s, border-color .15s; }
   .choice:hover { transform:translateY(-2px); border-color:var(--accent); }
-  .choice b { display:block; font-size:18px; margin:8px 0 4px; }
+  .choice b { display:block; font-size:18px; margin:0 0 4px; }
   .choice span { color:var(--muted); font-size:14px; }
 
   /* test bar */
@@ -36,7 +36,7 @@
   .timer { font-variant-numeric:tabular-nums; font-size:20px; font-weight:700; padding:6px 12px; border-radius:10px; background:var(--card); border:1px solid var(--line); }
   .timer.low { color:var(--bad); border-color:var(--bad); animation:blink 1s steps(2) infinite; }
   @keyframes blink { 50% { opacity:.55; } }
-  .tag { font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; margin-bottom:8px; }
+  .tag { font-size:14px; color:var(--muted); margin-bottom:8px; }
 
   /* sentence */
   .sentence { font-size:19px; line-height:2.3; }
@@ -78,11 +78,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%23147fae%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial%27 font-weight=%27bold%27 font-size=%2738%27 fill=%27%23fffdf9%27 text-anchor=%27middle%27%3E%C4%84%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="theme.css?v=8">
+<link rel="stylesheet" href="theme.css?v=12">
 </head>
 <body>
 <main id="app"></main>
-<script src="shell.js?v=8"></script>
+<script src="shell.js?v=10"></script>
 
 <script src="data.js"></script>
 <script src="skyryba-data.js"></script>
@@ -103,13 +103,12 @@ function startScreen() {
   stopTimer();
   app.innerHTML = `
     <a class="back" href="index.html">← Visos temos</a>
-    <span class="badge">15 minučių</span>
     <h1>Testas</h1>
-    <p class="sub">${COUNT} atsitiktinių sakinių · ${MINUTES} minučių. Atsakymai parodomi tik pabaigoje.</p>
+    <p class="sub">${COUNT} atsitiktinių sakinių per ${MINUTES} minučių. Atsakymai parodomi tik pabaigoje.</p>
     <div class="choices">
-      <button class="choice" data-t="r"><div>✍️</div><b>Rašyba</b><span>Praleistos raidės, kartu ar skyrium</span></button>
-      <button class="choice" data-t="s"><div>❝</div><b>Skyryba</b><span>Kableliai, brūkšniai, dvitaškiai</span></button>
-      <button class="choice" data-t="m"><div>🔀</div><b>Mišrus</b><span>Pusė rašybos, pusė skyrybos</span></button>
+      <button class="choice" data-t="r"><b>Rašyba</b><span>Praleistos raidės, kartu ar skyrium</span></button>
+      <button class="choice" data-t="s"><b>Skyryba</b><span>Kableliai, brūkšniai, dvitaškiai</span></button>
+      <button class="choice" data-t="m"><b>Mišrus</b><span>Pusė rašybos, pusė skyrybos</span></button>
     </div>`;
   app.querySelectorAll(".choice").forEach(b => b.onclick = () => startTest(b.dataset.t));
 }
@@ -152,12 +151,12 @@ function showItem() {
       <div class="tag">${it.type === "r" ? "Rašyba – įrašyk praleistas raides" : "Skyryba – padėk trūkstamus ženklus"}</div>
       <div class="sentence" id="sentence">${it.type === "r" ? renderR(it, ans) : renderS(it, ans)}</div>
       <div class="row">
-        <button class="btn secondary" id="prev" ${state.pos === 0 ? "disabled style='opacity:.4'" : ""}>← Atgal</button>
-        ${last ? `<button class="btn primary" id="finish">Baigti ${state.redo ? "taisymą" : "testą"}</button>` : `<button class="btn primary" id="next">Kitas →</button>`}
+        <button class="btn secondary" id="prev" ${state.pos === 0 ? "disabled" : ""}>Atgal</button>
+        ${last ? `<button class="btn primary" id="finish">Baigti ${state.redo ? "taisymą" : "testą"}</button>` : `<button class="btn primary" id="next">Kitas</button>`}
         ${!last ? `<button class="btn secondary" id="finish">Baigti</button>` : ""}
       </div>
     </div>
-    ${state.redo ? `<div class="row"><button class="btn secondary" id="toResults">← Atgal į rezultatą</button><button class="btn secondary" id="review">${state.showReview ? "Slėpti klaidas ▴" : "📋 Peržiūrėti klaidas ▾"}</button></div>
+    ${state.redo ? `<div class="row"><button class="btn secondary" id="toResults">Atgal į rezultatą</button><button class="btn secondary" id="review">${state.showReview ? "Slėpti klaidas" : "Peržiūrėti klaidas"}</button></div>
     ${state.showReview ? `<div style="margin-top:14px">${state.review}</div>` : ""}` : ""}`;
   document.getElementById("toResults") && (document.getElementById("toResults").onclick = () => renderResults(state.parent));
   document.getElementById("review") && (document.getElementById("review").onclick = () => { state.showReview = !state.showReview; showItem(); });
@@ -322,17 +321,17 @@ function renderResults(res) {
   app.innerHTML = `
     <a class="back" href="index.html">← Visos temos</a>
     <h1>${res.redo ? "Taisymo rezultatas" : "Testo rezultatas"}</h1>
-    ${res.timeUp ? `<p class="sub">⏰ Laikas baigėsi – testas užbaigtas automatiškai.</p>` : ""}
+    ${res.timeUp ? `<p class="sub">Laikas baigėsi – testas užbaigtas automatiškai.</p>` : ""}
     <div class="card score ${res.pct >= 85 ? "good" : res.pct >= 60 ? "mid" : "low"}">
       <div class="big">${res.points} / ${res.max}</div>
       <div class="pct">${res.pct}% teisingai</div>
-      <div class="meta">${res.nMist} ${plural(res.nMist)}${res.used !== null ? ` · laikas ${fmt(res.used)}` : ""}</div>
+      <div class="meta">${res.nMist} ${plural(res.nMist)}${res.used !== null ? `, laikas ${fmt(res.used)}` : ""}</div>
     </div>
     <div class="row">
-      ${res.nMist ? `<button class="btn danger" id="redo">🎯 ${state.redo && state.parent === res ? "Tęsti taisymą" : "Taisyti klaidas"} (${res.nMist})</button>` : ""}
+      ${res.nMist ? `<button class="btn danger" id="redo">${state.redo && state.parent === res ? "Tęsti taisymą" : "Taisyti klaidas"} (${res.nMist})</button>` : ""}
       <button class="btn primary" id="again">Naujas testas</button>
     </div>
-    ${res.nMist ? `<h2>Klaidos</h2>` : `<p class="allok" style="margin-top:20px">Be klaidų! 🎉</p>`}
+    ${res.nMist ? `<h2>Klaidos</h2>` : `<p class="allok" style="margin-top:20px">Be klaidų!</p>`}
     ${res.wrongItems.map(mistakeHtml).join("")}`;
 
   document.getElementById("again").onclick = startScreen;
@@ -356,7 +355,8 @@ startScreen();
 </script>
 <script src="demo-report.js"></script><!-- DEMO: remove later -->
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script defer src="auth-config.js"></script><script defer src="auth.js"></script>
-<script src="hyphen.js"></script>
-<script src="motion.js?v=8"></script>
+<script src="hyphen.js?v=2"></script>
+<script src="dev.js"></script>
+<script src="motion.js?v=9"></script>
 </body>
 </html>

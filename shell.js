@@ -16,14 +16,16 @@
     chat: '<path d="M4 5h16v11H9l-5 4z"/>',
     list: '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h8M8 17h5"/>',
     join: '<rect x="3" y="7" width="8" height="10" rx="2"/><rect x="13" y="7" width="8" height="10" rx="2"/>',
+    check: '<path d="M5 12l4 4 10-10"/>',
     ask: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6M12 17h.01"/>',
   };
   const items = [
     ["app.html", "Apžvalga", "home"], ["rasyba.html", "Rašyba", "pen"], ["skyryba.html", "Skyryba", "comma"],
     ["test.html", "Testas", "clock"], ["klaidos.html", "Klaidos", "chat"],
     ["pratimai.html#kartu", "Kartu ar atskirai", "join"], ["pratimai.html#rusis", "Sakinio rūšis", "list"], ["pratimai.html#zenklas", "Ženklai", "ask"],
+    ["pratimai.html#kultura", "Kalbos kultūra", "check"],
   ];
-  // pratimai.html is 3 sections, told apart by #kartu / #rusis / #zenklas
+  // pratimai.html is 4 sections, told apart by #kartu / #rusis / #zenklas / #kultura
   const here = () => page === "pratimai.html" ? "pratimai.html#" + (location.hash.slice(1) || "kartu") : page;
   const cur = items.find(i => i[0] === here()) || ["", "Treniruoklis"];
   // "Pratimai" group: every exercise; "Meniu": overview + mistakes
@@ -36,8 +38,6 @@
   shell.innerHTML = `
     <aside class="sbar" id="sbar">
       <a class="slogo" href="index.html"><span>Ą</span>Treniruoklis</a>
-      <small>Kursas</small>
-      <div class="sws"><i>B</i>Brandos egzaminas</div>
       <small>Meniu</small>
       <nav>${items.filter(i => !isPr(i)).map(link).join("")}</nav>
       <small>Pratimai</small>

@@ -35,13 +35,13 @@ const hyphenateText = t => t.replace(/\p{L}+/gu, hyphenateWord);
 const HY_SKIP = new Set(["SCRIPT", "STYLE", "TEXTAREA", "INPUT", "CODE"]);
 function hyphenateNode(root) {
   if (root.nodeType === 3) {
-    if (!HY_SKIP.has(root.parentNode?.nodeName) && !root.data.includes(SHY)) {
+    if (!HY_SKIP.has(root.parentNode?.nodeName) && !root.parentElement?.closest("#dev-root") && !root.data.includes(SHY)) {
       const t = hyphenateText(root.data);
       if (t !== root.data) root.data = t;
     }
     return;
   }
-  if (root.nodeType !== 1 || HY_SKIP.has(root.nodeName)) return;
+  if (root.nodeType !== 1 || HY_SKIP.has(root.nodeName) || root.closest("#dev-root")) return; // dev.js panel stays as typed
   const walk = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
   const nodes = [];
   while (walk.nextNode()) nodes.push(walk.currentNode);

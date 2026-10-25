@@ -67,21 +67,6 @@
     document.fonts?.ready.then(() => move(cur));
   }
 
-  // Cursor tags lean toward the mouse (mouse only, smoothed)
-  const tags = [...document.querySelectorAll("[data-depth]")];
-  if (tags.length && fine && !reduce) {
-    let tx = 0, ty = 0, x = 0, y = 0, raf = 0;
-    const loop = () => {
-      x += (tx - x) * .08; y += (ty - y) * .08;
-      tags.forEach(t => { const d = +t.dataset.depth; t.style.transform = `translate3d(${(x * d).toFixed(2)}px, ${(y * d).toFixed(2)}px, 0)`; });
-      raf = Math.abs(tx - x) + Math.abs(ty - y) > .001 ? requestAnimationFrame(loop) : 0;
-    };
-    addEventListener("pointermove", e => {
-      tx = e.clientX / innerWidth - .5; ty = e.clientY / innerHeight - .5;
-      if (!raf) raf = requestAnimationFrame(loop);
-    }, { passive: true });
-  }
-
   // Practice pages: the next sentence fades in instead of popping (test.html rebuilds #sentence, so re-query it)
   if (!document.querySelector(".hero") && document.body.animate) {
     let lastText = document.getElementById("sentence")?.textContent;

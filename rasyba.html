@@ -19,7 +19,7 @@
   .sentence input { font:inherit; font-size:18px; text-align:center; border:none; border-bottom:2px solid var(--accent); background:#eef1ff; border-radius:6px 6px 0 0; padding:0 2px; margin:0 1px; outline:none; }
   .sentence input:focus { background:#dfe5ff; }
   .sentence input.ok { border-color:var(--ok); background:#e6f5ec; color:var(--ok); }
-  .sentence input.bad { border-color:var(--bad); background:#fdecec; color:var(--bad); text-decoration:line-through; }
+  .sentence input.bad { border-color:var(--bad); background:#fdecec; color:var(--bad); }
   .hint { color:var(--muted); font-size:15px; }
   .actions { display:flex; gap:10px; margin-top:20px; }
   .actions button { font:inherit; font-size:16px; padding:12px 20px; border-radius:12px; border:none; cursor:pointer; }
@@ -103,15 +103,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%23147fae%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial%27 font-weight=%27bold%27 font-size=%2738%27 fill=%27%23fffdf9%27 text-anchor=%27middle%27%3E%C4%84%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="theme.css?v=8">
+<link rel="stylesheet" href="theme.css?v=12">
 </head>
 <body>
 <main>
   <div class="top">
     <a class="back" href="index.html">← Visos temos</a>
-    <a class="mode" id="modeLink" href="klaidos.html">Mano klaidos →</a>
+    <a class="mode" id="modeLink" href="klaidos.html">Mano klaidos</a>
   </div>
-  <span class="badge">Rašyba</span>
   <h1 id="title">Rašybos treniruoklis</h1>
   <p class="sub" id="sub">Įrašyk praleistas raides. Skliaustuose esančius žodžius parašyk kartu arba skyrium. Užlaikyk pelę ant langelio 1 sek. – atsiras užuomina.</p>
   <div class="card">
@@ -119,22 +118,22 @@
     <div class="sentence" id="sentence"></div>
     <div class="actions" id="actions">
       <button class="primary" id="check">Tikrinti</button>
-      <button class="secondary" id="next">Kitas sakinys →</button>
+      <button class="secondary" id="next">Kitas sakinys</button>
     </div>
     <div class="result" id="result"></div>
   </div>
 </main>
-<script src="shell.js?v=8"></script>
+<script src="shell.js?v=10"></script>
 
 <script src="data.js"></script>
-<script src="round.js"></script>
+<script src="round.js?v=5"></script>
 <script>
 // ?klaidos = practise only blanks you got wrong before
 const MISTAKE_MODE = new URLSearchParams(location.search).has("klaidos");
 if (MISTAKE_MODE) {
   document.getElementById("title").textContent = "Klaidų treniruotė";
   document.getElementById("sub").textContent = "Sakiniai, kuriuose suklydai. Užpildyk visus langelius – atsakyk teisingai 2 kartus iš eilės ir klaida keliauja į pataisytas.";
-  document.getElementById("modeLink").textContent = "← Klaidų sąrašas";
+  document.getElementById("modeLink").textContent = "Klaidų sąrašas";
 }
 
 // fixing = { i, keys, given } while redoing a round's mistakes (see round.js): only keys are blanks
@@ -142,11 +141,13 @@ let current = -1, parts = [], focused = null, checked = false, fixing = null;
 
 function load(i, fix = null) {
   current = i; checked = false; fixing = fix;
-  document.getElementById("sentence").classList.toggle("fixing", !!fix);
+  const view = !!fix && !fix.keys.length;   // already solved → just look at it
+  document.getElementById("sentence").classList.toggle("fixing", !!fix && !view);
+  document.getElementById("check").style.display = view ? "none" : "";
   parts = parse(SENTENCES[i]);
   document.getElementById("sentence").innerHTML = parts.map((p, k) => {
     if (p.t !== undefined) return esc(p.t);
-    if (fix && !fix.keys.includes(k)) return `<span class="kept">${esc(fix.given[k] ?? "")}</span>`;
+    if (fix && !fix.keys.includes(k)) return `<span class="kept${fix.bad?.includes(k) ? " miss" : ""}">${esc(fix.given[k] || (fix.bad?.includes(k) ? "_" : ""))}</span>`;
     if (p.word) return `<span class="hint">(${esc(p.hint)})</span> <input data-k="${k}" style="width:${Math.max(p.hint.length, 8) + 2}ch" autocomplete="off" autocapitalize="off" spellcheck="false">`;
     return `<input data-k="${k}" style="width:${Math.max(...p.ans.split("/").map(a => a.length)) + 1.6}ch" autocomplete="off" autocapitalize="off" spellcheck="false">`;
   }).join("");
@@ -155,40 +156,39 @@ function load(i, fix = null) {
   document.querySelector(".sentence input")?.focus();
 }
 
+// One try per sentence: wrong blanks go red and everything locks.
+// After checking you see each mistake and its fix; you redo the mistakes after the whole round.
 function check() {
-  if (document.getElementById("actions").style.display === "none" || document.getElementById("check").style.display === "none") return;
+  if (checked || document.getElementById("actions").style.display === "none" || document.getElementById("check").style.display === "none") return;
   const inputs = [...document.querySelectorAll(".sentence input")];
-  const first = !checked; checked = true;
-  let wrong = [], correct = [];
-  const given = { ...fixing?.given };
+  checked = true;
+  let wrong = [];
+  const given = { ...fixing?.given }, seen = { ...fixing?.given };
   inputs.forEach(inp => {
-    const k = +inp.dataset.k, p = parts[k];
-    const ok = p.ans.split("/").some(a => norm(inp.value) === norm(a));
-    if (ok) given[k] = p.ans.split("/").find(a => norm(a) === norm(inp.value));
+    const k = +inp.dataset.k, p = parts[k], val = inp.value.trim();
+    const ok = p.ans.split("/").some(a => norm(val) === norm(a));
+    if (ok) given[k] = val;   // right words stay the way you wrote them
+    seen[k] = val;
     inp.classList.toggle("ok", ok);
     inp.classList.toggle("bad", !ok);
-    if (first && inp.value.trim()) recordAnswer(current, k, ok, inp.value.trim());
-    if (!ok) wrong.push({ k, p, val: inp.value.trim() });
-    else correct.push({ k, p });
+    inp.readOnly = true;
+    if (val) recordAnswer(current, k, ok, val);
+    if (!ok) wrong.push({ k, p, val });
   });
+  document.getElementById("check").style.display = "none";
   const total = inputs.length, good = total - wrong.length;
-  let html = `<div class="score">${good} / ${total} teisingai</div>`, mHtml = "";
-  if (!wrong.length) html += `<div class="allok">Viskas teisingai! 🎉</div>`;
-  wrong.forEach(({ k, p, val }) => {
+  let html = `<div class="score">${fixing ? `Pataisyta ${good} / ${total}` : `${good} / ${total} teisingai`}</div>`;
+  if (!wrong.length) html += `<div class="allok">${fixing ? "Viskas pataisyta!" : "Viskas teisingai!"}</div>`;
+  else if (!fixing) html += `<div class="hint">Klaidas galėsi pataisyti, kai baigsi visus sakinius.</div>`;
+  // Your mistake → the right answer + rule, shown right after checking so you learn from it
+  const mHtml = wrong.map(({ k, p, val }) => {
     const right = p.word ? p.ans : wordAround(parts, k, p.ans.split("/")[0]);
     const yours = p.word ? (val || "—") : wordAround(parts, k, val || "_");
-    mHtml += mistakeRow(fixLine(yours, right), p.rule, fullRule(p.cat));
-  });
-  html += mHtml;
-  // Rules for the words you got right, folded away
-  if (correct.length) html += `<details class="rightlist"><summary>Teisingi žodžiai (${correct.length})</summary>${correct.map(({ k, p }) => {
-    const w = p.word ? p.ans : wordAround(parts, k, p.ans.split("/")[0]);
-    return `<div class="good"><div class="w"><b>${esc(w)}</b></div><div class="r">${esc(p.rule)}</div>${fullRule(p.cat)}</div>`;
-  }).join("")}</details>`;
-  const n =Object.keys(loadMistakes()).length;
-  if (n && !MISTAKE_MODE) html += `<a class="fixbtn" href="rasyba.html?klaidos">🎯 Taisyti klaidas (${n}) →</a>`;
-  document.getElementById("result").innerHTML = html;
-  if (first) roundAdd(good, total, mHtml, wrong.length ? { i: current, keys: wrong.map(w => w.k), given } : null, { i: current, keys: [], given });
+    return mistakeRow(fixLine(yours, right), p.rule, fullRule(p.cat));
+  }).join("");
+  const badKeys = [...(fixing?.bad || []).filter(k => !(k in given)), ...wrong.map(w => w.k)];
+  document.getElementById("result").innerHTML = html + mHtml;
+  roundAdd(good, total, mHtml, wrong.length ? { i: current, keys: wrong.map(w => w.k), given } : null, { i: current, keys: [], given: seen, bad: [...new Set(badKeys)] });
   updateModeLink();
 }
 
@@ -196,7 +196,7 @@ function check() {
 function updateModeLink() {
   if (MISTAKE_MODE) return;
   const n = Object.keys(loadMistakes()).length;
-  document.getElementById("modeLink").textContent = n ? `Mano klaidos (${n}) →` : "Mano klaidos →";
+  document.getElementById("modeLink").textContent = n ? `Mano klaidos (${n})` : "Mano klaidos";
 }
 updateModeLink();
 
@@ -220,7 +220,7 @@ function pickNext() {
   return deck.pop();
 }
 function showNoMistakes() {
-  document.getElementById("sentence").innerHTML = `<div class="empty">Klaidų neliko! 🎉<br>Paspręsk daugiau sakinių <a href="rasyba.html">įprastame režime</a>, o čia atsiras tie, kuriuose suklysi.</div>`;
+  document.getElementById("sentence").innerHTML = `<div class="empty">Klaidų neliko!<br>Paspręsk daugiau sakinių <a href="rasyba.html">įprastame režime</a>, o čia atsiras tie, kuriuose suklysi.</div>`;
   document.getElementById("actions").style.display = "none";
   document.getElementById("result").innerHTML = "";
 }
@@ -229,7 +229,8 @@ document.getElementById("check").onclick = check;
 document.getElementById("next").onclick = roundNext;
 const sentenceEl = document.getElementById("sentence");
 sentenceEl.addEventListener("focusin", e => { if (e.target.tagName === "INPUT") focused = e.target; });
-sentenceEl.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.tagName === "INPUT") { e.preventDefault(); check(); } });
+// Enter checks; after checking, Enter goes to the next sentence
+sentenceEl.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.tagName === "INPUT") { e.preventDefault(); if (e.repeat) return; checked ? roundNext() : check(); } });
 arrowKeys(sentenceEl);
 
 // Hold the mouse on a blank for 1 s → "?" appears above it → click shows which rule to use
@@ -264,7 +265,7 @@ function showQ(inp) {
   };
 }
 sentenceEl.addEventListener("mouseover", e => {
-  if (e.target.tagName !== "INPUT" || e.target === qFor) return;
+  if (e.target.tagName !== "INPUT" || e.target.readOnly || e.target === qFor) return;   // no hint after checking
   clearTimeout(holdTimer);
   const inp = e.target;
   holdTimer = setTimeout(() => showQ(inp), 1000);
@@ -288,7 +289,8 @@ roundGo(0);
 </script>
 <script src="demo-report.js"></script><!-- DEMO: remove later -->
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script defer src="auth-config.js"></script><script defer src="auth.js"></script>
-<script src="hyphen.js"></script>
-<script src="motion.js?v=8"></script>
+<script src="hyphen.js?v=2"></script>
+<script src="dev.js"></script>
+<script src="motion.js?v=9"></script>
 </body>
 </html>

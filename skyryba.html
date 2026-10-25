@@ -24,6 +24,7 @@
   .gap.ok { color:var(--ok); background:#e6f5ec; }
   .gap.bad { color:var(--bad); background:#fdecec; }
   .gap.miss { background:#fdecec; box-shadow:inset 0 -2px 0 var(--bad); }
+  .sentence.done .gap { cursor:default; }
   .gap.locked { cursor:default; color:var(--ink); font-weight:400; background:none; min-width:0; padding:0; }
   .actions { display:flex; gap:10px; margin-top:20px; flex-wrap:wrap; }
   .actions button { font:inherit; font-size:16px; padding:12px 20px; border-radius:12px; border:none; cursor:pointer; }
@@ -76,15 +77,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%23147fae%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial%27 font-weight=%27bold%27 font-size=%2738%27 fill=%27%23fffdf9%27 text-anchor=%27middle%27%3E%C4%84%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="theme.css?v=8">
+<link rel="stylesheet" href="theme.css?v=12">
 </head>
 <body>
 <main>
   <div class="top">
     <a class="back" href="index.html">← Visos temos</a>
-    <a class="mode" id="modeLink" href="klaidos.html#skyryba">Mano klaidos →</a>
+    <a class="mode" id="modeLink" href="klaidos.html#skyryba">Mano klaidos</a>
   </div>
-  <span class="badge">Skyryba</span>
   <h1 id="title">Skyrybos treniruoklis</h1>
   <p class="sub" id="sub">Spausk tarpą tarp žodžių, kad padėtum ženklą. Užvesk pelę ant tarpo – iššoks pasirinkimai (<b>∅ , – :</b>), arba spausk tarpą, kad ženklai keistųsi.</p>
   <div class="card">
@@ -92,22 +92,22 @@
     <div class="sentence" id="sentence"></div>
     <div class="actions" id="actions">
       <button class="primary" id="check">Tikrinti</button>
-      <button class="secondary" id="next">Kitas sakinys →</button>
+      <button class="secondary" id="next">Kitas sakinys</button>
     </div>
     <div class="result" id="result"></div>
   </div>
 </main>
-<script src="shell.js?v=8"></script>
+<script src="shell.js?v=10"></script>
 
 <script src="data.js"></script>
 <script src="skyryba-data.js"></script>
-<script src="round.js"></script>
+<script src="round.js?v=5"></script>
 <script>
 const MISTAKE_MODE = new URLSearchParams(location.search).has("klaidos");
 if (MISTAKE_MODE) {
   document.getElementById("title").textContent = "Skyrybos klaidų treniruotė";
   document.getElementById("sub").textContent = "Sakiniai, kuriuose suklydai. Sudėk visus ženklus – atsakyk teisingai 2 kartus iš eilės ir klaida keliauja į pataisytas.";
-  document.getElementById("modeLink").textContent = "← Klaidų sąrašas";
+  document.getElementById("modeLink").textContent = "Klaidų sąrašas";
 }
 
 const MARKS = ["", ",", "–", ":"];
@@ -115,12 +115,22 @@ const MARKS = ["", ",", "–", ":"];
 let current = -1, sent = null, checked = false, fixing = null;
 
 function load(i, fix = null) {
-  current = i; checked = false; fixing = fix;
-  document.getElementById("sentence").classList.toggle("fixing", !!fix);
+  current = i; fixing = fix;
+  const view = !!fix && !fix.keys.length;   // already solved → just look at it
+  checked = view;                           // so Enter goes on to the next one
+  const el = document.getElementById("sentence");
+  el.classList.toggle("fixing", !!fix && !view);
+  el.classList.remove("done");
+  document.getElementById("check").style.display = view ? "none" : "";
   sent = skParse(SK_SENTENCES[i]);
-  document.getElementById("sentence").innerHTML = sent.words.map((w, g) => {
+  el.innerHTML = sent.words.map((w, g) => {
     if (g >= sent.gaps.length) return esc(w);
-    if (fix && !fix.keys.includes(g)) { const m = fix.given[g] ?? ""; return esc(w) + (m === "–" ? ` <span class="kept">–</span> ` : m ? `<span class="kept">${esc(m)}</span> ` : " "); }
+    if (fix && !fix.keys.includes(g)) {
+      const m = fix.given[g] ?? "", bad = fix.bad?.includes(g);
+      // wrong spots in red: your wrong mark, or "_" where a mark was missing
+      if (bad) return esc(w) + (m === "–" ? ` <span class="kept miss">–</span> ` : `<span class="kept miss">${esc(m || "_")}</span> `);
+      return esc(w) + (m === "–" ? ` <span class="kept">–</span> ` : m ? `<span class="kept">${esc(m)}</span> ` : " ");
+    }
     return `${esc(w)}<button class="gap" data-g="${g}" data-m=""></button>`;
   }).join("");
   document.getElementById("result").innerHTML = "";
@@ -133,7 +143,7 @@ function setMark(b, mark) {
   b.className = "gap" + (mark ? " set" : "");
 }
 document.getElementById("sentence").addEventListener("click", e => {
-  const b = e.target.closest(".gap"); if (!b) return;
+  const b = e.target.closest(".gap"); if (!b || checked) return;
   // On touch screens the tap opens the choices instead of cycling
   if (matchMedia("(hover: none)").matches) return showPicker(b);
   setMark(b, MARKS[(MARKS.indexOf(b.dataset.m) + 1) % MARKS.length]);
@@ -160,7 +170,7 @@ function showPicker(b) {
   });
 }
 document.addEventListener("mouseover", e => {
-  const gap = e.target.closest(".sentence .gap");
+  const gap = checked ? null : e.target.closest(".sentence .gap");
   if (gap && gap !== pickFor) { clearTimeout(openTimer); openTimer = setTimeout(() => showPicker(gap), 120); }
   if (!gap) clearTimeout(openTimer);
   if (!pickFor) return;
@@ -170,17 +180,23 @@ document.addEventListener("mouseover", e => {
 addEventListener("resize", hidePicker);
 document.addEventListener("keydown", e => { if (e.key === "Escape") hidePicker(); });
 arrowKeys(document.getElementById("sentence"), (b, dir) => {
+  if (checked) return;
   setMark(b, MARKS[(MARKS.indexOf(b.dataset.m) + dir + MARKS.length) % MARKS.length]);
   if (pickFor === b) showPicker(b);
 }, hidePicker);
 
+// One try per sentence: wrong spots go red and the gaps lock.
+// After checking you see each mistake and its fix; you redo the mistakes after the whole round.
 function check() {
   hidePicker();
-  if (document.getElementById("actions").style.display === "none" || document.getElementById("check").style.display === "none") return;
-  const first = !checked; checked = true;
+  if (checked || document.getElementById("actions").style.display === "none" || document.getElementById("check").style.display === "none") return;
+  checked = true;
+  // locked now: drop the fixing red so right gaps turn green
+  document.getElementById("sentence").classList.add("done");
+  document.getElementById("sentence").classList.remove("fixing");
   const wrong = [], correct = [];
   // Paired gaps (e.g. both sides of a priedėlis) must use the same mark
-  const pairVals = {}, given = { ...fixing?.given };
+  const pairVals = {}, given = { ...fixing?.given }, seen = { ...fixing?.given };
   const addPair = (g, m) => { const p = sent.gaps[g].pair; if (p) (pairVals[p] = pairVals[p] || new Set()).add(m); };
   document.querySelectorAll(".sentence .gap").forEach(b => addPair(+b.dataset.g, b.dataset.m));
   if (fixing) sent.gaps.forEach((_, g) => { if (!fixing.keys.includes(g)) addPair(g, fixing.given[g] ?? ""); });
@@ -189,34 +205,40 @@ function check() {
     const ok = gap.ans.includes(val) && !(gap.pair && pairVals[gap.pair].size > 1);
     b.className = "gap " + (ok ? (val ? "ok" : "") : (val ? "bad" : "miss"));
     // Only remember gaps that matter: a mark was expected, or a wrong mark was added
-    if (first && (!gap.def || !ok || (current + ":" + g) in skLoadMistakes())) skRecord(current, g, ok, val);
+    if (!gap.def || !ok || (current + ":" + g) in skLoadMistakes()) skRecord(current, g, ok, val);
+    seen[g] = val;
     if (ok) given[g] = val;
     if (!ok) wrong.push({ g, gap, val });
     else if (!gap.def) correct.push({ g, gap, val });
   });
+  document.getElementById("check").style.display = "none";
   const a = sent.words;
-  let html = `<div class="score">${wrong.length ? `${wrong.length} ${wrong.length === 1 ? "klaida" : "klaidos"}` : "Viskas teisingai! 🎉"}</div>`, mHtml = "";
-  wrong.forEach(({ g, gap, val }) => {
+  // Your mistake → the right answer + rule, shown right after checking so you learn from it
+  const mHtml = wrong.map(({ g, gap, val }) => {
     const right = gap.ans.map(x => skJoin(a[g], x, a[g + 1])).join("  arba  ");
-    mHtml += mistakeRow(fixLine(skJoin(a[g], val, a[g + 1]), right), gap.rule, skFullRule(gap.cat));
-  });
-  html += mHtml;
-  // Points: marked places right + extra marks count as lost
-  // In fix mode every redone gap is one point (also removing an extra mark)
-  const pts = fixing ? fixing.keys.length : sent.gaps.filter(x => !x.def).length, extra = wrong.filter(w => w.gap.def).length;
-  if (first) roundAdd(fixing ? pts - wrong.length : Math.max(0, correct.length - extra), pts, mHtml, wrong.length ? { i: current, keys: wrong.map(w => w.g), given } : null, { i: current, keys: [], given });
-  if (correct.length) html += `<details class="rightlist"><summary>Teisingos vietos (${correct.length})</summary>${correct.map(({ g, gap, val }) =>
-    `<div class="good"><div class="w"><b>${esc(skJoin(a[g], val, a[g + 1]))}</b></div><div class="r">${esc(gap.rule)}</div>${skFullRule(gap.cat)}</div>`).join("")}</details>`;
-  const n = Object.keys(skLoadMistakes()).length;
-  if (n && !MISTAKE_MODE) html += `<a class="fixbtn" href="skyryba.html?klaidos">🎯 Taisyti klaidas (${n}) →</a>`;
-  document.getElementById("result").innerHTML = html;
+    return mistakeRow(fixLine(skJoin(a[g], val, a[g + 1]), right), gap.rule, skFullRule(gap.cat));
+  }).join("");
+  // Points: marked places right minus extra marks. In the fix pass the whole sentence is scored again
+  // and you win back only what that adds to the best score so far (score rides on the redo).
+  const sentPts = sent.gaps.filter(x => !x.def).length;
+  const scoreNow = Math.max(0, sentPts - wrong.filter(w => !w.gap.def).length - wrong.filter(w => w.gap.def).length);
+  const pts = fixing ? fixing.keys.length : sentPts;
+  const good = fixing ? Math.max(0, scoreNow - fixing.score) : scoreNow;
+  const redo = wrong.length ? { i: current, keys: wrong.map(w => w.g), given, score: Math.max(fixing?.score ?? 0, scoreNow) } : null;
+  const badKeys = [...(fixing?.bad || []).filter(g => !(g in given)), ...wrong.map(w => w.g)];
+  let html = fixing
+    ? `<div class="score">${wrong.length ? `Pataisyta ${pts - wrong.length} / ${pts}` : "Viskas pataisyta!"}</div>`
+    : `<div class="score">${wrong.length ? `${wrong.length} ${wrong.length === 1 ? "klaida" : "klaidos"}` : "Viskas teisingai!"}</div>`;
+  if (wrong.length && !fixing) html += `<div class="hint">Klaidas galėsi pataisyti, kai baigsi visus sakinius.</div>`;
+  document.getElementById("result").innerHTML = html + mHtml;
+  roundAdd(good, pts, mHtml, redo, { i: current, keys: [], given: seen, bad: [...new Set(badKeys)] });
   updateModeLink();
 }
 
 function updateModeLink() {
   if (MISTAKE_MODE) return;
   const n = Object.keys(skLoadMistakes()).length;
-  document.getElementById("modeLink").textContent = n ? `Mano klaidos (${n}) →` : "Mano klaidos →";
+  document.getElementById("modeLink").textContent = n ? `Mano klaidos (${n})` : "Mano klaidos";
 }
 
 // Shuffled deck, never the same sentence twice in a row
@@ -238,7 +260,7 @@ function pickNext() {
   return deck.pop();
 }
 function showNoMistakes() {
-  document.getElementById("sentence").innerHTML = `<div class="empty">Klaidų neliko! 🎉<br>Paspręsk daugiau sakinių <a href="skyryba.html">įprastame režime</a>.</div>`;
+  document.getElementById("sentence").innerHTML = `<div class="empty">Klaidų neliko!<br>Paspręsk daugiau sakinių <a href="skyryba.html">įprastame režime</a>.</div>`;
   document.getElementById("actions").style.display = "none";
   document.getElementById("result").innerHTML = "";
   hidePicker();
@@ -247,8 +269,8 @@ function showNoMistakes() {
 document.getElementById("check").onclick = check;
 document.getElementById("next").onclick = roundNext;
 document.addEventListener("keydown", e => {
-  if (e.key !== "Enter") return;
-  if (e.target.closest(".gap") || !e.target.closest("button, a, summary")) { e.preventDefault(); check(); }
+  if (e.key !== "Enter" || e.repeat) return;   // holding Enter must not check the next sentence empty
+  if (e.target.closest(".gap") || !e.target.closest("button, a, summary")) { if (document.getElementById("actions").style.display === "none") return; e.preventDefault(); checked ? roundNext() : check(); }
 });
 updateModeLink();
 roundStart(() => Math.min(ROUND_SIZE, pool().length), "skyryba.html?klaidos", pickNext, fix => load(fix.i, fix.keys ? fix : null), showNoMistakes);
@@ -256,7 +278,8 @@ roundGo(0);
 </script>
 <script src="demo-report.js"></script><!-- DEMO: remove later -->
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script defer src="auth-config.js"></script><script defer src="auth.js"></script>
-<script src="hyphen.js"></script>
-<script src="motion.js?v=8"></script>
+<script src="hyphen.js?v=2"></script>
+<script src="dev.js"></script>
+<script src="motion.js?v=9"></script>
 </body>
 </html>

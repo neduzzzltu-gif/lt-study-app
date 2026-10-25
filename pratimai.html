@@ -33,8 +33,8 @@
   .opt.bad { background:#fdecec; border-color:var(--bad); color:var(--bad); text-decoration:line-through; }
   .opt kbd { font:inherit; font-size:12px; color:var(--muted); margin-right:6px; }
   .legend { margin-top:10px; font-size:13px; color:var(--muted); }
-  .rule { margin-top:16px; padding:10px 14px; border-left:4px solid var(--ok); background:#f3faf6; border-radius:0 10px 10px 0; font-size:15px; line-height:1.5; }
-  .rule.bad { border-left-color:var(--bad); background:#fff7f7; }
+  .rule { margin-top:16px; padding:12px 16px; background:var(--ok-soft); border-radius:var(--r-sm); font-size:15px; line-height:1.5; }
+  .rule.bad { background:var(--bad-soft); }
   .actions { display:flex; gap:10px; margin-top:18px; }
   .actions button, .ractions button { font:inherit; font-size:16px; padding:12px 20px; border-radius:12px; border:none; cursor:pointer; }
   .primary { background:var(--ink); color:#fff; }
@@ -50,28 +50,27 @@
   .mistake .r { color:#444; font-size:14px; margin-top:4px; }
   .empty { color:var(--muted); line-height:1.6; }
   /* theme.css styles .mistake for the expandable rows elsewhere – keep the simple red row here */
-  .card .mistake { border-left:4px solid var(--bad); background:#fff7f7; padding:10px 14px; margin:10px 0 0; width:auto; border-radius:0 10px 10px 0; box-shadow:none; }
+  .card .mistake { background:var(--bad-soft); padding:12px 16px; margin:10px 0 0; width:auto; border-radius:var(--r-sm); box-shadow:none; }
   /* no soft hyphens inside answers – "nebe-jauku" would look like a written hyphen */
   .opt, .slot { white-space:nowrap; }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%23147fae%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial%27 font-weight=%27bold%27 font-size=%2738%27 fill=%27%23fffdf9%27 text-anchor=%27middle%27%3E%C4%84%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="theme.css?v=8">
+<link rel="stylesheet" href="theme.css?v=12">
 </head>
 <body>
 <main>
   <a class="back" href="index.html">← Visos temos</a>
-  <span class="badge">Pratimai</span>
   <h1 id="title">Greiti pratimai</h1>
   <p class="sub" id="sub"></p>
   <div class="tabs" id="tabs"></div>
   <div class="card" id="card"></div>
 </main>
-<script src="shell.js?v=8"></script>
+<script src="shell.js?v=10"></script>
 
 <script src="data.js"></script>
-<script src="pratimai-data.js"></script>
+<script src="pratimai-data.js?v=2"></script>
 <script>
 // One round = 10 questions of one mode; "klaidos" = only questions you got wrong before
 const ROUND = 10;
@@ -83,12 +82,12 @@ const opts = (m, it) => it.o || PR_MODES[m].opts;
 const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const mistakeIds = m => Object.keys(prLoad()).filter(id => id.startsWith(m + ":")).map(id => +id.split(":")[1]);
 
-// Each exercise type is its own section (sidebar link = #kartu / #rusis / #zenklas).
+// Each exercise type is its own section (sidebar link = #kartu / #rusis / #zenklas / #kultura).
 // Tabs only appear when there are mistakes: all questions vs. only the ones you got wrong.
 function renderTabs() {
   const n = mistakeIds(mode).length;
   document.getElementById("tabs").innerHTML = !n ? "" :
-    `<button class="tab ${onlyMistakes ? "" : "on"}" data-m="${mode}">Visi klausimai</button><button class="tab ${onlyMistakes ? "on" : ""}" data-only="1">🎯 Klaidos (${n})</button>`;
+    `<button class="tab ${onlyMistakes ? "" : "on"}" data-m="${mode}">Visi klausimai</button><button class="tab ${onlyMistakes ? "on" : ""}" data-only="1">Klaidos (${n})</button>`;
   document.getElementById("title").textContent = PR_MODES[mode].name;
   document.title = PR_MODES[mode].name + " – Lietuvių kalbos treniruoklis";
   document.getElementById("sub").textContent = PR_MODES[mode].sub;
@@ -116,7 +115,7 @@ function show() {
     <div class="progress"><span>Klausimas ${pos + 1} / ${queue.length}</span><i style="width:${pos / queue.length * 100}%"></i></div>
     <div class="q">${sentenceHtml(it)}</div>
     <div class="opts">${o.map((x, i) => `<button class="opt" data-i="${i}"><kbd>${i + 1}</kbd>${esc(x)}</button>`).join("")}</div>
-    ${mode === "rusis" ? `<div class="legend">${o.map(x => `${x} – ${RUSIS_NAMES[x]}`).join(" · ")}</div>` : ""}
+    ${mode === "rusis" ? `<div class="legend">${o.map(x => `${x} – ${RUSIS_NAMES[x]}`).join(", ")}</div>` : ""}
     <div id="after"></div>`;
 }
 
@@ -134,8 +133,8 @@ function answer(i) {
   if (it.s.includes("___")) document.querySelector(".q").innerHTML = sentenceHtml(it, o[it.a], true);
   const last = pos === queue.length - 1;
   document.getElementById("after").innerHTML = `
-    <div class="rule ${ok ? "" : "bad"}">${ok ? "✓ Teisingai. " : `✗ Teisingai būtų: <b>${esc(o[it.a])}</b>. `}${esc(it.r)}</div>
-    <div class="actions"><button class="primary" id="next">${last ? "Rezultatai →" : "Kitas →"}</button></div>`;
+    <div class="rule ${ok ? "" : "bad"}">${ok ? "Teisingai. " : `Teisingai būtų: <b>${esc(o[it.a])}</b>. `}${esc(it.r)}</div>
+    <div class="actions"><button class="primary" id="next">${last ? "Rezultatai" : "Kitas"}</button></div>`;
   document.getElementById("next").focus();
   renderTabs();
 }
@@ -149,7 +148,7 @@ function summary() {
     <div class="progress"><span>Raundas baigtas</span><i style="width:100%"></i></div>
     <div class="rsum ${pct >= 85 ? "good" : pct >= 60 ? "mid" : "low"}"><div class="big">${good} / ${total}</div><div class="pct">${pct}% teisingai</div></div>
     <div class="ractions">
-      ${n ? `<button class="primary" id="fixAll">🎯 Treniruoti klaidas (${n})</button>` : ""}
+      ${n ? `<button class="primary" id="fixAll">Treniruoti klaidas (${n})</button>` : ""}
       <button class="${n ? "secondary" : "primary"}" id="again">Naujas raundas</button>
     </div>
     ${wrong.map(r => { const it = PR_MODES[mode].items[r.idx], o = opts(mode, it);
@@ -185,7 +184,8 @@ document.addEventListener("keydown", e => {
 newRound();
 </script>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script defer src="auth-config.js"></script><script defer src="auth.js"></script>
-<script src="hyphen.js"></script>
-<script src="motion.js?v=8"></script>
+<script src="hyphen.js?v=2"></script>
+<script src="dev.js"></script>
+<script src="motion.js?v=9"></script>
 </body>
 </html>
