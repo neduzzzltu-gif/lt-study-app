@@ -1,4 +1,4 @@
-// Practice rounds: 10 sentences, then a summary with all mistakes.
+// Practice rounds: 5 sentences, then a summary with all mistakes.
 // Page must have #progress, #sentence, #actions, #check, #result, #next and call:
 //   roundStart(size, fixHref, pick, onFix, onEmpty), then roundGo(0)
 //   roundAdd(good, total, mistakesHtml, redo, view) on the check of a sentence (one try)
@@ -6,10 +6,8 @@
 // pick() returns the next sentence index (or null when there are none – then onEmpty() runs).
 // onFix(f) shows sentence f.i: f.keys = null → fresh; otherwise only f.keys are empty and
 // f.given holds your answers for the rest (keys: [] = just look at it).
-// Numbered boxes above the sentence: one per sentence of the round, any of them can be opened.
-//   not done yet → solve it · red (mistakes) / green → look at it
 // Mistakes are fixed only after the round, all in a row (roundFix), then the total score shows.
-const ROUND_SIZE = 10;
+const ROUND_SIZE = 5;
 let round = { size: ROUND_SIZE, slots: [], items: [], pos: -1, fixHref: "", pick: null, onFix: null, onEmpty: null, fix: null };
 
 // size can be a number or a function (re-evaluated for every new round)
@@ -30,7 +28,6 @@ function roundGo(n) {
     if (round.slots.includes(i)) i = null;
     if (i === null || i === undefined) {
       if (roundCount()) return roundSummary();          // nothing left to pick mid-round → show what was solved
-      document.getElementById("steps")?.replaceChildren();
       document.getElementById("progress").innerHTML = "";
       return round.onEmpty?.();
     }
@@ -65,24 +62,7 @@ function roundNextOpen() {
   return -1;
 }
 
-function roundSteps() {
-  let el = document.getElementById("steps");
-  if (!el) { el = document.createElement("div"); el.id = "steps"; el.className = "steps"; document.getElementById("progress").before(el); }
-  if (round.fix) return el.innerHTML = "";
-  el.innerHTML = Array.from({ length: round.size }, (_, n) => {
-    const it = round.items[n], on = n === round.pos ? " on" : "";
-    const cls = !it ? "" : it.redo ? " bad" : " ok";
-    const title = !it ? "Atidaryti" : "Peržiūrėti";
-    return `<button class="step${cls}${on}" data-n="${n}" title="${title}">${n + 1}</button>`;
-  }).join("");
-}
-document.addEventListener("click", e => {
-  const b = e.target.closest("#steps button.step"); if (!b || b.classList.contains("on")) return;
-  roundGo(+b.dataset.n);
-});
-
 function roundUpdate() {
-  roundSteps();
   if (round.fix) {
     const f = round.fix, n = f.queue.length;
     document.getElementById("progress").innerHTML =
@@ -129,7 +109,6 @@ function roundFixSummary() {
   // Still wrong + skipped sentences can be fixed again
   const left = f.queue.map((q, p) => f.done[p] ? f.done[p].redo : q).filter(Boolean);
   const wrong = left.filter(x => x.mistakesHtml);   // every sentence still wrong, skipped ones too
-  roundSteps();
   document.getElementById("progress").innerHTML = `<span>Testas baigtas</span><i style="width:100%"></i>`;
   document.getElementById("actions").style.display = "none";
   document.getElementById("sentence").innerHTML = `
@@ -154,7 +133,7 @@ function roundSummary() {
   const good = items.reduce((s, x) => s + x.good, 0), total = items.reduce((s, x) => s + x.total, 0);
   const pct = total ? Math.round(good / total * 100) : 100;
   const wrong = items.filter(x => x.mistakesHtml), canFix = round.onFix && items.some(x => x.redo);
-  round.pos = -1; roundSteps();
+  round.pos = -1;
   document.getElementById("progress").innerHTML = `<span>Raundas baigtas</span><i style="width:100%"></i>`;
   document.getElementById("actions").style.display = "none";
   document.getElementById("sentence").innerHTML = `
@@ -169,7 +148,7 @@ function roundSummary() {
     </div>`;
   // Right answers were shown after each check; the full list comes after fixing
   document.getElementById("result").innerHTML = canFix
-    ? `<div class="hint">Raudoni langeliai viršuje – sakiniai su klaidomis. Pataisyk jas – tada pamatysi galutinį rezultatą.</div>`
+    ? `<div class="hint">Kai kuriuose sakiniuose buvo klaidų. Pataisyk jas – tada pamatysi galutinį rezultatą.</div>`
     : wrong.length ? `<div class="score">Klaidos šiame raunde</div>` + wrong.map(x => x.mistakesHtml).join("")
     : `<div class="allok">Be klaidų!</div>`;
   document.getElementById("newRound").onclick = roundNew;

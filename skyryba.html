@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Skyrybos treniruoklis</title>
 <style>
-  :root { --bg:#f6f4ef; --card:#fff; --ink:#1d1d1f; --muted:#6b6b70; --line:#e3e0d8; --ok:#1f8a4c; --bad:#c62828; --accent:#2b4cff; }
+  :root { --bg:#f6f4ef; --card:#fff; --ink:#1d1d1f; --muted:#6b6b70; --line:#e3e0d8; --ok:#1f8a4c; --bad:#c62828; --accent:#1c1915; }
   * { box-sizing:border-box; }
   body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; background:var(--bg); color:var(--ink); }
   main { max-width:760px; margin:0 auto; padding:24px 16px 60px; }
@@ -14,29 +14,29 @@
   .mode { font-size:14px; color:var(--accent); text-decoration:none; }
   h1 { font-size:22px; margin:0 0 4px; }
   .sub { color:var(--muted); margin:0 0 20px; font-size:14px; line-height:1.5; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px; }
+  .card { background:var(--card); border:2px solid var(--line); border-radius:16px; padding:22px; }
   .sentence { font-size:19px; line-height:2.2; }
   /* clickable gap between words */
   .gap { display:inline-block; min-width:14px; height:28px; padding:0 3px; margin:0 1px; vertical-align:middle; border:none; border-radius:6px; background:transparent; font:inherit; font-size:20px; font-weight:700; color:var(--accent); cursor:pointer; line-height:28px; transition:background .12s; }
-  .gap:hover { background:#e4e9ff; }
-  .gap:focus { outline:2px solid var(--accent); outline-offset:1px; background:#dfe5ff; }
-  .gap.set { background:#eef1ff; }
-  .gap.ok { color:var(--ok); background:#e6f5ec; }
-  .gap.bad { color:var(--bad); background:#fdecec; }
-  .gap.miss { background:#fdecec; box-shadow:inset 0 -2px 0 var(--bad); }
+  .gap:hover { background:var(--accent-soft); }
+  .gap:focus { outline:2px solid var(--accent); outline-offset:1px; background:var(--sky); }
+  .gap.set { background:var(--accent-softer); }
+  .gap.ok { color:var(--ok); background:var(--ok-soft); }
+  .gap.bad { color:var(--bad); background:var(--bad-soft); }
+  .gap.miss { background:var(--bad-soft); box-shadow:inset 0 -2px 0 var(--bad); }
   .sentence.done .gap { cursor:default; }
   .gap.locked { cursor:default; color:var(--ink); font-weight:400; background:none; min-width:0; padding:0; }
   .actions { display:flex; gap:10px; margin-top:20px; flex-wrap:wrap; }
   .actions button { font:inherit; font-size:16px; padding:12px 20px; border-radius:12px; border:none; cursor:pointer; }
-  .primary { background:var(--ink); color:#fff; }
+  .primary { background:var(--btn); color:var(--btn-ink); }
   .secondary { background:var(--line); color:var(--ink); }
   .result { margin-top:20px; }
   .score { font-weight:600; margin-bottom:12px; }
-  .mistake { border-left:4px solid var(--bad); background:#fff7f7; padding:10px 14px; border-radius:0 10px 10px 0; margin-bottom:10px; }
+  .mistake { border-left:4px solid var(--bad); background:var(--bad-soft); padding:10px 14px; border-radius:0 10px 10px 0; margin-bottom:10px; }
   .mistake .w, .good .w { font-size:17px; }
   .mistake .w s { color:var(--bad); } .w s { text-decoration:none; } .w u { text-decoration-thickness:2px; text-underline-offset:3px; }
   .mistake .w b, .good .w b { color:var(--ok); }
-  .mistake .r, .good .r { color:#444; font-size:14px; margin-top:4px; }
+  .mistake .r, .good .r { color:var(--muted); font-size:14px; margin-top:4px; }
   .allok { color:var(--ok); font-weight:600; }
   .progress { position:relative; height:26px; margin:-6px 0 14px; font-size:13px; color:var(--muted); }
   .progress span { position:relative; z-index:1; }
@@ -46,7 +46,7 @@
   .rsum { text-align:center; padding:10px 0 6px; }
   .rsum .big { font-size:48px; font-weight:800; line-height:1; }
   .rsum .pct { font-size:18px; color:var(--muted); margin-top:6px; }
-  .rsum.good .big { color:var(--ok); } .rsum.mid .big { color:#c77700; } .rsum.low .big { color:var(--bad); }
+  .rsum.good .big { color:var(--ok); } .rsum.mid .big { color:var(--orange); } .rsum.low .big { color:var(--bad); }
   .ractions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:16px; }
   .ractions button { font:inherit; font-size:16px; padding:12px 20px; border-radius:12px; border:none; cursor:pointer; }
   .ractions .fixbtn { margin-top:0; padding:12px 20px; }
@@ -57,32 +57,33 @@
   .rightlist > summary::-webkit-details-marker { display:none; }
   .rightlist > summary::after { content:" ▾"; display:inline-block; transition:transform .2s; }
   .rightlist[open] > summary::after { transform:rotate(180deg); }
-  .good { border-left:4px solid var(--ok); background:#f3faf6; padding:10px 14px; border-radius:0 10px 10px 0; margin-bottom:10px; animation:slide .25s ease-out; }
+  .good { border-left:4px solid var(--ok); background:var(--ok-soft); padding:10px 14px; border-radius:0 10px 10px 0; margin-bottom:10px; animation:slide .25s ease-out; }
   .full { margin-top:8px; font-size:14px; }
   .full summary { cursor:pointer; color:var(--accent); font-weight:600; list-style:none; user-select:none; }
   .full summary::-webkit-details-marker { display:none; }
   .full summary::after { content:" ▾"; display:inline-block; transition:transform .2s; }
   .full[open] summary::after { transform:rotate(180deg); }
-  .full .body { margin-top:8px; padding:10px 12px; background:#fff; border:1px solid var(--line); border-radius:10px; color:#333; line-height:1.55; animation:slide .25s ease-out; }
+  .full .body { margin-top:8px; padding:10px 12px; background:var(--card); border:2px solid var(--line); border-radius:10px; color:var(--ink); line-height:1.55; animation:slide .25s ease-out; }
   .full .body p { margin:0 0 8px; } .full .body p:last-child { margin:0; }
-  .picker { position:absolute; display:flex; gap:4px; padding:5px; background:var(--ink); border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,.18); transform:translate(-50%, -100%); z-index:10; animation:pop .15s ease-out; }
-  .picker::after { content:""; position:absolute; left:50%; bottom:-5px; width:10px; height:10px; background:var(--ink); transform:translateX(-50%) rotate(45deg); }
-  .picker button { width:36px; height:36px; border:none; border-radius:8px; background:#2c2c30; color:#fff; font:inherit; font-size:20px; font-weight:700; cursor:pointer; position:relative; z-index:1; }
+  .picker { position:absolute; display:flex; gap:4px; padding:5px; background:var(--pop); border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,.18); transform:translate(-50%, -100%); z-index:10; animation:pop .15s ease-out; }
+  .picker::after { content:""; position:absolute; left:50%; bottom:-5px; width:10px; height:10px; background:var(--pop); transform:translateX(-50%) rotate(45deg); }
+  .picker button { width:36px; height:36px; border:none; border-radius:8px; background:#202f36; color:var(--ink); font:inherit; font-size:20px; font-weight:700; cursor:pointer; position:relative; z-index:1; }
   .picker button:hover { background:var(--accent); }
-  .picker button.cur { background:#4a4a52; box-shadow:inset 0 0 0 2px #aab8ff; }
+  .picker button.cur { background:#2b3d45; box-shadow:inset 0 0 0 2px var(--sky); }
   @keyframes pop { from { opacity:0; transform:translate(-50%, -85%) scale(.92); } }
   .full .body .src { font-size:12px; color:var(--muted); margin-bottom:8px; }
   @keyframes slide { from { opacity:0; transform:translateY(-8px); } }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%23147fae%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial%27 font-weight=%27bold%27 font-size=%2738%27 fill=%27%23fffdf9%27 text-anchor=%27middle%27%3E%C4%84%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="theme.css?v=12">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400..900&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%23ffc800%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial%27 font-weight=%27bold%27 font-size=%2738%27 fill=%27%231a1400%27 text-anchor=%27middle%27%3E%C4%84%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="theme.css?v=31">
+<script>try { const s = JSON.parse(localStorage.getItem("settings")) || {}; for (const k in s) if (s[k]) document.documentElement.classList.add("set-" + k); } catch {}</script>
 </head>
 <body>
 <main>
   <div class="top">
-    <a class="back" href="index.html">← Visos temos</a>
+    <a class="back" href="app.html">← Visos temos</a>
     <a class="mode" id="modeLink" href="klaidos.html#skyryba">Mano klaidos</a>
   </div>
   <h1 id="title">Skyrybos treniruoklis</h1>
@@ -97,11 +98,11 @@
     <div class="result" id="result"></div>
   </div>
 </main>
-<script src="shell.js?v=10"></script>
+<script src="shell.js?v=20"></script>
 
-<script src="data.js"></script>
-<script src="skyryba-data.js"></script>
-<script src="round.js?v=5"></script>
+<script src="data.js?v=2"></script>
+<script src="skyryba-data.js?v=3"></script>
+<script src="round.js?v=8"></script>
 <script>
 const MISTAKE_MODE = new URLSearchParams(location.search).has("klaidos");
 if (MISTAKE_MODE) {
@@ -277,9 +278,9 @@ roundStart(() => Math.min(ROUND_SIZE, pool().length), "skyryba.html?klaidos", pi
 roundGo(0);
 </script>
 <script src="demo-report.js"></script><!-- DEMO: remove later -->
-<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script defer src="auth-config.js"></script><script defer src="auth.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script defer src="auth-config.js"></script><script defer src="auth.js?v=5"></script>
 <script src="hyphen.js?v=2"></script>
 <script src="dev.js"></script>
-<script src="motion.js?v=9"></script>
+<script src="motion.js?v=11"></script>
 </body>
 </html>

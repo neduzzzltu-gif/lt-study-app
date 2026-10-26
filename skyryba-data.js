@@ -236,6 +236,19 @@ const SK_SENTENCES = [
   );
 })();
 
+// short ones moved in from the old "Ženklai" quiz (2026-10-26) – appended so saved ids stay valid
+SK_SENTENCES.push(
+  "Žiema atėjo staiga[:/–|Antrasis bejungtukio sakinio dėmuo paaiškina pirmąjį – dvitaškis (arba brūkšnys).|dvitaskis] per naktį iškrito pusmetris sniego.",
+  "Vieni mokiniai rašė[,|Gretinami du veiksmai – bejungtukio sakinio dėmenys skiriami kableliu.|sujung] kiti skaitė.",
+  "Ateisi vėliau[–|Pirmasis dėmuo reiškia sąlygą – dažniausiai rašomas brūkšnys.|sujung] nieko nebeliks.",
+  "Jis turėjo tris draugus[:/–|"+S.apib+"] Joną[,|"+S.vienNo+"] Petrą ir Ugnę.",
+  "Mano brolis[–/|"+S.bruk+"] gydytojas.",
+  "Lauke lijo[,|"+S.suj+"] o mes žaidėme stalo žaidimus.",
+  "Jis nusprendė[:/–|"+S.dvit+"] nuo rytojaus pradės sportuoti.",
+  "Pasakyk tiesą[–/:|Antrasis dėmuo reiškia pasekmę – rašomas brūkšnys (ar dvitaškis).|dvitaskis] tau pačiam bus lengviau.",
+  "Vasarą aplankėme daug miestų[:/–|"+S.apib+"] Trakus[,|"+S.vienNo+"] Kernavę ir Nidą."
+);
+
 // Parse into words + gap after each word: { words:[], gaps:[{ans:[...], rule, cat}] }
 function skParse(src) {
   const specs = [];

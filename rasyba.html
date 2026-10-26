@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rašybos treniruoklis</title>
 <style>
-  :root { --bg:#f6f4ef; --card:#fff; --ink:#1d1d1f; --muted:#6b6b70; --line:#e3e0d8; --ok:#1f8a4c; --bad:#c62828; --accent:#2b4cff; }
+  :root { --bg:#f6f4ef; --card:#fff; --ink:#1d1d1f; --muted:#6b6b70; --line:#e3e0d8; --ok:#1f8a4c; --bad:#c62828; --accent:#1c1915; }
   * { box-sizing:border-box; }
   body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; background:var(--bg); color:var(--ink); }
   main { max-width:760px; margin:0 auto; padding:24px 16px 60px; }
@@ -14,33 +14,33 @@
   .mode { font-size:14px; color:var(--accent); text-decoration:none; }
   h1 { font-size:22px; margin:0 0 4px; }
   .sub { color:var(--muted); margin:0 0 20px; font-size:14px; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px; }
+  .card { background:var(--card); border:2px solid var(--line); border-radius:16px; padding:22px; }
   .sentence { font-size:19px; line-height:2.3; }
-  .sentence input { font:inherit; font-size:18px; text-align:center; border:none; border-bottom:2px solid var(--accent); background:#eef1ff; border-radius:6px 6px 0 0; padding:0 2px; margin:0 1px; outline:none; }
-  .sentence input:focus { background:#dfe5ff; }
-  .sentence input.ok { border-color:var(--ok); background:#e6f5ec; color:var(--ok); }
-  .sentence input.bad { border-color:var(--bad); background:#fdecec; color:var(--bad); }
+  .sentence input { font:inherit; font-size:18px; text-align:center; border:none; border-bottom:2px solid var(--accent); background:var(--accent-softer); border-radius:6px 6px 0 0; padding:0 2px; margin:0 1px; outline:none; }
+  .sentence input:focus { background:var(--sky); }
+  .sentence input.ok { border-color:var(--ok); background:var(--ok-soft); color:var(--ok); }
+  .sentence input.bad { border-color:var(--bad); background:var(--bad-soft); color:var(--bad); }
   .hint { color:var(--muted); font-size:15px; }
   .actions { display:flex; gap:10px; margin-top:20px; }
   .actions button { font:inherit; font-size:16px; padding:12px 20px; border-radius:12px; border:none; cursor:pointer; }
-  .primary { background:var(--ink); color:#fff; }
+  .primary { background:var(--btn); color:var(--btn-ink); }
   .secondary { background:var(--line); color:var(--ink); }
   .result { margin-top:20px; }
   .score { font-weight:600; margin-bottom:12px; }
-  .mistake { border-left:4px solid var(--bad); background:#fff7f7; padding:10px 14px; border-radius:0 10px 10px 0; margin-bottom:10px; }
+  .mistake { border-left:4px solid var(--bad); background:var(--bad-soft); padding:10px 14px; border-radius:0 10px 10px 0; margin-bottom:10px; }
   .mistake .w { font-size:17px; }
   .mistake .w s { color:var(--bad); } .w s { text-decoration:none; } .w u { text-decoration-thickness:2px; text-underline-offset:3px; }
   .mistake .w b { color:var(--ok); }
-  .mistake .r { color:#444; font-size:14px; margin-top:4px; }
+  .mistake .r { color:var(--muted); font-size:14px; margin-top:4px; }
   .fixbtn { display:inline-block; margin-top:6px; padding:10px 16px; border-radius:12px; background:var(--bad); color:#fff; text-decoration:none; font-weight:600; font-size:15px; }
   .rightlist { margin:14px 0 10px; }
   .rightlist > summary { cursor:pointer; color:var(--ok); font-weight:600; list-style:none; user-select:none; margin-bottom:10px; }
   .rightlist > summary::-webkit-details-marker { display:none; }
   .rightlist > summary::after { content:" ▾"; display:inline-block; transition:transform .2s; }
   .rightlist[open] > summary::after { transform:rotate(180deg); }
-  .good { border-left:4px solid var(--ok); background:#f3faf6; padding:10px 14px; border-radius:0 10px 10px 0; margin-bottom:10px; animation:slide .25s ease-out; }
+  .good { border-left:4px solid var(--ok); background:var(--ok-soft); padding:10px 14px; border-radius:0 10px 10px 0; margin-bottom:10px; animation:slide .25s ease-out; }
   .good .w { font-size:17px; } .good .w b { color:var(--ok); }
-  .good .r { color:#444; font-size:14px; margin-top:4px; }
+  .good .r { color:var(--muted); font-size:14px; margin-top:4px; }
   .progress { position:relative; height:26px; margin:-6px 0 14px; font-size:13px; color:var(--muted); }
   .progress span { position:relative; z-index:1; }
   .progress i { position:absolute; left:0; bottom:0; height:4px; background:var(--accent); border-radius:999px; transition:width .3s ease; z-index:1; }
@@ -49,7 +49,7 @@
   .rsum { text-align:center; padding:10px 0 6px; }
   .rsum .big { font-size:48px; font-weight:800; line-height:1; }
   .rsum .pct { font-size:18px; color:var(--muted); margin-top:6px; }
-  .rsum.good .big { color:var(--ok); } .rsum.mid .big { color:#c77700; } .rsum.low .big { color:var(--bad); }
+  .rsum.good .big { color:var(--ok); } .rsum.mid .big { color:var(--orange); } .rsum.low .big { color:var(--bad); }
   .ractions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:16px; }
   .ractions button { font:inherit; font-size:16px; padding:12px 20px; border-radius:12px; border:none; cursor:pointer; }
   .ractions .fixbtn { margin-top:0; padding:12px 20px; }
@@ -58,7 +58,7 @@
   /* "?" hint bubble */
   /* easeOutBack (easings.net) for the playful "?" pop; strong ease-out for everything else */
   :root { --ease-back:cubic-bezier(0.34, 1.56, 0.64, 1); --ease-in-out:cubic-bezier(0.77, 0, 0.175, 1); }
-  .qmark { position:absolute; width:30px; height:30px; border-radius:50%; border:none; background:var(--accent); color:#fff; font-weight:700; font-size:16px; cursor:pointer; box-shadow:0 4px 12px rgba(43,76,255,.35); z-index:10;
+  .qmark { position:absolute; width:30px; height:30px; border-radius:50%; border:none; background:var(--btn); color:var(--btn-ink); font-weight:700; font-size:16px; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.48); z-index:10;
     transform:translate(-50%, -100%); transform-origin:50% 100%;
     transition:transform 280ms var(--ease-back), opacity 160ms var(--ease-out); }
   @starting-style { .qmark { opacity:0; transform:translate(-50%, -100%) translateY(10px) scale(.6); } }
@@ -74,11 +74,11 @@
   .qmark.out { opacity:0; transform:translate(-50%, -100%) translateY(14px) scale(.35); transition:transform 260ms var(--ease-in-out), opacity 160ms var(--ease-out) 100ms; }
 
   /* tip grows out of the spot where the "?" was */
-  .tip { position:absolute; max-width:300px; background:var(--ink); color:#fff; font-size:14px; line-height:1.45; padding:10px 12px; border-radius:10px; z-index:11;
+  .tip { position:absolute; max-width:300px; background:var(--btn); color:var(--btn-ink); font-size:14px; line-height:1.45; padding:10px 12px; border-radius:10px; z-index:11;
     transform:translate(-50%, -100%); transform-origin:50% 100%;
     transition:transform 200ms var(--ease-out), opacity 160ms var(--ease-out); }
   @starting-style { .tip { opacity:0; transform:translate(-50%, -100%) translateY(6px) scale(.94); } }
-  .tip b { display:block; margin-bottom:3px; color:#aab8ff; }
+  .tip b { display:block; margin-bottom:3px; color:var(--sky); }
   .tip b, .tip span { transition:opacity 220ms var(--ease-out), transform 220ms var(--ease-out); }
   .tip span { display:block; transition-delay:50ms; }
   @starting-style { .tip b, .tip span { opacity:0; transform:translateY(4px); } }
@@ -95,20 +95,21 @@
   .full summary::-webkit-details-marker { display:none; }
   .full summary::after { content:" ▾"; display:inline-block; transition:transform .2s; }
   .full[open] summary::after { transform:rotate(180deg); }
-  .full .body { margin-top:8px; padding:10px 12px; background:#fff; border:1px solid var(--line); border-radius:10px; color:#333; line-height:1.55; animation:slide .25s ease-out; }
+  .full .body { margin-top:8px; padding:10px 12px; background:var(--card); border:2px solid var(--line); border-radius:10px; color:var(--ink); line-height:1.55; animation:slide .25s ease-out; }
   .full .body p { margin:0 0 8px; } .full .body p:last-child { margin:0; }
   .full .body .src { font-size:12px; color:var(--muted); margin-bottom:8px; }
   @keyframes slide { from { opacity:0; transform:translateY(-8px); } }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%23147fae%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial%27 font-weight=%27bold%27 font-size=%2738%27 fill=%27%23fffdf9%27 text-anchor=%27middle%27%3E%C4%84%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="theme.css?v=12">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400..900&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%23ffc800%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial%27 font-weight=%27bold%27 font-size=%2738%27 fill=%27%231a1400%27 text-anchor=%27middle%27%3E%C4%84%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="theme.css?v=31">
+<script>try { const s = JSON.parse(localStorage.getItem("settings")) || {}; for (const k in s) if (s[k]) document.documentElement.classList.add("set-" + k); } catch {}</script>
 </head>
 <body>
 <main>
   <div class="top">
-    <a class="back" href="index.html">← Visos temos</a>
+    <a class="back" href="app.html">← Visos temos</a>
     <a class="mode" id="modeLink" href="klaidos.html">Mano klaidos</a>
   </div>
   <h1 id="title">Rašybos treniruoklis</h1>
@@ -123,10 +124,10 @@
     <div class="result" id="result"></div>
   </div>
 </main>
-<script src="shell.js?v=10"></script>
+<script src="shell.js?v=20"></script>
 
-<script src="data.js"></script>
-<script src="round.js?v=5"></script>
+<script src="data.js?v=2"></script>
+<script src="round.js?v=8"></script>
 <script>
 // ?klaidos = practise only blanks you got wrong before
 const MISTAKE_MODE = new URLSearchParams(location.search).has("klaidos");
@@ -288,9 +289,9 @@ roundStart(() => Math.min(ROUND_SIZE, pool().length), "rasyba.html?klaidos", pic
 roundGo(0);
 </script>
 <script src="demo-report.js"></script><!-- DEMO: remove later -->
-<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script defer src="auth-config.js"></script><script defer src="auth.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script defer src="auth-config.js"></script><script defer src="auth.js?v=5"></script>
 <script src="hyphen.js?v=2"></script>
 <script src="dev.js"></script>
-<script src="motion.js?v=9"></script>
+<script src="motion.js?v=11"></script>
 </body>
 </html>

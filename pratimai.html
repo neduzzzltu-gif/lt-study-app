@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Greiti pratimai</title>
+<title>Pratimai</title>
 <style>
-  :root { --bg:#f6f4ef; --card:#fff; --ink:#1d1d1f; --muted:#6b6b70; --line:#e3e0d8; --ok:#1f8a4c; --bad:#c62828; --accent:#2b4cff; }
+  :root { --bg:#f6f4ef; --card:#fff; --ink:#1d1d1f; --muted:#6b6b70; --line:#e3e0d8; --ok:#1f8a4c; --bad:#c62828; --accent:#1c1915; }
   * { box-sizing:border-box; }
   body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; background:var(--bg); color:var(--ink); }
   main { max-width:760px; margin:0 auto; padding:24px 16px 60px; }
@@ -13,41 +13,41 @@
   h1 { font-size:22px; margin:0 0 4px; }
   .sub { color:var(--muted); margin:0 0 18px; font-size:14px; line-height:1.5; }
   .tabs { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
-  .tab { font:inherit; font-size:15px; padding:8px 16px; border-radius:999px; border:1px solid var(--line); background:var(--card); cursor:pointer; }
-  .tab.on { background:var(--ink); color:#fff; border-color:var(--ink); }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px; }
+  .tab { font:inherit; font-size:15px; padding:8px 16px; border-radius:999px; border:2px solid var(--line); background:var(--card); cursor:pointer; }
+  .tab.on { background:var(--btn); color:var(--btn-ink); border-color:var(--btn); }
+  .card { background:var(--card); border:2px solid var(--line); border-radius:16px; padding:22px; }
   .progress { position:relative; height:26px; margin:-6px 0 14px; font-size:13px; color:var(--muted); }
   .progress span { position:relative; z-index:1; }
   .progress i { position:absolute; left:0; bottom:0; height:4px; background:var(--accent); border-radius:999px; transition:width .3s ease; z-index:1; }
   .progress::after { content:""; position:absolute; left:0; right:0; bottom:0; height:4px; background:var(--line); border-radius:999px; }
   .q { font-size:20px; line-height:1.7; min-height:3.4em; }
   .slot { display:inline-block; min-width:4ch; padding:0 6px; border-bottom:2px solid var(--accent); background:var(--sky-soft); border-radius:6px 6px 0 0; text-align:center; }
-  .slot.ok { border-color:var(--ok); background:#e6f5ec; color:var(--ok); }
-  .slot.bad { border-color:var(--bad); background:#fdecec; color:var(--bad); }
+  .slot.ok { border-color:var(--ok); background:var(--ok-soft); color:var(--ok); }
+  .slot.bad { border-color:var(--bad); background:var(--bad-soft); color:var(--bad); }
   .opts { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
-  .opt { font:inherit; font-size:17px; min-width:64px; padding:12px 18px; border-radius:12px; border:1.5px solid var(--line); background:#fff; cursor:pointer; transition:background .15s, border-color .15s, transform .1s; }
+  .opt { font:inherit; font-size:17px; min-width:64px; padding:12px 18px; border-radius:12px; border:2px solid var(--line); background:var(--card); color:var(--ink); cursor:pointer; transition:background .15s, border-color .15s, transform .1s; }
   .opt:hover:not(:disabled) { border-color:var(--accent); }
   .opt:active:not(:disabled) { transform:scale(.97); }
   .opt:disabled { cursor:default; }
-  .opt.ok { background:#e6f5ec; border-color:var(--ok); color:var(--ok); font-weight:600; }
-  .opt.bad { background:#fdecec; border-color:var(--bad); color:var(--bad); text-decoration:line-through; }
+  .opt.ok { background:var(--ok-soft); border-color:var(--ok); color:var(--ok); font-weight:600; }
+  .opt.bad { background:var(--bad-soft); border-color:var(--bad); color:var(--bad); text-decoration:line-through; }
   .opt kbd { font:inherit; font-size:12px; color:var(--muted); margin-right:6px; }
   .legend { margin-top:10px; font-size:13px; color:var(--muted); }
   .rule { margin-top:16px; padding:12px 16px; background:var(--ok-soft); border-radius:var(--r-sm); font-size:15px; line-height:1.5; }
   .rule.bad { background:var(--bad-soft); }
   .actions { display:flex; gap:10px; margin-top:18px; }
   .actions button, .ractions button { font:inherit; font-size:16px; padding:12px 20px; border-radius:12px; border:none; cursor:pointer; }
-  .primary { background:var(--ink); color:#fff; }
+  .primary { background:var(--btn); color:var(--btn-ink); }
   .secondary { background:var(--line); color:var(--ink); }
   .rsum { text-align:center; padding:10px 0 6px; }
   .rsum .big { font-size:48px; font-weight:800; line-height:1; }
   .rsum .pct { font-size:18px; color:var(--muted); margin-top:6px; }
-  .rsum.good .big { color:var(--ok); } .rsum.mid .big { color:#c77700; } .rsum.low .big { color:var(--bad); }
+  .rsum.good .big { color:var(--ok); } .rsum.mid .big { color:var(--orange); } .rsum.low .big { color:var(--bad); }
   .ractions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:16px; }
-  .mistake { border-left:4px solid var(--bad); background:#fff7f7; padding:10px 14px; border-radius:0 10px 10px 0; margin-top:10px; }
+  .mistake { border-left:4px solid var(--bad); background:var(--bad-soft); padding:10px 14px; border-radius:0 10px 10px 0; margin-top:10px; }
   .mistake .w { font-size:16px; line-height:1.5; }
   .mistake .w s { color:var(--bad); } .mistake .w b { color:var(--ok); }
-  .mistake .r { color:#444; font-size:14px; margin-top:4px; }
+  .mistake .r { color:var(--muted); font-size:14px; margin-top:4px; }
   .empty { color:var(--muted); line-height:1.6; }
   /* theme.css styles .mistake for the expandable rows elsewhere – keep the simple red row here */
   .card .mistake { background:var(--bad-soft); padding:12px 16px; margin:10px 0 0; width:auto; border-radius:var(--r-sm); box-shadow:none; }
@@ -55,25 +55,26 @@
   .opt, .slot { white-space:nowrap; }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%23147fae%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial%27 font-weight=%27bold%27 font-size=%2738%27 fill=%27%23fffdf9%27 text-anchor=%27middle%27%3E%C4%84%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="theme.css?v=12">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400..900&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%23ffc800%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial%27 font-weight=%27bold%27 font-size=%2738%27 fill=%27%231a1400%27 text-anchor=%27middle%27%3E%C4%84%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="theme.css?v=31">
+<script>try { const s = JSON.parse(localStorage.getItem("settings")) || {}; for (const k in s) if (s[k]) document.documentElement.classList.add("set-" + k); } catch {}</script>
 </head>
 <body>
 <main>
-  <a class="back" href="index.html">← Visos temos</a>
-  <h1 id="title">Greiti pratimai</h1>
+  <a class="back" href="app.html">← Visos temos</a>
+  <h1 id="title">Pratimai</h1>
   <p class="sub" id="sub"></p>
   <div class="tabs" id="tabs"></div>
   <div class="card" id="card"></div>
 </main>
-<script src="shell.js?v=10"></script>
+<script src="shell.js?v=20"></script>
 
-<script src="data.js"></script>
-<script src="pratimai-data.js?v=2"></script>
+<script src="data.js?v=2"></script>
+<script src="pratimai-data.js?v=3"></script>
 <script>
-// One round = 10 questions of one mode; "klaidos" = only questions you got wrong before
-const ROUND = 10;
+// One round = 5 questions of one mode; "klaidos" = only questions you got wrong before
+const ROUND = 5;
 const RUSIS_NAMES = { V: "vientisinis", SP: "sudėtinis prijungiamasis", SS: "sudėtinis sujungiamasis", SB: "sudėtinis bejungtukis", SM: "sudėtinis mišrusis" };
 let mode = Object.keys(PR_MODES).includes(location.hash.slice(1)) ? location.hash.slice(1) : "kartu";
 let onlyMistakes = false, queue = [], pos = 0, answered = false, results = [];
@@ -82,7 +83,7 @@ const opts = (m, it) => it.o || PR_MODES[m].opts;
 const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const mistakeIds = m => Object.keys(prLoad()).filter(id => id.startsWith(m + ":")).map(id => +id.split(":")[1]);
 
-// Each exercise type is its own section (sidebar link = #kartu / #rusis / #zenklas / #kultura).
+// Each exercise type is its own section (sidebar link = #kartu / #rusis / #kultura).
 // Tabs only appear when there are mistakes: all questions vs. only the ones you got wrong.
 function renderTabs() {
   const n = mistakeIds(mode).length;
@@ -183,9 +184,9 @@ document.addEventListener("keydown", e => {
 });
 newRound();
 </script>
-<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script defer src="auth-config.js"></script><script defer src="auth.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script defer src="auth-config.js"></script><script defer src="auth.js?v=5"></script>
 <script src="hyphen.js?v=2"></script>
 <script src="dev.js"></script>
-<script src="motion.js?v=9"></script>
+<script src="motion.js?v=11"></script>
 </body>
 </html>

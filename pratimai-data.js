@@ -52,22 +52,6 @@ const PR_MODES = {
       { s: "Kai atėjo pavasaris, ledai ištirpo, upė patvino.", a: 4, r: "Prijungiamasis ryšys (kai atėjo pavasaris) ir bejungtukis (ledai ištirpo, upė patvino) – sudėtinis mišrusis." }
     ]
   },
-  zenklas: {
-    name: "Ženklai",
-    sub: "Kuris skyrybos ženklas tinka vietoj ___?",
-    items: [
-      { s: "Žiema atėjo staiga ___ per naktį iškrito pusmetris sniego.", o: [",", ":"], a: 1, r: "Antrasis bejungtukio sakinio dėmuo paaiškina pirmąjį – dvitaškis (arba brūkšnys)." },
-      { s: "Vieni mokiniai rašė ___ kiti skaitė.", o: [",", ":"], a: 0, r: "Gretinami du veiksmai – bejungtukio sakinio dėmenys skiriami kableliu." },
-      { s: "Ateisi vėliau ___ nieko nebeliks.", o: [",", "–"], a: 1, r: "Pirmasis dėmuo reiškia sąlygą – dažniausiai rašomas brūkšnys." },
-      { s: "Pianiną, smuiką, natas ___ viską jis paveldėjo iš tėvo.", o: [":", "–"], a: 1, r: "Po vienarūšių dalių prieš apibendrinamąjį žodį (viską) rašomas brūkšnys." },
-      { s: "Jis turėjo tris draugus ___ Joną, Petrą ir Ugnę.", o: [":", ","], a: 0, r: "Po apibendrinamojo žodžio (draugus) prieš vienarūšes dalis rašomas dvitaškis." },
-      { s: "Mano brolis ___ gydytojas.", o: [",", "–"], a: 1, r: "Vietoj praleistos jungties „yra“ gali būti rašomas brūkšnys; kablelis tarp veiksnio ir tarinio – klaida." },
-      { s: "Lauke lijo ___ o mes žaidėme stalo žaidimus.", o: [",", ":"], a: 0, r: "Prieš jungtuką o sudėtinio sakinio dėmenys skiriami kableliu." },
-      { s: "Jis nusprendė ___ nuo rytojaus pradės sportuoti.", o: [",", ":"], a: 1, r: "Antrasis dėmuo atskleidžia, ką nusprendė (aiškina) – dvitaškis." },
-      { s: "Pasakyk tiesą ___ tau pačiam bus lengviau.", o: [",", "–"], a: 1, r: "Antrasis dėmuo reiškia pasekmę – rašomas brūkšnys (ar dvitaškis)." },
-      { s: "Vasarą aplankėme daug miestų ___ Trakus, Kernavę ir Nidą.", o: [":", ","], a: 0, r: "Po apibendrinamojo žodžio (miestų) prieš išvardijimą rašomas dvitaškis." }
-    ]
-  },
   // from his tests and notes (2026-10-25)
   kultura: {
     name: "Kalbos kultūra",

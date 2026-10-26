@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Patikrink nuotrauką</title>
+<style>
+  * { box-sizing:border-box; }
+  body { margin:0; }
+  main { max-width:760px; margin:0 auto; padding:24px 16px 60px; }
+  h1 { margin:0 0 4px; }
+  .sub { color:var(--muted); margin:0 0 20px; }
+  /* pick a photo: the whole box is the file button, also takes drag & drop */
+  .drop { position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; min-height:240px; padding:28px; border-radius:var(--r-lg); border:2px dashed var(--line); background:var(--card); color:var(--muted); text-align:center; cursor:pointer; transition:border-color 150ms ease, background 150ms ease; }
+  .drop[hidden] { display:none; }
+  .drop svg { width:36px; height:36px; color:var(--accent); }
+  .drop b { color:var(--ink); font-size:17px; font-weight:700; }
+  .drop span { font-size:14px; max-width:40ch; }
+  @media (hover:hover) and (pointer:fine) { .drop:hover { border-color:var(--sky); background:var(--accent-softer); } }
+  .drop.over { border-color:var(--accent); background:var(--accent-softer); }
+  .drop:has(input:focus-visible) { outline:2px solid var(--accent); outline-offset:3px; }
+  .drop input { position:absolute; width:1px; height:1px; opacity:0; }
+  /* picked: the photo + actions */
+  .pick { display:grid; gap:16px; }
+  .pick[hidden] { display:none; }
+  .pick img { display:block; width:100%; max-height:60dvh; object-fit:contain; border-radius:var(--r); background:var(--bg); }
+  .pick .row { display:flex; flex-wrap:wrap; gap:10px; }
+  .pick .row button { min-height:44px; border:none; font-family:inherit; font-size:16px; cursor:pointer; }
+  .pick .row button[aria-busy=true] { opacity:.6; cursor:progress; }
+  .pick .row button[aria-disabled=true] { opacity:.45; cursor:default; }
+  .pick .row button:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  #status { margin:14px 0 0; font-size:15px; line-height:1.5; color:var(--muted); }
+  #status:empty { margin:0; } /* stays in the a11y tree, so the first message gets read out */
+  #status.bad { color:var(--bad); }
+  #status.quiet { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+  /* results */
+  #out h2 { font-size:18px; margin:28px 0 12px; }
+  .fix { padding:14px 18px; margin-bottom:10px; border-radius:var(--r); background:var(--card); box-shadow:inset 0 0 0 2px var(--line); }
+  .fix .w { font-size:17px; font-weight:600; }
+  .fix .w s { color:var(--bad); text-decoration-thickness:2px; }
+  .fix .w b { color:var(--ok); }
+  .fix p { margin:6px 0 0; font-size:14px; line-height:1.45; color:var(--muted); }
+  .none { margin-top:20px; padding:18px; border-radius:var(--r); background:var(--ok-soft); color:var(--ok); font-weight:600; }
+  /* loading: grey rows in the result layout */
+  .skel { height:64px; margin-bottom:10px; border-radius:var(--r); background:var(--card); box-shadow:inset 0 0 0 2px var(--line); animation:skel 1.2s ease-in-out infinite; }
+  #out .skel:first-child { margin-top:20px; }
+  @keyframes skel { 50% { opacity:.5; } }
+  @media (prefers-reduced-motion: reduce) { .skel { animation:none; } }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400..900&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%23ffc800%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial%27 font-weight=%27bold%27 font-size=%2738%27 fill=%27%231a1400%27 text-anchor=%27middle%27%3E%C4%84%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="theme.css?v=31">
+<script>try { const s = JSON.parse(localStorage.getItem("settings")) || {}; for (const k in s) if (s[k]) document.documentElement.classList.add("set-" + k); } catch {}</script>
+</head>
+<body>
+<main>
+  <h1>Patikrink nuotrauką</h1>
+  <p class="sub">Nufotografuok ranka parašytą tekstą arba įkelk nuotrauką. AI suras rašybos ir skyrybos klaidas.</p>
+  <label class="drop" id="drop">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
+    <b>Pasirink nuotrauką</b>
+    <span>Telefone gali iškart fotografuoti. Kompiuteryje gali ir nutempti failą čia.</span>
+    <input type="file" id="file" accept="image/*">
+  </label>
+  <div class="card pick" id="pick" hidden>
+    <img id="preview" alt="Tavo įkelta nuotrauka">
+    <div class="row">
+      <button type="button" class="btn primary" id="check">Tikrinti</button>
+      <button type="button" class="btn secondary" id="other">Kita nuotrauka</button>
+    </div>
+  </div>
+  <p id="status" role="status"></p>
+  <div id="out"></div>
+</main>
+<script src="shell.js?v=20"></script>
+<script src="photo-ai.js?v=2"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const drop = $("drop"), file = $("file"), pick = $("pick"), img = $("preview"), check = $("check"), other = $("other"), status = $("status"), out = $("out");
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`);
+  // quiet = only for screen readers (the result heading already shows it)
+  const say = (t, bad, quiet) => { status.textContent = t; status.classList.toggle("bad", !!bad); status.classList.toggle("quiet", !!quiet); };
+  // seq: a new photo or "Kita nuotrauka" makes an answer that's still on its way stale
+  let photo = null, url = "", seq = 0;
+  const isImage = f => f.type.startsWith("image/") || (!f.type && /\.(jpe?g|png|webp|gif|heic|heif)$/i.test(f.name));
+  const clear = () => { seq++; photo = null; out.innerHTML = ""; say(""); if (url) { URL.revokeObjectURL(url); url = ""; } };
+
+  function use(f) {
+    if (!f) return;
+    if (!isImage(f)) return say("Tai ne nuotrauka. Pasirink JPG ar PNG failą.", true);
+    clear();
+    const u = URL.createObjectURL(f);
+    // show the photo only once it opens: some browsers can't open HEIC (iPhone format)
+    img.onload = () => { photo = f; url = u; drop.hidden = true; pick.hidden = false; check.focus(); };
+    img.onerror = () => { URL.revokeObjectURL(u); file.value = ""; say("Ši naršyklė neatidaro šio formato (pvz. HEIC). Išsaugok nuotrauką kaip JPG ir įkelk dar kartą.", true); };
+    img.src = u;
+  }
+  file.addEventListener("change", () => use(file.files[0]));
+  // drag & drop onto the box; children don't count as leaving it
+  drop.addEventListener("dragover", e => { e.preventDefault(); drop.classList.add("over"); });
+  drop.addEventListener("dragleave", e => { if (!drop.contains(e.relatedTarget)) drop.classList.remove("over"); });
+  drop.addEventListener("drop", e => { e.preventDefault(); drop.classList.remove("over"); use(e.dataTransfer.files[0]); });
+  // a photo dropped next to the box would open it in the tab and leave the app
+  addEventListener("dragover", e => e.preventDefault());
+  addEventListener("drop", e => e.preventDefault());
+
+  other.onclick = () => {
+    if (other.ariaDisabled === "true") return;
+    clear(); file.value = "";
+    pick.hidden = true; drop.hidden = false; file.focus();
+  };
+
+  const busy = on => {
+    check.ariaBusy = on ? "true" : null; other.ariaDisabled = on ? "true" : null;
+    check.textContent = on ? "Tikrinama…" : "Tikrinti";
+  };
+  check.onclick = async () => {
+    if (!photo || check.ariaBusy === "true") return;
+    // photo-ai.js sets checkPhoto once the API address is filled in
+    if (!window.checkPhoto) return say("AI tikrinimas dar neprijungtas. Kai jis bus paruoštas, čia matysi savo klaidas.");
+    const run = ++seq;
+    busy(true); say("Tikrinama…");
+    out.innerHTML = '<div class="skel"></div><div class="skel"></div><div class="skel"></div>';
+    try {
+      const list = await window.checkPhoto(photo);
+      if (run !== seq) return;
+      out.innerHTML = list.length
+        ? `<h2>Rastos klaidos: ${list.length}</h2>` + list.map(m =>
+            `<div class="fix"><div class="w"><s>${esc(m.wrong)}</s> → <b>${esc(m.right)}</b></div>${m.why ? `<p>${esc(m.why)}</p>` : ""}</div>`).join("")
+        : '<div class="none">Klaidų nerasta.</div>';
+      say(list.length ? `Rastos klaidos: ${list.length}.` : "Klaidų nerasta.", false, true);
+    } catch (e) {
+      if (run !== seq) return;
+      out.innerHTML = "";
+      say(e?.name === "TimeoutError" ? "Tikrinimas užtruko per ilgai. Pabandyk dar kartą." : "Nepavyko patikrinti. Pabandyk dar kartą arba įkelk aiškesnę nuotrauką.", true);
+    } finally {
+      busy(false);
+    }
+  };
+})();
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script defer src="auth-config.js"></script><script defer src="auth.js?v=5"></script>
+<script src="dev.js"></script>
+<script src="motion.js?v=11"></script>
+</body>
+</html>

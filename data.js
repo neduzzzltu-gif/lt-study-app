@@ -321,6 +321,8 @@ const mistakeRow = (line, rule, full) => `<div class="mistake"><div class="w">${
 document.addEventListener("click", e => {
   const b = e.target.closest(".mistake .exp"); if (!b) return;
   const open = b.parentElement.classList.toggle("open");
+  // reopening shows just the short rule again: the full rule starts folded every time
+  if (open) b.parentElement.querySelectorAll("details.full[open]").forEach(d => d.open = false);
   b.setAttribute("aria-expanded", open);
   b.setAttribute("aria-label", open ? "Slėpti taisyklę" : "Rodyti taisyklę");
 });

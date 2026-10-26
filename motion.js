@@ -2,7 +2,8 @@
 // a soft fade between sentences and the result-screen ring. Styles live in theme.css / index.html.
 (() => {
   window.__motion = 1;
-  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // a function: the ⚙ "Mažiau animacijų" switch can flip mid-session
+  const reduce = () => matchMedia("(prefers-reduced-motion: reduce)").matches || document.documentElement.classList.contains("set-calm");
   const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
   const EASE = "cubic-bezier(0.23, 1, 0.32, 1)";
   const easeOut = t => 1 - Math.pow(1 - t, 3);
@@ -10,7 +11,7 @@
   // Count a number up from 0 to data-count
   function countUp(el, delay = 0, dur = 1100) {
     const to = +el.dataset.count;
-    if (!Number.isFinite(to) || reduce || !to) return void (el.textContent = to || 0);
+    if (!Number.isFinite(to) || reduce() || !to) return void (el.textContent = to || 0);
     const start = performance.now() + delay;
     el.textContent = 0;
     const tick = t => {
@@ -75,14 +76,14 @@
       // only a new sentence: #sentence itself replaced, or its children swapped (not inner edits after "Tikrinti")
       if (!sent || sent.textContent === lastText || !recs.some(r => r.target === sent || [...r.addedNodes].some(n => n.contains?.(sent)))) return;
       lastText = sent.textContent;
-      sent.animate([{ opacity: 0, transform: reduce ? "none" : "translateY(4px)" }, { opacity: 1, transform: "none" }], { duration: 180, easing: EASE });
+      sent.animate([{ opacity: 0, transform: reduce() ? "none" : "translateY(4px)" }, { opacity: 1, transform: "none" }], { duration: 180, easing: EASE });
     }).observe(document.querySelector("main") || document.body, { childList: true, subtree: true });
   }
 
   // Result screens (round end, test): ring fills to the score, the number counts up, letters burst on a good score
   const LETTERS = ["ą", "ę", "į", "ų", "ė", "ū", "č", "š", "ž", ","];
   function burst(box) {
-    if (reduce || !box.animate) return;
+    if (reduce() || !box.animate) return;
     const ring = box.querySelector(".ring");
     LETTERS.forEach((ch, i) => {
       const s = document.createElement("span");

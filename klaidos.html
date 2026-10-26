@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mano klaidos</title>
 <style>
-  :root { --bg:#f6f4ef; --card:#fff; --ink:#1d1d1f; --muted:#6b6b70; --line:#e3e0d8; --ok:#1f8a4c; --bad:#c62828; --accent:#2b4cff; }
+  :root { --bg:#f6f4ef; --card:#fff; --ink:#1d1d1f; --muted:#6b6b70; --line:#e3e0d8; --ok:#1f8a4c; --bad:#c62828; --accent:#1c1915; }
   * { box-sizing:border-box; }
   body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; background:var(--bg); color:var(--ink); }
   main { max-width:760px; margin:0 auto; padding:24px 16px 60px; }
@@ -14,9 +14,9 @@
   h2 { font-size:17px; margin:28px 0 12px; }
   .sub { color:var(--muted); margin:0 0 20px; font-size:14px; }
   .btn { display:inline-block; font:inherit; font-size:16px; padding:12px 20px; border-radius:12px; border:none; cursor:pointer; text-decoration:none; }
-  .primary { background:var(--ink); color:#fff; }
+  .primary { background:var(--btn); color:var(--btn-ink); }
   .ghost { background:none; color:var(--muted); font-size:14px; padding:8px 0; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; }
+  .card { background:var(--card); border:2px solid var(--line); border-radius:16px; padding:18px; }
   .cat { margin-bottom:14px; }
   .cat:last-child { margin-bottom:0; }
   .cat .row { display:flex; justify-content:space-between; font-size:15px; margin-bottom:6px; }
@@ -29,19 +29,19 @@
   .word .w s { color:var(--bad); } .w s { text-decoration:none; } .w u { text-decoration-thickness:2px; text-underline-offset:3px; }
   .word .w b { color:var(--ok); }
   .word .w small { color:var(--muted); font-size:13px; margin-left:6px; }
-  .word .r { color:#444; font-size:14px; margin-top:4px; }
+  .word .r { color:var(--muted); font-size:14px; margin-top:4px; }
   .word.fixed { border-left-color:var(--ok); }
   .word.fixed .w s { color:var(--muted); }
   .tabs { display:flex; gap:8px; margin-bottom:18px; }
-  .tab { font:inherit; font-size:15px; padding:8px 16px; border-radius:999px; border:1px solid var(--line); background:var(--card); cursor:pointer; }
-  .tab.on { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .tab { font:inherit; font-size:15px; padding:8px 16px; border-radius:999px; border:2px solid var(--line); background:var(--card); cursor:pointer; }
+  .tab.on { background:var(--btn); color:var(--btn-ink); border-color:var(--btn); }
   .empty { color:var(--muted); line-height:1.6; }
   .full { margin-top:8px; font-size:14px; }
   .full summary { cursor:pointer; color:var(--accent); font-weight:600; list-style:none; user-select:none; }
   .full summary::-webkit-details-marker { display:none; }
   .full summary::after { content:" ▾"; display:inline-block; transition:transform .2s; }
   .full[open] summary::after { transform:rotate(180deg); }
-  .full .body { margin-top:8px; padding:10px 12px; background:#fff; border:1px solid var(--line); border-radius:10px; color:#333; line-height:1.55; animation:slide .25s ease-out; }
+  .full .body { margin-top:8px; padding:10px 12px; background:var(--card); border:2px solid var(--line); border-radius:10px; color:var(--ink); line-height:1.55; animation:slide .25s ease-out; }
   .full .body p { margin:0 0 8px; } .full .body p:last-child { margin:0; }
   .full .body .src { font-size:12px; color:var(--muted); margin-bottom:8px; }
   @keyframes slide { from { opacity:0; transform:translateY(-8px); } }
@@ -58,7 +58,7 @@
   .pages > .pg:not(.on) { visibility:hidden; }
   /* weak spot = one line: name | bar | count */
   .cat-line { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) 88px; align-items:center; gap:14px; padding:9px 0; font-size:15px; overflow-wrap:break-word; }
-  .cat-line + .cat-line { border-top:1px solid var(--line); }
+  .cat-line + .cat-line { border-top:2px solid var(--line); }
   /* weak spots: all in one list, rows spread evenly to fill the card */
   .cols .card { display:grid; grid-auto-rows:1fr; }
   .cols .card .bar { height:10px; }
@@ -68,7 +68,7 @@
   .pager { display:flex; align-items:center; justify-content:center; gap:14px; margin-top:12px; }
   .pager span { min-width:52px; text-align:center; font-size:14px; color:var(--muted); font-variant-numeric:tabular-nums; }
   .pager button { width:40px; height:40px; display:grid; place-items:center; padding:0; border:none; border-radius:50%; background:var(--accent-soft); color:var(--indigo); font:inherit; font-size:20px; line-height:1; cursor:pointer; transition:background .15s, transform .1s; }
-  .pager button:hover:not(:disabled) { background:#d4ebf5; }
+  .pager button:hover:not(:disabled) { background:var(--accent-soft); }
   .pager button:active:not(:disabled) { transform:scale(.92); }
   .pager button:disabled { opacity:.35; cursor:default; }
   /* compact so the whole mistakes area fits on one screen */
@@ -87,21 +87,22 @@
   @media (max-width:1110px) { .cols { grid-template-columns:1fr; gap:0; } .cat-line { grid-template-columns:minmax(0,1fr) 56px 80px; gap:10px; font-size:14px; } .cols .card { grid-auto-rows:auto; } .cols .word .w { padding-right:0; } .cols .word .full summary { position:static; margin-top:4px; } }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%23147fae%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial%27 font-weight=%27bold%27 font-size=%2738%27 fill=%27%23fffdf9%27 text-anchor=%27middle%27%3E%C4%84%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="theme.css?v=12">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400..900&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%23ffc800%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-family=%27Arial%27 font-weight=%27bold%27 font-size=%2738%27 fill=%27%231a1400%27 text-anchor=%27middle%27%3E%C4%84%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="theme.css?v=31">
+<script>try { const s = JSON.parse(localStorage.getItem("settings")) || {}; for (const k in s) if (s[k]) document.documentElement.classList.add("set-" + k); } catch {}</script>
 </head>
 <body>
 <main>
-  <a class="back" href="index.html">← Visos temos</a>
+  <a class="back" href="app.html">← Visos temos</a>
     <h1>Mano klaidos</h1>
   <p class="sub">Čia kaupiasi vietos, kuriose suklydai. Atsakyk teisingai 2 kartus iš eilės – klaida keliauja į pataisytas.</p>
   <div id="content"></div>
 </main>
-<script src="shell.js?v=10"></script>
+<script src="shell.js?v=20"></script>
 
-<script src="data.js"></script>
-<script src="skyryba-data.js"></script>
+<script src="data.js?v=2"></script>
+<script src="skyryba-data.js?v=3"></script>
 <script>
 const plural = n => n % 10 === 1 && n % 100 !== 11 ? "klaida" : (n % 10 === 0 || (n % 100 > 10 && n % 100 < 20)) ? "klaidų" : "klaidos";
 
@@ -233,9 +234,9 @@ document.getElementById("content").addEventListener("click", e => {
 });
 render();
 </script>
-<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script defer src="auth-config.js"></script><script defer src="auth.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script defer src="auth-config.js"></script><script defer src="auth.js?v=5"></script>
 <script src="hyphen.js?v=2"></script>
 <script src="dev.js"></script>
-<script src="motion.js?v=9"></script>
+<script src="motion.js?v=11"></script>
 </body>
 </html>
